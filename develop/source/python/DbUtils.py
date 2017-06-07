@@ -24,6 +24,7 @@ class DbUtils:
         # Datenbankverbindung beenden, falls eine besteht
         if self.con:
             self.con.close()
+
     '''
     Singleton für die Datenbankverbindung
     Gibt die aktuelle Verbindung zurück oder erzeugt eine, falls diese nicht existiert
@@ -42,19 +43,18 @@ class DbUtils:
             print "Error %s:" % e.args[0]
             sys.exit(1)
 
-    def get_cursor(self):
-        return self.get_connection().cursor()
-
+    ''' Löscht und erstellt die Datenbank '''
     def create_database(self):
-        cur = self.get_cursor()
+        con = self.get_connection()
+        cur = con.cursor()
 
         # Tables erzeugen, ggf. vorher löschen
         cur.execute("DROP TABLE IF EXISTS Filme")
         cur.execute("CREATE TABLE Filme("
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     "name Text, "
                     "pfad Text "            
                     ")"
                     )
-
+        con.commit()
 
