@@ -48,6 +48,8 @@ class DbUtils:
         cur = con.cursor()
 
         # Tables erzeugen, ggf. vorher löschen
+
+        # Table für die Filme
         cur.execute("DROP TABLE IF EXISTS Filme")
         cur.execute("CREATE TABLE Filme("
                     "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -59,6 +61,24 @@ class DbUtils:
 
         # Index zum Suchen, wenn eine neue Datei hinzugefügt wird
         cur.execute("CREATE INDEX index_pfad ON Filme(pfad)")
+
+
+        # Table für die Genres
+        cur.execute("DROP TABLE IF EXISTS Genres")
+        cur.execute("CREATE TABLE Genres("
+                    "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    "name Text "
+                    ")"
+                    )
+        # Default-Werte setzen
+        genres = [('Horror',),
+                  ('Komoedie',),
+                  ('Science Fiction',),
+                  ('Dokumentation',),
+                  ('Action',)
+                  ]
+
+        cur.executemany("INSERT INTO Genres(name) VALUES(?)", genres)
 
         # Statements auf DB ausführen
         con.commit()
