@@ -6,6 +6,7 @@ import sqlite3 as sl
 import sys
 import hashlib
 from Persistable import Persistable
+from ObjectCache import ObjectCache
 
 
 class Film(Persistable):
@@ -14,6 +15,13 @@ class Film(Persistable):
     - Datenbank aktualisieren und erstellen
     - Wrapper für Abfragen
     """
+
+    cache = None
+
+    def __new__(cls, *args, **kwargs):
+        if not Film.cache:
+            Film.cache = ObjectCache(cls)
+        return super(Film, cls).__new__(cls)
 
     def __init__(self, db_id=None, name=None, pfad=None, checksum=None):
         """ Constructor """
