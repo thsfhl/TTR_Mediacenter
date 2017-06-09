@@ -55,7 +55,9 @@ class DbUtils:
                     "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     "name Text, "
                     "pfad Text NOT NULL UNIQUE, "            
-                    "checksum Text NOT NULL "         
+                    "checksum Text NOT NULL, "
+                    "genre INTEGER, "
+                    "filetype INTEGER "
                     ")"
                     )
 
@@ -79,6 +81,26 @@ class DbUtils:
                   ]
 
         cur.executemany("INSERT INTO Genres(name) VALUES(?)", genres)
+
+
+        # Table für die FileTypes
+        cur.execute("DROP TABLE IF EXISTS FileTypes")
+        cur.execute("CREATE TABLE FileTypes("
+                    "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    "name Text ,"
+                    "extension Text"
+                    ")"
+                    )
+        # Default-Werte setzen
+        filetypes = [('AVI', '.avi'),
+                  ('MPEG', '.mpeg'),
+                  ('MPEG', '.mpg'),
+                  ('Windows Media Video', '.wmv'),
+                  ('Flash Video', '.flv'),
+                  ('QuickTime File Format', '.mov')
+                  ]
+
+        cur.executemany("INSERT INTO FileTypes(name, extension) VALUES(?, ?)", filetypes)
 
         # Statements auf DB ausführen
         con.commit()

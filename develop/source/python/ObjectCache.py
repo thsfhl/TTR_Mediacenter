@@ -22,7 +22,11 @@ class ObjectCache:
 
     def get_all(self):
         """" Hier sollen alle Werte aus der DB geladen und im Cache abgelegt werden """
-        raise NotImplementedError
+        objs = self.cls.get_all()
+        for obj in objs:
+            self.instances[obj.db_id] = obj
+
+        return self.instances
 
     def persist(self, obj):
         obj.persist()

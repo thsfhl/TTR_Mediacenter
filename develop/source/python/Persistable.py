@@ -29,6 +29,12 @@ class Persistable:
         """ Gibt das Objekt mit der passenden ID aus der Datenbank zurück oder Null """
         raise NotImplementedError
 
+    @staticmethod
+    @abc.abstractmethod
+    def get_all():
+        """ Gibt das Objekt mit der passenden ID aus der Datenbank zurück oder Null """
+        raise NotImplementedError
+
     @abc.abstractmethod
     def persist(self):
         """ Speichert das Objekt in die Datenbank """

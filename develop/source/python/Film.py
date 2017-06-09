@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# ToDo: MD5-Hash muss immer berechnet werden, wenn "pfad" neu gesetzt wird
-
-import sqlite3 as sl
-import sys
 import hashlib
 from Persistable import Persistable
+from Genre import Genre
+from FileType import FileType
 from ObjectCache import ObjectCache
 
 
@@ -16,20 +14,23 @@ class Film(Persistable):
     - Wrapper für Abfragen
     """
 
-    cache = None
+    _cache = None
 
-    def __new__(cls, *args, **kwargs):
-        if not Film.cache:
-            Film.cache = ObjectCache(cls)
-        return super(Film, cls).__new__(cls)
-
-    def __init__(self, db_id=None, name=None, pfad=None, checksum=None):
+    def __init__(self, db_id=None, name=None, pfad=None, checksum=None, genre=None, filetype=None):
         """ Constructor """
         Persistable.__init__(self)
         self.db_id = db_id
         self.name = name
         self.pfad = pfad
         self.checksum = checksum
+        self.genre = genre
+        self.filetype = filetype
+
+    @staticmethod
+    def get_cache():
+        if not Film._cache:
+            Film._cache = ObjectCache(Film().__class__)
+        return Film._cache
 
     @staticmethod
     def get_table_name():
@@ -41,24 +42,54 @@ class Film(Persistable):
         """ Overridden aus Persistable """
         con = Film.db.get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, name, pfad, checksum FROM " + Film.get_table_name() + " WHERE db_id=?", (db_id,))
+        cur.execute("SELECT db_id, name, pfad, checksum, genre, filetype FROM " + Film.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
         if row:
-            film = Film(row[0], row[1], row[2], row[3])
+            film = Film.film_from_row(row)
             return film
         else:
             return None
+
+    @staticmethod
+    def get_all():
+        """ Overridden aus Persistable """
+        con = Film.db.get_connection()
+        cur = con.cursor()
+        cur.execute("SELECT db_id, name, pfad, checksum, genre, filetype FROM " + Film.get_table_name())
+
+        instances = []
+        for row in cur:
+            film = Film.film_from_row()
+            instances.append(film)
+
+        return instances
+
+    @staticmethod
+    def film_from_row(row):
+        genre = Genre.get_cache().get_by_id(row[4])
+        filetype = FileType.get_cache().get_by_id(row[4])
+        film = Film(row[0], row[1], row[2], row[3], genre, filetype)
+        return film
 
     def persist(self):
         """ Overridden aus Persistable """
         con = Film.db.get_connection()
         cur = con.cursor()
+
+        genre_id = 0
+        if self.genre:
+            genre_id = self.genre.db_id
+
+        filetype_id = 0
+        if self.filetype:
+            filetype_id = self.filetype.db_id
+
         if (self.db_id > 0):
-            cur.execute("UPDATE " + self.get_table_name() + " SET name=?, pfad=?, checksum=? WHERE id=?",
-                        (self.name, self.pfad, self.db_id))
+            cur.execute("UPDATE " + self.get_table_name() + " SET name=?, pfad=?, checksum=?, genre, filetype WHERE id=?",
+                        (self.name, self.pfad, genre_id, filetype_id, self.db_id))
         else:
-            cur.execute("INSERT INTO " + self.get_table_name() + " (name, pfad, checksum) VALUES (?,?,?)",
-                        (self.name, self.pfad, self.checksum))
+            cur.execute("INSERT INTO " + self.get_table_name() + " (name, pfad, checksum, genre, filetype) VALUES (?,?,?,?,?)",
+                        (self.name, self.pfad, self.checksum, genre_id, filetype_id))
             self.db_id = cur.lastrowid
         con.commit()
 
@@ -91,10 +122,10 @@ class Film(Persistable):
         """
         con = Film.db.get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, name, pfad, checksum FROM " + Film.get_table_name() + " WHERE pfad=?", (path,))
+        cur.execute("SELECT db_id, name, pfad, checksum, genre, filetype FROM " + Film.get_table_name() + " WHERE pfad=?", (path,))
         row = cur.fetchone()
         if row:
-            film = Film(row[0], row[1], row[2], row[3])
+            film = Film.film_from_row(row)
             return film
         else:
             return None
