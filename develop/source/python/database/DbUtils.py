@@ -63,8 +63,8 @@ class DbUtils:
         cur.execute("DROP TABLE IF EXISTS FileTypes")
         cur.execute("CREATE TABLE FileTypes("
                     "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    "name Text ,"
-                    "extension Text"
+                    "name Text NOT NULL,"
+                    "extension Text NOT NULL UNIQUE"
                     ")"
                     )
         # Default-Werte setzen
@@ -83,7 +83,7 @@ class DbUtils:
         cur.execute("DROP TABLE IF EXISTS Genres")
         cur.execute("CREATE TABLE Genres("
                     "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    "name Text "
+                    "name Text NOT NULL UNIQUE "
                     ")"
                     )
         # Default-Werte setzen
@@ -101,7 +101,7 @@ class DbUtils:
         cur.execute("DROP TABLE IF EXISTS Filme")
         cur.execute("CREATE TABLE Filme("
                     "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    "name Text, "
+                    "name Text NOT NULL, "
                     "pfad Text NOT NULL UNIQUE, "
                     "checksum Text NOT NULL, "
                     "genre INTEGER, "
