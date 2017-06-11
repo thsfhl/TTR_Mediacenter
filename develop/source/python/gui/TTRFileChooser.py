@@ -28,6 +28,7 @@ class TTRFileChooser(Gtk.Window):
         self.add_filters(dialog)
 
         response = dialog.run()
+        file = ""
         if response == Gtk.ResponseType.OK:
             print("Datei auswaehlen wurde geklickt")
             file = dialog.get_filename()
@@ -60,6 +61,7 @@ class TTRFileChooser(Gtk.Window):
         dialog.set_default_size(800, 400)
 
         response = dialog.run()
+        folder = ""
         if response == Gtk.ResponseType.OK:
             print("Verzeichnis auswaehlen wurde geklickt")
             folder = dialog.get_filename()
