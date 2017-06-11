@@ -29,12 +29,14 @@ class TTRFileChooser(Gtk.Window):
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-            print("Datei oeffnen wurde ausgewaehlt")
-            print("Selektierte Datei: " + dialog.get_filename())
+            print("Datei auswaehlen wurde geklickt")
+            file = dialog.get_filename()
+            print("Selektierte Datei: " + file)
         elif response == Gtk.ResponseType.CANCEL:
             print("Vorgang wurde durch den Benutzer abgebrochen")
 
         dialog.destroy()
+        return file
 
     def add_filters(self, dialog):
         filter_text = Gtk.FileFilter()
@@ -61,9 +63,11 @@ class TTRFileChooser(Gtk.Window):
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-            print("Verzeichnis auswaehlen wurde ausgewaehlt")
-            print("Folder selected: " + dialog.get_filename())
+            print("Verzeichnis auswaehlen wurde geklickt")
+            folder = dialog.get_filename()
+            print("Folder selected: " + folder)
         elif response == Gtk.ResponseType.CANCEL:
             print("Vorgang wurde durch den Benutzer abgebrochen")
 
         dialog.destroy()
+        return folder
