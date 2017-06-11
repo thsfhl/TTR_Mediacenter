@@ -47,24 +47,38 @@ class DbUtils:
         con = self.get_connection()
         cur = con.cursor()
 
-        # Tables erzeugen, ggf. vorher löschen
+        # Tabellen erzeugen, ggf. vorher löschen
+        self.createTableFilme(cur)
 
-        # Table für die Filme
-        cur.execute("DROP TABLE IF EXISTS Filme")
-        cur.execute("CREATE TABLE Filme("
+        self.createTableGenres(cur)
+
+        self.createTableFileTypes(cur)
+
+        # Statements auf DB ausführen
+        con.commit()
+
+    # Tabelle FileTypes anlegen und mit Standardwerten füllen
+    def createTableFileTypes(self, cur):
+        # Table für die FileTypes
+        cur.execute("DROP TABLE IF EXISTS FileTypes")
+        cur.execute("CREATE TABLE FileTypes("
                     "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    "name Text, "
-                    "pfad Text NOT NULL UNIQUE, "            
-                    "checksum Text NOT NULL, "
-                    "genre INTEGER, "
-                    "filetype INTEGER "
+                    "name Text ,"
+                    "extension Text"
                     ")"
                     )
+        # Default-Werte setzen
+        filetypes = [('AVI', '.avi'),
+                     ('MPEG', '.mpeg'),
+                     ('MPEG', '.mpg'),
+                     ('Windows Media Video', '.wmv'),
+                     ('Flash Video', '.flv'),
+                     ('QuickTime File Format', '.mov')
+                     ]
+        cur.executemany("INSERT INTO FileTypes(name, extension) VALUES(?, ?)", filetypes)
 
-        # Index zum Suchen, wenn eine neue Datei hinzugefügt wird
-        cur.execute("CREATE INDEX index_pfad ON Filme(pfad)")
-
-
+    # Tabelle Genres anlegen und mit Standardwerten füllen
+    def createTableGenres(self, cur):
         # Table für die Genres
         cur.execute("DROP TABLE IF EXISTS Genres")
         cur.execute("CREATE TABLE Genres("
@@ -79,29 +93,21 @@ class DbUtils:
                   ('Dokumentation',),
                   ('Action',)
                   ]
-
         cur.executemany("INSERT INTO Genres(name) VALUES(?)", genres)
 
-
-        # Table für die FileTypes
-        cur.execute("DROP TABLE IF EXISTS FileTypes")
-        cur.execute("CREATE TABLE FileTypes("
+    # Tabelle Filme anlegen
+    def createTableFilme(self, cur):
+        # Table für die Filme
+        cur.execute("DROP TABLE IF EXISTS Filme")
+        cur.execute("CREATE TABLE Filme("
                     "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    "name Text ,"
-                    "extension Text"
+                    "name Text, "
+                    "pfad Text NOT NULL UNIQUE, "
+                    "checksum Text NOT NULL, "
+                    "genre INTEGER, "
+                    "filetype INTEGER "
                     ")"
                     )
-        # Default-Werte setzen
-        filetypes = [('AVI', '.avi'),
-                  ('MPEG', '.mpeg'),
-                  ('MPEG', '.mpg'),
-                  ('Windows Media Video', '.wmv'),
-                  ('Flash Video', '.flv'),
-                  ('QuickTime File Format', '.mov')
-                  ]
-
-        cur.executemany("INSERT INTO FileTypes(name, extension) VALUES(?, ?)", filetypes)
-
-        # Statements auf DB ausführen
-        con.commit()
+        # Index zum Suchen, wenn eine neue Datei hinzugefügt wird
+        cur.execute("CREATE INDEX index_pfad ON Filme(pfad)")
 
