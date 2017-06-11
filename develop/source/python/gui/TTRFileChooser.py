@@ -24,7 +24,7 @@ class TTRFileChooser(Gtk.Window):
                                        Gtk.FileChooserAction.OPEN,
                                        (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                                         Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-
+        dialog.set_default_response(gtk.RESPONSE_OK)
         self.add_filters(dialog)
 
         response = dialog.run()
@@ -39,20 +39,18 @@ class TTRFileChooser(Gtk.Window):
         return file
 
     def add_filters(self, dialog):
-        filter_text = Gtk.FileFilter()
-        filter_text.set_name("Text files")
-        filter_text.add_mime_type("text/plain")
-        dialog.add_filter(filter_text)
+        filter = Gtk.FileFilter()
+        filter.set_name("Mediendateien")
+        filter.add_mime_type("image/png")
+        filter.add_mime_type("image/jpeg")
+        filter.add_mime_type("image/gif")
+        filter.add_pattern("*.png")
+        filter.add_pattern("*.jpg")
+        filter.add_pattern("*.gif")
+        filter.add_pattern("*.tif")
+        filter.add_pattern("*.xpm")
+        dialog.add_filter(filter)
 
-        filter_py = Gtk.FileFilter()
-        filter_py.set_name("Python files")
-        filter_py.add_mime_type("text/x-python")
-        dialog.add_filter(filter_py)
-
-        filter_any = Gtk.FileFilter()
-        filter_any.set_name("Any files")
-        filter_any.add_pattern("*")
-        dialog.add_filter(filter_any)
 
     def on_folder_clicked(self, widget):
         dialog = Gtk.FileChooserDialog("Bitte waehle ein Verzeichnis aus", self,
