@@ -19,12 +19,11 @@ class Film(Persistable):
     def __init__(self, db_id=None, name=None, pfad=None, checksum=None, genre=None, filetype=None):
         """ Constructor """
         Persistable.__init__(self)
-        self.db_id = db_id
-        self.name = name
-        self.pfad = pfad
-        self.checksum = checksum
-        self.genre = genre
-        self.filetype = filetype
+        self._name = name
+        self._pfad = pfad
+        self._checksum = checksum
+        self._genre = genre
+        self._filetype = filetype
 
     @staticmethod
     def get_cache():
@@ -40,7 +39,7 @@ class Film(Persistable):
     @staticmethod
     def get_by_id(db_id):
         """ Overridden aus Persistable """
-        con = Film.db.get_connection()
+        con = Film.get_db().get_connection()
         cur = con.cursor()
         cur.execute("SELECT db_id, name, pfad, checksum, genre, filetype FROM " + Film.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
@@ -53,7 +52,7 @@ class Film(Persistable):
     @staticmethod
     def get_all():
         """ Overridden aus Persistable """
-        con = Film.db.get_connection()
+        con = Film.get_db().get_connection()
         cur = con.cursor()
         cur.execute("SELECT db_id, name, pfad, checksum, genre, filetype FROM " + Film.get_table_name())
 
@@ -73,24 +72,24 @@ class Film(Persistable):
 
     def persist(self):
         """ Overridden aus Persistable """
-        con = Film.db.get_connection()
+        con = Film.get_db().get_connection()
         cur = con.cursor()
 
         genre_id = 0
-        if self.genre:
-            genre_id = self.genre.db_id
+        if self.get_genre():
+            genre_id = self.get_genre().get_db_id()
 
         filetype_id = 0
-        if self.filetype:
-            filetype_id = self.filetype.db_id
+        if self.get_filetype():
+            filetype_id = self.get_filetype().get_db_id()
 
-        if (self.db_id > 0):
+        if (self.get_db_id() > 0):
             cur.execute("UPDATE " + self.get_table_name() + " SET name=?, pfad=?, checksum=?, genre, filetype WHERE id=?",
-                        (self.name, self.pfad, genre_id, filetype_id, self.db_id))
+                        (self.get_name(), self.get_pfad(), genre_id, filetype_id, self.get_db_id()))
         else:
             cur.execute("INSERT INTO " + self.get_table_name() + " (name, pfad, checksum, genre, filetype) VALUES (?,?,?,?,?)",
-                        (self.name, self.pfad, self.checksum, genre_id, filetype_id))
-            self.db_id = cur.lastrowid
+                        (self.get_name(), self.get_pfad(), self.get_checksum(), genre_id, filetype_id))
+            self.set_db_id(cur.lastrowid)
         con.commit()
 
     # ------------ Für Crawler ------------
@@ -112,15 +111,15 @@ class Film(Persistable):
         """
         Vergleicht die gespeicherte Checksum des Films mit Datei auf die der Pfad zeigt
         """
-        checksum = Film.md5(self.pfad)
-        return self.checksum == checksum
+        checksum = Film.md5(self.get_pfad())
+        return self.get_checksum() == checksum
 
     @staticmethod
     def get_by_path(path):
         """
         Sucht einen Film anhand des Pfads. Wird keiner gefunden wird None zurückgegeben, sonst der Film
         """
-        con = Film.db.get_connection()
+        con = Film.get_db().get_connection()
         cur = con.cursor()
         cur.execute("SELECT db_id, name, pfad, checksum, genre, filetype FROM " + Film.get_table_name() + " WHERE pfad=?", (path,))
         row = cur.fetchone()
@@ -129,3 +128,38 @@ class Film(Persistable):
             return film
         else:
             return None
+
+
+    # -------------- Getter und Setter -------------------
+
+    # get/set db_id ist bereits in Persistable drin
+
+    def get_name(self):
+        return self._name
+
+    def set_name(self, name):
+        self._name = name
+
+    def get_pfad(self):
+        return self._pfad
+
+    def set_pfad(self, pfad):
+        self._pfad = pfad
+    
+    def get_checksum(self):
+        return self._checksum
+
+    def set_checksum(self, checksum):
+        self._checksum = checksum
+
+    def get_genre(self):
+        return self._genre
+
+    def set_genre(self, genre):
+        self._genre = genre
+
+    def get_filetype(self):
+        return self._filetype
+
+    def set_filetype(self, filetype):
+        self._filetype = filetype

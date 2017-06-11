@@ -24,17 +24,17 @@ class ObjectCache:
         """" Hier sollen alle Werte aus der DB geladen und im Cache abgelegt werden """
         objs = self.cls.get_all()
         for obj in objs:
-            self.instances[obj.db_id] = obj
+            self.instances[obj.get_db_id()] = obj
 
         return self.instances
 
     def persist(self, obj):
         obj.persist()
-        self.instances[obj.db_id] = obj
+        self.instances[obj.get_db_id()] = obj
 
     def delete(self, obj):
-        if obj.db_id:
+        if obj.get_db_id():
             obj.delete()
-            del self.instances[obj.db_id]
+            del self.instances[obj.get_db_id()]
         else:
             raise AssertionError("Die Id des Objekts darf nicht 'None' sein!")

@@ -10,12 +10,12 @@ from DbUtils import DbUtils
 class Persistable:
     __metaclass__ = abc.ABCMeta
 
-    db = None
+    _db = None
 
     def __init__(self, db_id=None):
         """ Constructor """
-        Persistable.db_id = db_id
-        Persistable.db = DbUtils()
+        self._db_id = db_id
+        Persistable._db = DbUtils()
 
     @staticmethod
     @abc.abstractmethod
@@ -42,10 +42,25 @@ class Persistable:
 
     def delete(self):
         """ Löscht das Objekt aus der Datenbank """
-        if(self.db_id and self.db_id > 0):
-            con = self.db.get_connection()
+        if(self.get_db_id() and self.get_db_id() > 0):
+            con = self.get_db().get_connection()
             cur = con.cursor()
-            cur.execute("DELETE FROM " + self.get_table_name() + " WHERE db_id = ?", (self.db_id,))
+            cur.execute("DELETE FROM " + self.get_table_name() + " WHERE db_id = ?", (self.get_db_id(),))
             con.commit()
+
+    # -------------- Getter und Setter -------------------
+
+    @staticmethod
+    def get_db():
+        return Persistable._db
+
+    # set_db() gibt es nicht, da im Constructor gesetzt
+
+    def get_db_id(self):
+        return self._db_id
+
+    def set_db_id(self, db_id):
+        self._db_id = db_id
+
 
 

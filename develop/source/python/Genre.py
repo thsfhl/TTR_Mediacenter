@@ -16,8 +16,8 @@ class Genre(Persistable):
     def __init__(self, db_id=None, name=None):
         """ Constructor """
         Persistable.__init__(self)
-        self.db_id = db_id
-        self.name = name
+        self._db_id = db_id
+        self._name = name
 
     @staticmethod
     def get_cache():
@@ -33,7 +33,7 @@ class Genre(Persistable):
     @staticmethod
     def get_by_id(db_id):
         """ Overridden aus Persistable """
-        con = Genre.db.get_connection()
+        con = Genre.get_db().get_connection()
         cur = con.cursor()
         cur.execute("SELECT db_id, name FROM " + Genre.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
@@ -46,7 +46,7 @@ class Genre(Persistable):
     @staticmethod
     def get_all():
         """ Overridden aus Persistable """
-        con = Genre.db.get_connection()
+        con = Genre.get_db().get_connection()
         cur = con.cursor()
         cur.execute("SELECT db_id, name FROM " + Genre.get_table_name())
 
@@ -59,13 +59,23 @@ class Genre(Persistable):
 
     def persist(self):
         """ Overridden aus Persistable """
-        con = Genre.db.get_connection()
+        con = Genre.get_db().get_connection()
         cur = con.cursor()
-        if (self.db_id > 0):
+        if self.get_db_id() > 0:
             cur.execute("UPDATE " + self.get_table_name() + " SET name=? WHERE id=?",
-                        (self.name, self.db_id))
+                        (self.get_name(), self.get_db_id()))
         else:
             cur.execute("INSERT INTO " + self.get_table_name() + " (name) VALUES (?)",
-                        (self.name))
-            self.db_id = cur.lastrowid
+                        (self.get_name()))
+            self.set_db_id(cur.lastrowid)
         con.commit()
+
+    # -------------- Getter und Setter -------------------
+
+    # get/set db_id ist bereits in Persistable drin
+
+    def get_name(self):
+        return self._name
+
+    def set_name(self, name):
+        self._name = name

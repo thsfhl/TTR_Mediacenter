@@ -16,9 +16,10 @@ class FileType(Persistable):
     def __init__(self, db_id=None, name=None, extension=None):
         """ Constructor """
         Persistable.__init__(self)
-        self.db_id = db_id
-        self.name = name
-        self.extension = extension
+        self.set_db_id(db_id)
+        self._name = name
+        self._extension = None
+        self.set_extension(extension)
 
     @staticmethod
     def get_cache():
@@ -34,7 +35,7 @@ class FileType(Persistable):
     @staticmethod
     def get_by_id(db_id):
         """ Overridden aus Persistable """
-        con = FileType.db.get_connection()
+        con = FileType.get_db().get_connection()
         cur = con.cursor()
         cur.execute("SELECT db_id, name, extension FROM " + FileType.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
@@ -47,7 +48,7 @@ class FileType(Persistable):
     @staticmethod
     def get_all():
         """ Overridden aus Persistable """
-        con = FileType.db.get_connection()
+        con = FileType.get_db().get_connection()
         cur = con.cursor()
         cur.execute("SELECT db_id, name, extension FROM " + FileType.get_table_name())
 
@@ -60,13 +61,33 @@ class FileType(Persistable):
 
     def persist(self):
         """ Overridden aus Persistable """
-        con = FileType.db.get_connection()
+        con = FileType.get_db().get_connection()
         cur = con.cursor()
-        if (self.db_id > 0):
+        if self.get_db_id() > 0:
             cur.execute("UPDATE " + self.get_table_name() + " SET name=?, extension=? WHERE id=?",
-                        (self.name, self.extension, self.db_id))
+                        (self.get_name(), self.get_extension(), self.get_db_id()))
         else:
             cur.execute("INSERT INTO " + self.get_table_name() + " (name, extension) VALUES (?, ?)",
-                        (self.name, self.extension))
-            self.db_id = cur.lastrowid
+                        (self.get_name(), self.get_extension()))
+            self.set_db_id(cur.lastrowid)
         con.commit()
+
+    # -------------- Getter und Setter -------------------
+
+    # get/set db_id ist bereits in Persistable drin
+
+    def get_name(self):
+        return self._name
+
+    def set_name(self, name):
+        self._name = name
+        
+    def get_extension(self):
+        return self._extension
+
+    def set_extension(self, extension):
+        if extension:
+            self._extension = extension.lower()
+        else:
+            self._extension = None
+
