@@ -107,6 +107,7 @@ if __name__ == '__main__':
     win = TTRFileChooser()
     win.connect("delete-event", Gtk.main_quit)
     win.show_all()
-    Gtk.main()
+    fileOrFolder = Gtk.main()
+    print fileOrFolder
 
 
