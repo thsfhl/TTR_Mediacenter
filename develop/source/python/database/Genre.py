@@ -21,6 +21,10 @@ class Genre(Persistable):
 
     @staticmethod
     def get_cache():
+        """
+        Liefert entweder das Cache-Objekt oder legt den Cache an, falls nicht vorhanden
+        :return: ObjectCache zu Genre
+        """
         if not Genre._cache:
             Genre._cache = ObjectCache(Genre().__class__)
         return Genre._cache
@@ -52,8 +56,8 @@ class Genre(Persistable):
 
         instances = []
         for row in cur:
-            film = Genre(row[0], row[1])
-            instances.append(film)
+            genre = Genre(row[0], row[1])
+            instances.append(genre)
 
         return instances
 

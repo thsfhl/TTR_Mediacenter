@@ -23,6 +23,10 @@ class FileType(Persistable):
 
     @staticmethod
     def get_cache():
+        """
+        Liefert entweder das Cache-Objekt oder legt den Cache an, falls nicht vorhanden
+        :return: ObjectCache zu FileType
+        """
         if not FileType._cache:
             FileType._cache = ObjectCache(FileType().__class__)
         return FileType._cache
@@ -47,7 +51,16 @@ class FileType(Persistable):
 
     @staticmethod
     def get_by_extension(extension):
-
+        """
+        Prüft, ob ein Objekt mit der passenden Extension im Cache bereits vorhanden ist.
+        Falls ja, wird es zurückgegegben, falls nicht, wird in der Datenbank nachgesehen
+        und ggf. dem Cache hinzugefügt.
+        
+        Falls die Extension weder im Cache noch in der DB vorhanden ist, wird None zurückgegeben
+        
+        :param extension: 
+        :return: 
+        """
         extension = extension.lower()
 
         # Versuchen, den FileType aus dem Cache zu laden
@@ -56,7 +69,8 @@ class FileType(Persistable):
         if filetype:
             return filetype
 
-        # Falls noch nicht in Cache vorhanden, in der DB nachschauen
+        # Falls noch nicht in Cache vorhanden, in der DB nachschauen und falls gefunden
+        # in Cache  hinzufügen
         con = FileType.get_db().get_connection()
         cur = con.cursor()
 

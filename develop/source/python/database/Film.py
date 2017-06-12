@@ -30,6 +30,10 @@ class Film(Persistable):
 
     @staticmethod
     def get_cache():
+        """
+        Liefert entweder das Cache-Objekt oder legt den Cache an, falls nicht vorhanden
+        :return: ObjectCache zu Film
+        """
         if not Film._cache:
             Film._cache = ObjectCache(Film().__class__)
         return Film._cache
@@ -68,6 +72,12 @@ class Film(Persistable):
 
     @staticmethod
     def film_from_row(row):
+        """
+        Erzeugt ein Film-Objekt aus einer Datenbankzeile
+        
+        :param row: Passende Datenbankzeile 
+        :return: Film-Objekt
+        """
         genre = Genre.get_cache().get_by_id(row[4])
         filetype = FileType.get_cache().get_by_id(row[4])
         film = Film(row[0], row[1], row[2], row[3], row[4], genre, filetype)

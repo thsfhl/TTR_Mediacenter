@@ -64,6 +64,7 @@ class FilmCrawler:
                 if crawl_subfolders or (fullpath == base_path):
                     neue_filme = self.crawl_folder(base_path, crawl_subfolders, os.path.join(rel_path, item))
 
+                    # Falls neue Filme gefunden wurden, werden diese der Liste hinzugefügt
                     if neue_filme:
                         for film_neu in neue_filme:
                             filme.append(film_neu)
