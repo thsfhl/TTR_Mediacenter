@@ -2,82 +2,112 @@
 
 # main file
 
-# DB-Klasse importieren
-from DbUtils import DbUtils
-from Film import Film
-from Genre import Genre
-from FileType import FileType
-
+import sys
+import os
 import gi
 gi.require_version('Gtk', '3.0')
+
 from gi.repository import Gtk
+import argparse
+
+# DB-Klasse importieren
+from database.DbUtils import DbUtils
+from database.FileType import FileType
+from database.Film import Film
+from develop.source.python.database.Genre import Genre
+
+from gui.TTRFileChooser import TTRFileChooser
 
 # nur zum Test
 import hashlib
 
-# Reiner Testkram von Thomas - kann gerne wieder gelöscht werden
-# Test der Datenbank-Klasse
-db = DbUtils()
+def addFilm(film, filmcache, pfad, id):
+    # Film1 erzeugen und in DB speichern
+    film = Film()
+    film.set_pfad(pfad)
+    film.set_name(film)
+    checksum = hashlib.md5()
+    checksum.update(pfad)
+    film.set_checksum(checksum.hexdigest())
+    film.set_genre(Genre.get_cache().get_by_id(id))
+    film.set_filetype(FileType.get_cache().get_by_id(id))
+    filmcache.persist(film)
+    return film
 
-# --------------------------------------------------------------------
-# Test von Thomas: Datenbank erzeugen und Abfrage ausgeben
-# --------------------------------------------------------------------
+def dbTests():
+    # Reiner Testkram von Thomas - kann gerne wieder gelöscht werden
+    # Test der Datenbank-Klasse
+    db = DbUtils()
 
-# Löscht Datenbank und legt die Dabelle neu an
-db.create_database()
+    # --------------------------------------------------------------------
+    # Test von Thomas: Datenbank erzeugen und Abfrage ausgeben
+    # --------------------------------------------------------------------
 
-# Test von Einträgen und dem Cache
+    # Löscht Datenbank und legt die Dabelle neu an
+    db.create_database()
 
-# Film muss 1x instanziiert werden, damit der Cache in der Klasse initialisiert wird
-# Sieht nicht so schön aus, weil eigentlich statisches Feld, aber funktioniert
-filmcache = Film.get_cache()
+    # Test von Einträgen und dem Cache
 
-# Film1 erzeugen und in DB speichern
-film1 = Film()
-film1.set_pfad("c:\\erster_film.avi")
-film1.set_name("Dat is der erste Film")
-checksum1 = hashlib.md5()
-checksum1.update("Film1")
-film1.set_checksum(checksum1.hexdigest())
-film1.set_genre(Genre.get_cache().get_by_id(1))
-film1.set_filetype(FileType.get_cache().get_by_id(1))
-filmcache.persist(film1)
+    # Film muss 1x instanziiert werden, damit der Cache in der Klasse initialisiert wird
+    # Sieht nicht so schön aus, weil eigentlich statisches Feld, aber funktioniert
+    filmcache = Film.get_cache()
 
-# Film2 erzeugen und in DB speichern
-film2 = Film()
-film2.set_pfad("c:\\zweiter_film.mpeg")
-film2.set_name("Und der zweite Film")
-checksum2 = hashlib.md5()
-checksum2.update("film2")
-film2.set_checksum(checksum2.hexdigest())
-film2.set_genre(Genre.get_cache().get_by_id(2))
-film2.set_filetype(FileType.get_cache().get_by_id(2))
-filmcache.persist(film2)
+    pfad = "c:\\erster_film.avi"
+    film = "Dat is der erste Film"
+    id = 1
+    film1 = addFilm(film, filmcache, pfad, id)
 
-# Filme 1 und 2 ausgeben
-fromdb1 = filmcache.get_by_id(film1.get_db_id())
-print(str(fromdb1.get_db_id()) + " - " + fromdb1.get_name() + ", " + fromdb1.get_pfad() + ", " + fromdb1.get_genre().get_name() + ", " + fromdb1.get_filetype().get_name() + ", " + str(fromdb1.get_checksum()))
+    pfad = "c:\\zweiter_film.mpeg"
+    film = "Dat ist der zweite Film"
+    id = 2
+    # Film2 erzeugen und in DB speichern
+    film2 = addFilm(film, filmcache, pfad, id)
 
-fromdb2 = filmcache.get_by_id(film2.get_db_id())
-print(str(fromdb2.get_db_id()) + " - " + fromdb2.get_name() + ", " + fromdb2.get_pfad() + ", " + fromdb2.get_genre().get_name() + ", " + fromdb2.get_filetype().get_name() + ", " + str(fromdb2.get_checksum()))
-print("ID Film (original):  ")
-print(fromdb2)
+    # Filme 1 und 2 ausgeben
+    fromdb1 = filmcache.get_by_id(film1.get_db_id())
+    print(str(fromdb1.get_db_id()) + " - " + fromdb1.get_name() + ", " + fromdb1.get_pfad() + ", " + fromdb1.get_genre().get_name() + ", " + fromdb1.get_filetype().get_name() + ", " + str(fromdb1.get_checksum()))
 
-# ------ Test ob das gleiche Objekt aus dem Cache geholt wird ------
+    fromdb2 = filmcache.get_by_id(film2.get_db_id())
+    print(str(fromdb2.get_db_id()) + " - " + fromdb2.get_name() + ", " + fromdb2.get_pfad() + ", " + fromdb2.get_genre().get_name() + ", " + fromdb2.get_filetype().get_name() + ", " + str(fromdb2.get_checksum()))
+    print("ID Film (original):  ")
+    print(fromdb2)
 
-fromdb2a = filmcache.get_by_id(film2.get_db_id())
-print("ID Film (aus Cache): ")
-print(fromdb2a)
+    # ------ Test ob das gleiche Objekt aus dem Cache geholt wird ------
 
-fromdb2b = Film.get_by_id(film2.get_db_id())
-print "ID Film (aus DB):    "
-print fromdb2b
+    fromdb2a = filmcache.get_by_id(film2.get_db_id())
+    print("ID Film (aus Cache): ")
+    print(fromdb2a)
 
-# Film 2 löschen und testen, ob es funktioniert hat
-print filmcache.instances
-filmcache.delete(fromdb2)
-deleted = filmcache.get_by_id(film2.get_db_id())
-if deleted:
-    print str(deleted.id) + deleted.get_name() + ", " + deleted.get_pfad()
-else:
-    print "Der Film mit der id %i wurde aus der Datenbank gelöscht!" % (film2.get_db_id())
+    fromdb2b = Film.get_by_id(film2.get_db_id())
+    print "ID Film (aus DB):    "
+    print fromdb2b
+
+    # Film 2 löschen und testen, ob es funktioniert hat
+    print filmcache.instances
+    filmcache.delete(fromdb2)
+    deleted = filmcache.get_by_id(film2.get_db_id())
+    if deleted:
+        print str(deleted.id) + deleted.get_name() + ", " + deleted.get_pfad()
+    else:
+        print "Der Film mit der id %i wurde aus der Datenbank gelöscht!" % (film2.get_db_id())
+
+
+if __name__ == '__main__':
+    '''
+    The main method of this python-script.
+    Here the subprocedures are called with the initial directory where to start from 
+    '''
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", action="store_true")
+
+    args = parser.parse_args()
+    if (args.d == True):
+        dbTests()
+
+    win = TTRFileChooser()
+    win.connect("delete-event", Gtk.main_quit)
+    win.show_all()
+    fileOrFolder = Gtk.main()
+    print fileOrFolder
+
+
