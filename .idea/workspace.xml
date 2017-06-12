@@ -3,16 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9e787f9c-e91c-4c14-a29a-bcc2fd7dcc28" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/ttr_mediacenter.db" afterPath="$PROJECT_DIR$/develop/source/python/ttr_mediacenter.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/TTR_Mediacenter.iml" afterPath="$PROJECT_DIR$/.idea/TTR_Mediacenter.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/FilmCrawler.py" afterPath="$PROJECT_DIR$/develop/source/python/FilmCrawler.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py" afterPath="$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/database/DbUtils.py" afterPath="$PROJECT_DIR$/develop/source/python/database/DbUtils.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/database/FileType.py" afterPath="$PROJECT_DIR$/develop/source/python/database/FileType.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/database/Film.py" afterPath="$PROJECT_DIR$/develop/source/python/database/Film.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/database/ObjectCache.py" afterPath="$PROJECT_DIR$/develop/source/python/database/ObjectCache.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/gui/TTRFileChooser.py" afterPath="$PROJECT_DIR$/develop/source/python/gui/TTRFileChooser.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,16 +16,16 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/TTR_Mediacenter$TTR_Mediacenter.coverage" NAME="TTR_Mediacenter Coverage Results" MODIFIED="1497202552402" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/develop/source/python" />
     <SUITE FILE_PATH="coverage/ea03$DbUtils.coverage" NAME="DbUtils Coverage Results" MODIFIED="1496776896236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/develop/source/python" />
-    <SUITE FILE_PATH="coverage/ea03$TTR_Mediacenter.coverage" NAME="TTR_Mediacenter Coverage Results" MODIFIED="1497303105213" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/develop/source/python" />
+    <SUITE FILE_PATH="coverage/ea03$TTR_Mediacenter.coverage" NAME="TTR_Mediacenter Coverage Results" MODIFIED="1497304151305" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/develop/source/python" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TTR_Mediacenter.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TTR_Mediacenter.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="103" column="31" lean-forward="true" selection-start-line="103" selection-start-column="31" selection-end-line="103" selection-end-column="31" />
+            <state relative-caret-position="221">
+              <caret line="105" column="26" lean-forward="true" selection-start-line="105" selection-start-column="26" selection-end-line="105" selection-end-column="26" />
               <folding>
                 <element signature="e#38#48#0" expanded="true" />
               </folding>
@@ -41,11 +33,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FilmCrawler.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="FilmCrawler.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/develop/source/python/FilmCrawler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="71" column="110" lean-forward="false" selection-start-line="71" selection-start-column="110" selection-end-line="71" selection-end-column="110" />
+            <state relative-caret-position="765">
+              <caret line="45" column="36" lean-forward="false" selection-start-line="45" selection-start-column="36" selection-end-line="45" selection-end-column="36" />
               <folding>
                 <element signature="e#25#55#0" expanded="true" />
               </folding>
@@ -57,7 +49,7 @@
         <entry file="file://$PROJECT_DIR$/develop/source/python/database/FileType.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="867">
-              <caret line="51" column="0" lean-forward="true" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
+              <caret line="51" column="0" lean-forward="false" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
               <folding>
                 <element signature="e#25#60#0" expanded="true" />
               </folding>
@@ -82,14 +74,14 @@
               <caret line="105" column="25" lean-forward="false" selection-start-line="105" selection-start-column="25" selection-end-line="105" selection-end-column="25" />
               <folding>
                 <element signature="e#25#45#0" expanded="true" />
-                <marker date="1497301440078" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
-                <marker date="1497301440078" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
-                <marker date="1497301440078" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
-                <marker date="1497301440078" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
-                <marker date="1497301440078" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
-                <marker date="1497301440078" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
-                <marker date="1497301440078" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
-                <marker date="1497301440078" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
+                <marker date="1497303828467" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
+                <marker date="1497303828467" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
+                <marker date="1497303828467" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
+                <marker date="1497303828467" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
+                <marker date="1497303828467" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
+                <marker date="1497303828467" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
+                <marker date="1497303828467" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
+                <marker date="1497303828467" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
               </folding>
             </state>
           </provider>
@@ -111,7 +103,7 @@
         <entry file="file://$PROJECT_DIR$/develop/source/python/gui/TTRFileChooser.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
-              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -209,8 +201,8 @@
         <option value="$PROJECT_DIR$/develop/source/python/database/ObjectCache.py" />
         <option value="$PROJECT_DIR$/develop/source/python/database/DbUtils.py" />
         <option value="$PROJECT_DIR$/develop/source/python/database/Film.py" />
-        <option value="$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py" />
         <option value="$PROJECT_DIR$/develop/source/python/FilmCrawler.py" />
+        <option value="$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py" />
       </list>
     </option>
   </component>
@@ -750,14 +742,14 @@
           <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="8" selection-end-column="14" />
           <folding>
             <element signature="e#25#45#0" expanded="true" />
-            <marker date="1497301440078" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
-            <marker date="1497301440078" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
-            <marker date="1497301440078" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
-            <marker date="1497301440078" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
-            <marker date="1497301440078" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
+            <marker date="1497303828467" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
+            <marker date="1497303828467" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
+            <marker date="1497303828467" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
+            <marker date="1497303828467" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
+            <marker date="1497303828467" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
           </folding>
         </state>
       </provider>
@@ -813,14 +805,14 @@
           <caret line="80" column="8" lean-forward="true" selection-start-line="80" selection-start-column="8" selection-end-line="80" selection-end-column="8" />
           <folding>
             <element signature="e#25#45#0" expanded="true" />
-            <marker date="1497301440078" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
-            <marker date="1497301440078" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
-            <marker date="1497301440078" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
-            <marker date="1497301440078" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
-            <marker date="1497301440078" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
+            <marker date="1497303828467" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
+            <marker date="1497303828467" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
+            <marker date="1497303828467" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
+            <marker date="1497303828467" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
+            <marker date="1497303828467" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
           </folding>
         </state>
       </provider>
@@ -869,14 +861,14 @@
           <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#25#45#0" expanded="true" />
-            <marker date="1497301440078" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
-            <marker date="1497301440078" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
-            <marker date="1497301440078" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
-            <marker date="1497301440078" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
-            <marker date="1497301440078" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
+            <marker date="1497303828467" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
+            <marker date="1497303828467" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
+            <marker date="1497303828467" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
+            <marker date="1497303828467" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
+            <marker date="1497303828467" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
           </folding>
         </state>
       </provider>
@@ -925,14 +917,14 @@
           <caret line="54" column="23" lean-forward="true" selection-start-line="54" selection-start-column="23" selection-end-line="54" selection-end-column="23" />
           <folding>
             <element signature="e#25#45#0" expanded="true" />
-            <marker date="1497301440078" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
-            <marker date="1497301440078" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
-            <marker date="1497301440078" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
-            <marker date="1497301440078" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
-            <marker date="1497301440078" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
+            <marker date="1497303828467" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
+            <marker date="1497303828467" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
+            <marker date="1497303828467" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
+            <marker date="1497303828467" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
+            <marker date="1497303828467" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
           </folding>
         </state>
       </provider>
@@ -981,14 +973,14 @@
           <caret line="51" column="49" lean-forward="true" selection-start-line="51" selection-start-column="49" selection-end-line="51" selection-end-column="49" />
           <folding>
             <element signature="e#25#45#0" expanded="true" />
-            <marker date="1497301440078" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
-            <marker date="1497301440078" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
-            <marker date="1497301440078" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
-            <marker date="1497301440078" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
-            <marker date="1497301440078" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
+            <marker date="1497303828467" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
+            <marker date="1497303828467" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
+            <marker date="1497303828467" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
+            <marker date="1497303828467" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
+            <marker date="1497303828467" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
           </folding>
         </state>
       </provider>
@@ -1079,7 +1071,7 @@
     <entry file="file://$PROJECT_DIR$/develop/source/python/gui/TTRFileChooser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
-          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1087,7 +1079,7 @@
     <entry file="file://$PROJECT_DIR$/develop/source/python/database/FileType.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="867">
-          <caret line="51" column="0" lean-forward="true" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
+          <caret line="51" column="0" lean-forward="false" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
           <folding>
             <element signature="e#25#60#0" expanded="true" />
           </folding>
@@ -1108,14 +1100,14 @@
           <caret line="105" column="25" lean-forward="false" selection-start-line="105" selection-start-column="25" selection-end-line="105" selection-end-column="25" />
           <folding>
             <element signature="e#25#45#0" expanded="true" />
-            <marker date="1497301440078" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
-            <marker date="1497301440078" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
-            <marker date="1497301440078" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
-            <marker date="1497301440078" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
-            <marker date="1497301440078" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
-            <marker date="1497301440078" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
+            <marker date="1497303828467" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
+            <marker date="1497303828467" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
+            <marker date="1497303828467" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
+            <marker date="1497303828467" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
+            <marker date="1497303828467" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
+            <marker date="1497303828467" expanded="true" signature="3233:3646" ph="CREATE TABLE... Filme" />
           </folding>
         </state>
       </provider>
@@ -1130,22 +1122,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py">
+    <entry file="file://$PROJECT_DIR$/develop/source/python/FilmCrawler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="103" column="31" lean-forward="true" selection-start-line="103" selection-start-column="31" selection-end-line="103" selection-end-column="31" />
+        <state relative-caret-position="765">
+          <caret line="45" column="36" lean-forward="false" selection-start-line="45" selection-start-column="36" selection-end-line="45" selection-end-column="36" />
           <folding>
-            <element signature="e#38#48#0" expanded="true" />
+            <element signature="e#25#55#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/develop/source/python/FilmCrawler.py">
+    <entry file="file://$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="71" column="110" lean-forward="false" selection-start-line="71" selection-start-column="110" selection-end-line="71" selection-end-column="110" />
+        <state relative-caret-position="221">
+          <caret line="105" column="26" lean-forward="true" selection-start-line="105" selection-start-column="26" selection-end-line="105" selection-end-column="26" />
           <folding>
-            <element signature="e#25#55#0" expanded="true" />
+            <element signature="e#38#48#0" expanded="true" />
           </folding>
         </state>
       </provider>

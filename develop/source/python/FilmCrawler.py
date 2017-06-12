@@ -44,7 +44,6 @@ class FilmCrawler:
 
         # Falls Datei, prüfen ob FileType passt und ggf. auslesen
         if os.path.isfile(fullpath):
-            # ToDo: Prüfen der Dateiendung und Auslesen der Dateiinfos
             film_neu = self.read_file_to_film(fullpath)
             if film_neu:
                 filme.append(film_neu)
@@ -96,7 +95,7 @@ class FilmCrawler:
             if film_aus_db.checksum_changed():
                 # Checksum neu setzen
                 film_aus_db.set_checksum(film_aus_db.md5(path))
-                film_aus_db.set_status(1) # Status auf "geänderte Datei" setzen
+                film_aus_db.set_status(1) # Status auf "geänderte Datei" setzen / ggf. später auch Metadaten neu lesen
                 Film.get_cache().persist(film_aus_db)
             return film_aus_db
 

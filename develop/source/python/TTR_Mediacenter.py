@@ -101,7 +101,7 @@ def crawlerTest():
 
         # Eigentlicher Test
         crawler = FilmCrawler()
-        filme = crawler.crawl_folder("D:\Breaking Bad", True)
+        filme = crawler.crawl_folder("D:\Breaking Bad\Breakin_Bad_S05\Breakin_Bad-S05E01_-_Lebe_frei_oder_stirb.avi", True)
         print filme
         for film in filme:
             Film.get_cache().persist(film)
