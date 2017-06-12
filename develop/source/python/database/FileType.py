@@ -40,8 +40,34 @@ class FileType(Persistable):
         cur.execute("SELECT db_id, name, extension FROM " + FileType.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
         if row:
-            film = FileType(row[0], row[1], row[2])
-            return film
+            filetype = FileType(row[0], row[1], row[2])
+            return filetype
+        else:
+            return None
+
+    @staticmethod
+    def get_by_extension(extension):
+
+        extension = extension.lower()
+
+        # Versuchen, den FileType aus dem Cache zu laden
+        filetype = FileType.get_cache().get_by_property('extension', extension)
+
+        if filetype:
+            return filetype
+
+        # Falls noch nicht in Cache vorhanden, in der DB nachschauen
+        con = FileType.get_db().get_connection()
+        cur = con.cursor()
+
+        if not extension:
+            return None
+
+        cur.execute("SELECT db_id FROM " + FileType.get_table_name() + " WHERE extension=?", (extension,))
+        row = cur.fetchone()
+        if row:
+            filetype = FileType.get_cache().get_by_id(row[0])
+            return filetype
         else:
             return None
 

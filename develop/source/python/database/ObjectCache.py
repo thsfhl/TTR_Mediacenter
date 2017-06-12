@@ -38,3 +38,15 @@ class ObjectCache:
             del self.instances[obj.get_db_id()]
         else:
             raise AssertionError("Die Id des Objekts darf nicht 'None' sein!")
+
+    def get_by_property(self, prop_name, prop_value):
+        """ Holt nur Objekt aus dem Cache, ohne alternativ in der Datenbank zu suchen """
+        for key, value in self.instances.iteritems():
+            if getattr(value, "_" + prop_name) == prop_value:
+                return value
+        return None
+
+    def add_to_cache(self, obj):
+        if getattr(obj, 'db_id'):
+            self.instances[getattr(obj, 'db_id')] = obj
+
