@@ -14,7 +14,8 @@ import argparse
 from database.DbUtils import DbUtils
 from database.FileType import FileType
 from database.Film import Film
-from develop.source.python.database.Genre import Genre
+from database.Genre import Genre
+from FilmCrawler import FilmCrawler
 
 from gui.TTRFileChooser import TTRFileChooser
 
@@ -127,6 +128,24 @@ class TTR_Mediacenter(Gtk.Application):
             print "Der Film mit der id %i wurde aus der Datenbank gelöscht!" % (film2.get_db_id())
 
 
+    def crawlerTest(self):
+        # Datenbank leeren und neu erstellen für Test
+        db = DbUtils()
+        db.create_database()
+
+        # Eigentlicher Test
+        crawler = FilmCrawler()
+        filme = crawler.crawl_folder("C:\\temp\\video_test", True)
+        print filme
+        if filme:
+            for film in filme:
+                Film.persist(film)
+
+        # Test ob ID von Film auch in DB landet
+        test_db_film = Film.get_by_id(1)
+        print test_db_film
+
+
 if __name__ == '__main__':
     '''
     The main method of this python-script.
@@ -148,8 +167,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if (args.d == True):
         appl.dbTests()
+        # Achtung, hier muss ein sinnvolles Verzeichnis angegeben werden
+        appl.crawlerTest()
+        # dbTests()
 
-    # win = TTRFileChooser()
+
+        # win = TTRFileChooser()
     # win.connect("delete-event", Gtk.main_quit)
     # win.show_all()
     # Gtk.main()
