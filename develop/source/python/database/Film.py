@@ -156,6 +156,41 @@ class Film(Persistable):
         else:
             return None
 
+    @staticmethod
+    def read_file_to_film(path):
+        """
+        Nimmt eine Datei entgegen und liefert, falls es sich um einen Film handelt,
+        ein Film-Objekt zurück. Anderenfalls None
+
+        :param path: Pfad zur Datei 
+        :return: Film oder None
+        """
+        # Dateiendung prüfen und dabei FileType ermitteln
+        path_folder, filename = os.path.split(path)
+        file_root, file_extension = os.path.splitext(filename)
+        filetype = FileType.get_by_extension(file_extension.lower())
+
+        if not filetype:
+            return None
+
+        # Eigenschaften auslesen
+        # Genre = Null, falls nicht in Metadaten vorhanden
+        film_aus_db = Film.get_by_path(path)
+        if film_aus_db:
+            # Ein Film mit diesem Pfad existiert bereits in der DB
+            if film_aus_db.checksum_changed():
+                # Checksum neu setzen
+                film_aus_db.set_checksum(film_aus_db.md5(path))
+                film_aus_db.set_status(
+                    1)  # Status auf "geänderte Datei" setzen / ggf. später auch Metadaten neu lesen
+                Film.get_cache().persist(film_aus_db)
+            return film_aus_db
+
+        # Falls der Film noch nicht in der Datenbank war
+        film_neu = Film(None, file_root, path_folder, filename, Film.md5(path), None, filetype)
+
+        return film_neu
+
     # -------------- Getter und Setter -------------------
 
     # get/set db_id ist bereits in Persistable drin

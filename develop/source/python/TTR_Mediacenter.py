@@ -97,7 +97,7 @@ def crawlerTest():
 
         # Eigentlicher Test
         crawler = FilmCrawler()
-        filme = crawler.crawl_folder("D:\Breaking Bad\Breakin_Bad_S05\Breakin_Bad-S05E01_-_Lebe_frei_oder_stirb.avi", True)
+        filme = crawler.crawl_folder("C:\\temp\\video_test", True)
         print filme
         if filme:
             for film in filme:
@@ -117,8 +117,8 @@ if __name__ == '__main__':
     parser.add_argument("-d", action="store_true")
 
     # Achtung, hier muss ein sinnvolles Verzeichnis angegeben werden
-    # crawlerTest()
-    dbTests()
+    crawlerTest()
+    # dbTests()
 
     args = parser.parse_args()
     if (args.d == True):

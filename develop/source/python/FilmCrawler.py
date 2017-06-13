@@ -44,7 +44,7 @@ class FilmCrawler:
 
         # Falls Datei, prüfen ob FileType passt und ggf. auslesen
         if os.path.isfile(fullpath):
-            film_neu = self.read_file_to_film(fullpath)
+            film_neu = Film.read_file_to_film(fullpath)
             if film_neu:
                 filme.append(film_neu)
 
@@ -72,37 +72,5 @@ class FilmCrawler:
         print filme # ToDo: print Entfernen, ist nur zum Testen, ob und/oder wie die Dateien eingelesen werden
         return filme
 
-    def read_file_to_film(self, path):
-        """
-        Nimmt eine Datei entgegen und liefert, falls es sich um einen Film handelt,
-        ein Film-Objekt zurück. Anderenfalls None
-        
-        :param path: Pfad zur Datei 
-        :return: Film oder None
-        """
-        # Dateiendung prüfen und dabei FileType ermitteln
-        path_folder, filename = os.path.split(path)
-        file_root, file_extension = os.path.splitext(filename)
-        filetype = FileType.get_by_extension(file_extension.lower())
-
-        if not filetype:
-            return None
-
-        # Eigenschaften auslesen
-        # Genre = Null, falls nicht in Metadaten vorhanden
-        film_aus_db = Film.get_by_path(path)
-        if film_aus_db:
-            # Ein Film mit diesem Pfad existiert bereits in der DB
-            if film_aus_db.checksum_changed():
-                # Checksum neu setzen
-                film_aus_db.set_checksum(film_aus_db.md5(path))
-                film_aus_db.set_status(1) # Status auf "geänderte Datei" setzen / ggf. später auch Metadaten neu lesen
-                Film.get_cache().persist(film_aus_db)
-            return film_aus_db
-
-        # Falls der Film noch nicht in der Datenbank war
-        film_neu = Film(None, file_root, path_folder, filename, Film.md5(path), None, filetype)
-
-        return film_neu
 
 
