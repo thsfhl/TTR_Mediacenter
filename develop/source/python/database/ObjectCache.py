@@ -11,14 +11,10 @@ class ObjectCache:
         self.instances = {}
 
     def get_by_id(self, db_id):
-        if db_id not in self.instances:
-            obj = self.cls.get_by_id(db_id)
-            if obj:
-                self.instances[db_id] = obj
-            else:
-                return None
-
-        return self.instances[db_id]
+        if db_id in self.instances:
+            return self.instances[db_id]
+        else:
+            return None
 
     def get_all(self):
         """" Hier sollen alle Werte aus der DB geladen und im Cache abgelegt werden """
@@ -28,13 +24,8 @@ class ObjectCache:
 
         return self.instances
 
-    def persist(self, obj):
-        obj.persist()
-        self.instances[obj.get_db_id()] = obj
-
-    def delete(self, obj):
+    def remove_from_cache(self, obj):
         if obj.get_db_id():
-            obj.delete()
             del self.instances[obj.get_db_id()]
         else:
             raise AssertionError("Die Id des Objekts darf nicht 'None' sein!")
@@ -47,6 +38,6 @@ class ObjectCache:
         return None
 
     def add_to_cache(self, obj):
-        if getattr(obj, 'db_id'):
-            self.instances[getattr(obj, 'db_id')] = obj
+        if obj.get_db_id():
+            self.instances[obj.get_db_id()] = obj
 

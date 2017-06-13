@@ -46,12 +46,19 @@ class Film(Persistable):
     @staticmethod
     def get_by_id(db_id):
         """ Overridden aus Persistable """
+        # Im Cache nachschauen, ob es eine Instanz gibt
+        film = Film.get_cache().get_by_id(db_id)
+        if film:
+            return film
+
+        # Falls nicht aus Datenbank holen
         con = Film.get_db().get_connection()
         cur = con.cursor()
         cur.execute("SELECT db_id, titel, pfad, filename, checksum, genre, filetype FROM " + Film.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
         if row:
             film = Film.film_from_row(row)
+            Film.get_cache().add_to_cache(film)
             return film
         else:
             return None
@@ -67,6 +74,7 @@ class Film(Persistable):
         for row in cur:
             film = Film.film_from_row(row)
             instances.append(film)
+            Film.get_cache().add_to_cache(film)
 
         return instances
 
@@ -105,6 +113,9 @@ class Film(Persistable):
             self.set_db_id(cur.lastrowid)
         con.commit()
 
+        # Cache aktualsieren
+        Film.get_cache().add_to_cache(self)
+
     # ------------ Für Crawler ------------
 
     @staticmethod
@@ -127,20 +138,6 @@ class Film(Persistable):
         checksum = Film.md5(self.get_pfad())
         return self.get_checksum() == checksum
 
-    def get_by_path(self, path):
-        path_folder, filename = os.path.split(path)
-        con = Film.get_db().get_connection()
-        cur = con.cursor()
-        cur.execute(
-            "SELECT db_id FROM " + Film.get_table_name() + " WHERE pfad=? AND filename=?", (path_folder, filename))
-
-        row = cur.fetchone()
-        if row:
-            film = Film.get_cache().get_by_id(row[0])
-            return film
-        else:
-            return None
-
     @staticmethod
     def get_by_path(path):
         """
@@ -151,7 +148,10 @@ class Film(Persistable):
         cur.execute("SELECT db_id, titel, pfad, filename, checksum, genre, filetype FROM " + Film.get_table_name() + " WHERE pfad=?", (path,))
         row = cur.fetchone()
         if row:
-            film = Film.film_from_row(row)
+            film = Film.get_cache().get_by_id(row[0])
+            if not film:
+                film = Film.film_from_row(row)
+                Film.get_cache().add_to_cache(film)
             return film
         else:
             return None

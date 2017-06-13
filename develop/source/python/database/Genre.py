@@ -37,13 +37,19 @@ class Genre(Persistable):
     @staticmethod
     def get_by_id(db_id):
         """ Overridden aus Persistable """
+        # Try to get from Cache
+        genre = Genre.get_cache().get_by_id(db_id)
+        if genre:
+            return genre
+
         con = Genre.get_db().get_connection()
         cur = con.cursor()
         cur.execute("SELECT db_id, name FROM " + Genre.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
         if row:
-            film = Genre(row[0], row[1])
-            return film
+            genre = Genre(row[0], row[1])
+            Genre.get_cache().add_to_cache(genre)
+            return genre
         else:
             return None
 
@@ -58,6 +64,7 @@ class Genre(Persistable):
         for row in cur:
             genre = Genre(row[0], row[1])
             instances.append(genre)
+            Genre.get_cache().add_to_cache(genre)
 
         return instances
 
@@ -73,6 +80,7 @@ class Genre(Persistable):
                         (self.get_name()))
             self.set_db_id(cur.lastrowid)
         con.commit()
+        Genre.get_cache().add_to_cache(self)
 
     # -------------- Getter und Setter -------------------
 

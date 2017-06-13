@@ -31,9 +31,9 @@ def addFilm(id, titel, pfad, filename, genre_id, filetype_id):
     md5 = hashlib.md5()
     md5.update("Bam")
     film.set_checksum(md5.hexdigest())
-    film.set_genre(Genre.get_cache().get_by_id(genre_id))
-    film.set_filetype(FileType.get_cache().get_by_id(filetype_id))
-    Film.get_cache().persist(film)
+    film.set_genre(Genre.get_by_id(genre_id))
+    film.set_filetype(FileType.get_by_id(filetype_id))
+    Film.persist(film)
     return film
 
 def dbTests():
@@ -50,10 +50,6 @@ def dbTests():
 
     # Test von Einträgen und dem Cache
 
-    # Film muss 1x instanziiert werden, damit der Cache in der Klasse initialisiert wird
-    # Sieht nicht so schön aus, weil eigentlich statisches Feld, aber funktioniert
-    filmcache = Film.get_cache()
-
     pfad = "c:\ordnername\\"
     filename = "erster_film.avi"
     titel = "Dat is der erste Film"
@@ -67,17 +63,17 @@ def dbTests():
     film2 = addFilm(id, titel, pfad, filename, id, id)
 
     # Filme 1 und 2 ausgeben
-    fromdb1 = filmcache.get_by_id(film1.get_db_id())
+    fromdb1 = Film.get_by_id(film1.get_db_id())
     print(str(fromdb1.get_db_id()) + " - " + fromdb1.get_titel() + ", " + fromdb1.get_pfad() + ", " + fromdb1.get_genre().get_name() + ", " + fromdb1.get_filetype().get_name() + ", " + str(fromdb1.get_checksum()))
 
-    fromdb2 = filmcache.get_by_id(film2.get_db_id())
+    fromdb2 = Film.get_by_id(film2.get_db_id())
     print(str(fromdb2.get_db_id()) + " - " + fromdb2.get_titel() + ", " + fromdb2.get_pfad() + ", " + fromdb2.get_genre().get_name() + ", " + fromdb2.get_filetype().get_name() + ", " + str(fromdb2.get_checksum()))
     print("ID Film (original):  ")
     print(fromdb2)
 
     # ------ Test ob das gleiche Objekt aus dem Cache geholt wird ------
 
-    fromdb2a = filmcache.get_by_id(film2.get_db_id())
+    fromdb2a = Film.get_by_id(film2.get_db_id())
     print("ID Film (aus Cache): ")
     print(fromdb2a)
 
@@ -86,9 +82,9 @@ def dbTests():
     print fromdb2b
 
     # Film 2 löschen und testen, ob es funktioniert hat
-    print filmcache.instances
-    filmcache.delete(fromdb2)
-    deleted = filmcache.get_by_id(film2.get_db_id())
+    print Film.get_cache().instances
+    Film.delete(fromdb2)
+    deleted = Film.get_by_id(film2.get_db_id())
     if deleted:
         print str(deleted.id) + deleted.get_titel() + ", " + deleted.get_pfad()
     else:
@@ -103,11 +99,12 @@ def crawlerTest():
         crawler = FilmCrawler()
         filme = crawler.crawl_folder("D:\Breaking Bad\Breakin_Bad_S05\Breakin_Bad-S05E01_-_Lebe_frei_oder_stirb.avi", True)
         print filme
-        for film in filme:
-            Film.get_cache().persist(film)
+        if filme:
+            for film in filme:
+                Film.persist(film)
 
         # Test ob ID von Film auch in DB landet
-        test_db_film = Film.get_cache().get_by_id(1)
+        test_db_film = Film.get_by_id(1)
         print test_db_film
 
 
@@ -120,8 +117,8 @@ if __name__ == '__main__':
     parser.add_argument("-d", action="store_true")
 
     # Achtung, hier muss ein sinnvolles Verzeichnis angegeben werden
-    crawlerTest()
-    # dbTests()
+    # crawlerTest()
+    dbTests()
 
     args = parser.parse_args()
     if (args.d == True):
