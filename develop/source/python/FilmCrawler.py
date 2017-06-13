@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from .FileType import FileType
+from database.Film import Film
+from database.FileType import FileType
 import os
 
-class FilmCrawler:
 
+class FilmCrawler:
     def __init__(self):
         pass
 
-    @staticmethod
-    def crawl_folder(rootpath, rel_path, crawl_subfolders = False):
+    def crawl_folder(self, base_path, crawl_subfolders=False, rel_path=""):
         """
         Sucht Dateien innerhalb des übergebenen Pfades aus und ruft sich selbst
         für jeden Eintrag auf, der wiederum ein Ordner ist, falls crawl_subfolder == true
@@ -19,18 +19,23 @@ class FilmCrawler:
 
         :param base_path: Basispfad, der beim ersten Aufruf angegeben wird
         :param rel_path: Relativer Pfad des Elements zum Basispfad
+        :param crawl_subfolders: Flag, ob Unterordner durchsucht werden sollen
         :return: Kein Rückgabewert, sondern Ausgabe auf der Konsole
         """
 
         filme = []
 
+        # Dateinamen in Unicode umwandeln, damit diese später sauber in SQLite geschrieben werden können
+        base_path = unicode(base_path)
+        rel_path = unicode(rel_path)
+
         # Ordner durchsuchen und Filme in Liste verstauen
 
-        # Verzweigung für erste Iteration
+        # Verzweigung für erste Iteration (hier ist der volle Pfad identisch mit dem base_path)
         if len(rel_path) > 0:
-            fullpath = os.path.join(rootpath, rel_path)
+            fullpath = os.path.join(base_path, rel_path)
         else:
-            fullpath = rootpath
+            fullpath = base_path
 
         # Prüfen ob der Pfad existiert
         if not os.path.exists(fullpath):
@@ -39,8 +44,9 @@ class FilmCrawler:
 
         # Falls Datei, prüfen ob FileType passt und ggf. auslesen
         if os.path.isfile(fullpath):
-            # ToDo: Prüfen der Dateiendung und Auslesen der Dateiinfos
-            raise NotImplementedError
+            film_neu = Film.read_file_to_film(fullpath)
+            if film_neu:
+                filme.append(film_neu)
 
         # Falls Ordner, diesen ausgeben und weitere Rekursion der Inhalte
         elif os.path.isdir(fullpath):
@@ -53,8 +59,18 @@ class FilmCrawler:
                 return  # Beenden des Rekursionspfades
 
             for item in contents:
-                # ToDo: Items lesen
-                raise NotImplementedError
 
+                # Falls option aktiv, dass Subfolder auch durchsucht werden sollen oder basisfolder
+                if crawl_subfolders or (fullpath == base_path):
+                    neue_filme = self.crawl_folder(base_path, crawl_subfolders, os.path.join(rel_path, item))
+
+                    # Falls neue Filme gefunden wurden, werden diese der Liste hinzugefügt
+                    if neue_filme:
+                        for film_neu in neue_filme:
+                            filme.append(film_neu)
+
+        print filme # ToDo: print Entfernen, ist nur zum Testen, ob und/oder wie die Dateien eingelesen werden
         return filme
+
+
 

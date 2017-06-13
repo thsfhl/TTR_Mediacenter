@@ -47,6 +47,9 @@ class Persistable:
             cur = con.cursor()
             cur.execute("DELETE FROM " + self.get_table_name() + " WHERE db_id = ?", (self.get_db_id(),))
             con.commit()
+            cache = self.get_cache()
+            if cache:
+                cache.remove_from_cache(self)
 
     # -------------- Getter und Setter -------------------
 

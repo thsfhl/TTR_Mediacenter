@@ -23,6 +23,10 @@ class FileType(Persistable):
 
     @staticmethod
     def get_cache():
+        """
+        Liefert entweder das Cache-Objekt oder legt den Cache an, falls nicht vorhanden
+        :return: ObjectCache zu FileType
+        """
         if not FileType._cache:
             FileType._cache = ObjectCache(FileType().__class__)
         return FileType._cache
@@ -35,13 +39,56 @@ class FileType(Persistable):
     @staticmethod
     def get_by_id(db_id):
         """ Overridden aus Persistable """
+        # Try to get from cache
+        filetype = FileType.get_cache().get_by_id(db_id)
+        if filetype:
+            return filetype
+
+        # Sonst aus DB holen
         con = FileType.get_db().get_connection()
         cur = con.cursor()
         cur.execute("SELECT db_id, name, extension FROM " + FileType.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
         if row:
-            film = FileType(row[0], row[1], row[2])
-            return film
+            filetype = FileType(row[0], row[1], row[2])
+            FileType.get_cache().add_to_cache(filetype)
+            return filetype
+        else:
+            return None
+
+    @staticmethod
+    def get_by_extension(extension):
+        """
+        Prüft, ob ein Objekt mit der passenden Extension im Cache bereits vorhanden ist.
+        Falls ja, wird es zurückgegegben, falls nicht, wird in der Datenbank nachgesehen
+        und ggf. dem Cache hinzugefügt.
+        
+        Falls die Extension weder im Cache noch in der DB vorhanden ist, wird None zurückgegeben
+        
+        :param extension: 
+        :return: 
+        """
+        extension = extension.lower()
+
+        # Versuchen, den FileType aus dem Cache zu laden
+        filetype = FileType.get_cache().get_by_property('extension', extension)
+
+        if filetype:
+            return filetype
+
+        # Falls noch nicht in Cache vorhanden, in der DB nachschauen und falls gefunden
+        # in Cache  hinzufügen
+        con = FileType.get_db().get_connection()
+        cur = con.cursor()
+
+        if not extension:
+            return None
+
+        cur.execute("SELECT db_id FROM " + FileType.get_table_name() + " WHERE extension=?", (extension,))
+        row = cur.fetchone()
+        if row:
+            filetype = FileType.get_by_id(row[0])
+            return filetype
         else:
             return None
 
@@ -54,8 +101,9 @@ class FileType(Persistable):
 
         instances = []
         for row in cur:
-            film = FileType(row[0], row[1], row[2])
-            instances.append(film)
+            filetype = FileType(row[0], row[1], row[2])
+            instances.append(filetype)
+            FileType.get_cache().add_to_cache(filetype)
 
         return instances
 
@@ -71,6 +119,7 @@ class FileType(Persistable):
                         (self.get_name(), self.get_extension()))
             self.set_db_id(cur.lastrowid)
         con.commit()
+        FileType.get_cache().add_to_cache(self)
 
     # -------------- Getter und Setter -------------------
 

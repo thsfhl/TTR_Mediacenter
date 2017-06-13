@@ -101,13 +101,15 @@ class DbUtils:
         cur.execute("DROP TABLE IF EXISTS Filme")
         cur.execute("CREATE TABLE Filme("
                     "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    "name Text NOT NULL, "
-                    "pfad Text NOT NULL UNIQUE, "
+                    "titel Text NOT NULL, "
+                    "pfad Text NOT NULL, "
+                    "filename Text NOT NULL, "
                     "checksum Text NOT NULL, "
                     "genre INTEGER, "
-                    "filetype INTEGER "
+                    "filetype INTEGER, "
+                    "UNIQUE (pfad, filename)"
                     ")"
                     )
         # Index zum Suchen, wenn eine neue Datei hinzugefügt wird
-        cur.execute("CREATE INDEX index_pfad ON Filme(pfad)")
+        cur.execute("CREATE INDEX index_pfad ON Filme(pfad, filename)")
 
