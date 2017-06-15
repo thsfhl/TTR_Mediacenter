@@ -105,11 +105,27 @@ class DbUtils:
                     "pfad Text NOT NULL, "
                     "filename Text NOT NULL, "
                     "checksum Text NOT NULL, "
-                    "genre INTEGER, "
                     "filetype INTEGER, "
-                    "UNIQUE (pfad, filename)"
+                    "image Text, "
+                    "UNIQUE (pfad, filename), "
+                    "FOREIGN KEY(filetype) REFERENCES FileTypes(db_id)"        
                     ")"
                     )
         # Index zum Suchen, wenn eine neue Datei hinzugefügt wird
         cur.execute("CREATE INDEX index_pfad ON Filme(pfad, filename)")
+
+        # Tabelle Filme anlegen
+        def createTableFilmGenre(self, cur):
+            # Table für die Filme
+            cur.execute("DROP TABLE IF EXISTS FilmGenre")
+            cur.execute("CREATE TABLE FilmGenre("
+                        "film_id INTEGER NOT NULL, "
+                        "genre_id INTEGER NOT NULL, "
+                        "UNIQUE (film_id, genre_id), "
+                        "FOREIGN KEY(film_id) REFERENCES Film(db_id) ON DELETE CASCADE, "
+                        "FOREIGN KEY(genre_id) REFERENCES Genre(db_id) ON DELETE CASCADE"
+                        ")"
+                        )
+            # Index zum Suchen, wenn eine neue Datei hinzugefügt wird
+            cur.execute("CREATE INDEX index_film_genre ON Filme(film_id, genre_id)")
 

@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9e787f9c-e91c-4c14-a29a-bcc2fd7dcc28" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/ttr_mediacenter.db" afterPath="$PROJECT_DIR$/develop/source/python/ttr_mediacenter.db" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/FilmCrawler.py" afterPath="$PROJECT_DIR$/develop/source/python/FilmCrawler.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/database/DbUtils.py" afterPath="$PROJECT_DIR$/develop/source/python/database/DbUtils.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/database/Film.py" afterPath="$PROJECT_DIR$/develop/source/python/database/Film.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/database/Persistable.py" afterPath="$PROJECT_DIR$/develop/source/python/database/Persistable.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,7 +19,8 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/TTR_Mediacenter$TTR_Mediacenter.coverage" NAME="TTR_Mediacenter Coverage Results" MODIFIED="1497202552402" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/develop/source/python" />
     <SUITE FILE_PATH="coverage/ea03$DbUtils.coverage" NAME="DbUtils Coverage Results" MODIFIED="1496776896236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/develop/source/python" />
-    <SUITE FILE_PATH="coverage/ea03$TTR_Mediacenter.coverage" NAME="TTR_Mediacenter Coverage Results" MODIFIED="1497372218645" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/develop/source/python" />
+    <SUITE FILE_PATH="coverage/ea03$Rtest.coverage" NAME="Rtest Coverage Results" MODIFIED="1497561048643" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/develop/source/python" />
+    <SUITE FILE_PATH="coverage/ea03$TTR_Mediacenter.coverage" NAME="TTR_Mediacenter Coverage Results" MODIFIED="1497545212453" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/develop/source/python" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
@@ -22,8 +28,8 @@
       <file leaf-file-name="TTR_Mediacenter.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="952">
-              <caret line="120" column="6" lean-forward="false" selection-start-line="120" selection-start-column="6" selection-end-line="120" selection-end-column="6" />
+            <state relative-caret-position="170">
+              <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="35" />
               <folding>
                 <element signature="e#38#48#0" expanded="true" />
                 <element signature="e#496#857#0" expanded="false" />
@@ -36,8 +42,8 @@
       <file leaf-file-name="FilmCrawler.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/develop/source/python/FilmCrawler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="748">
-              <caret line="46" column="27" lean-forward="false" selection-start-line="46" selection-start-column="27" selection-end-line="46" selection-end-column="27" />
+            <state relative-caret-position="425">
+              <caret line="65" column="44" lean-forward="false" selection-start-line="65" selection-start-column="44" selection-end-line="65" selection-end-column="44" />
               <folding>
                 <element signature="e#25#55#0" expanded="true" />
               </folding>
@@ -57,16 +63,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Genre.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/develop/source/python/database/Genre.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1377">
-              <caret line="82" column="43" lean-forward="false" selection-start-line="82" selection-start-column="43" selection-end-line="82" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ObjectCache.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/develop/source/python/database/ObjectCache.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -77,14 +73,59 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Film.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Film.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/develop/source/python/database/Film.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="159" column="26" lean-forward="false" selection-start-line="159" selection-start-column="26" selection-end-line="159" selection-end-column="26" />
+            <state relative-caret-position="293">
+              <caret line="177" column="68" lean-forward="false" selection-start-line="177" selection-start-column="68" selection-end-line="177" selection-end-column="68" />
               <folding>
                 <element signature="e#25#39#0" expanded="true" />
+                <marker date="1497560859362" expanded="true" signature="2273:2319" ph="SELECT genre... FilmGenre" />
+                <marker date="1497560859362" expanded="true" signature="4509:4573" ph="DELETE FROM " />
+                <marker date="1497560859362" expanded="true" signature="4819:4829" ph="DELETE FROM " />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DbUtils.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/develop/source/python/database/DbUtils.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1530">
+              <caret line="108" column="26" lean-forward="false" selection-start-line="108" selection-start-column="26" selection-end-line="108" selection-end-column="26" />
+              <folding>
+                <marker date="1497554221479" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
+                <marker date="1497554221479" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
+                <marker date="1497554221479" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
+                <marker date="1497554221479" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
+                <marker date="1497554221479" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
+                <marker date="1497554221479" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
+                <marker date="1497554221479" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
+                <marker date="1497554221479" expanded="true" signature="3233:3620" ph="CREATE TABLE... Filme" />
+                <marker date="1497554221479" expanded="true" signature="3233:3725" ph="CREATE TABLE... Filme" />
+                <marker date="1497554221479" expanded="true" signature="4024:4054" ph="DROP TABLE I... " />
+                <marker date="1497554221479" expanded="true" signature="4082:4475" ph="CREATE TABLE... Filme" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Rtest.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/develop/source/python/Rtest.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="281">
+              <caret line="127" column="37" lean-forward="false" selection-start-line="127" selection-start-column="37" selection-end-line="127" selection-end-column="37" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test.glade" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/develop/source/python/test.glade">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="172">
+              <caret line="165" column="29" lean-forward="false" selection-start-line="165" selection-start-column="28" selection-end-line="165" selection-end-column="29" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -92,18 +133,8 @@
       <file leaf-file-name="Persistable.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/develop/source/python/database/Persistable.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="867">
-              <caret line="52" column="0" lean-forward="false" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TTRFileChooser.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/develop/source/python/gui/TTRFileChooser.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+            <state relative-caret-position="340">
+              <caret line="20" column="33" lean-forward="true" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -120,18 +151,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>&quot;</find>
-      <find>'''</find>
-      <find>get_</find>
-      <find>Film.db.</find>
-      <find>Film(</find>
-      <find>cls</find>
-      <find>db_id</find>
-      <find>Film</find>
-      <find>genre</find>
-      <find>self.db_id</find>
-      <find>Film.db</find>
-      <find>checksum</find>
       <find>fromdb2.</find>
       <find>.db</find>
       <find>.gen</find>
@@ -145,11 +164,23 @@
       <find>rootpath</find>
       <find>name</find>
       <find>pfad</find>
-      <find>filetype</find>
-      <find>print</find>
       <find>titel</find>
       <find>.get_name()</find>
       <find>crawl_fo</find>
+      <find>getG</find>
+      <find>get_genre</find>
+      <find>delete</find>
+      <find>filetype</find>
+      <find>2</find>
+      <find>my_name_cell_data_func</find>
+      <find>my_name</find>
+      <find>print</find>
+      <find>my_</find>
+      <find>title</find>
+      <find>titl</find>
+      <find>tree_model</find>
+      <find>set_ce</find>
+      <find>get_by_path</find>
     </findStrings>
     <replaceStrings>
       <replace>Film.db.</replace>
@@ -172,6 +203,8 @@
       <replace>status</replace>
       <replace>filename</replace>
       <replace>.get_titel()</replace>
+      <replace>image</replace>
+      <replace>3</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -197,14 +230,15 @@
         <option value="$PROJECT_DIR$/develop/source/python/DbUtils.py" />
         <option value="$PROJECT_DIR$/develop/source/python/gui/MyFileChooser.py" />
         <option value="$PROJECT_DIR$/develop/source/python/gui/TTRFileChooser.py" />
-        <option value="$PROJECT_DIR$/develop/source/python/database/DbUtils.py" />
         <option value="$PROJECT_DIR$/develop/source/python/database/ObjectCache.py" />
-        <option value="$PROJECT_DIR$/develop/source/python/database/Persistable.py" />
         <option value="$PROJECT_DIR$/develop/source/python/database/Genre.py" />
         <option value="$PROJECT_DIR$/develop/source/python/database/FileType.py" />
-        <option value="$PROJECT_DIR$/develop/source/python/FilmCrawler.py" />
         <option value="$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py" />
+        <option value="$PROJECT_DIR$/develop/source/python/database/DbUtils.py" />
+        <option value="$PROJECT_DIR$/develop/source/python/database/Persistable.py" />
+        <option value="$PROJECT_DIR$/develop/source/python/FilmCrawler.py" />
         <option value="$PROJECT_DIR$/develop/source/python/database/Film.py" />
+        <option value="$PROJECT_DIR$/develop/source/python/Rtest.py" />
       </list>
     </option>
   </component>
@@ -215,10 +249,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="56" />
-    <option name="y" value="15" />
-    <option name="width" value="1264" />
-    <option name="height" value="655" />
+    <option name="x" value="107" />
+    <option name="y" value="51" />
+    <option name="width" value="1725" />
+    <option name="height" value="951" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -235,7 +269,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -331,6 +364,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -356,7 +390,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.TTR_Mediacenter">
+  <component name="RunManager" selected="Python.Rtest">
     <configuration default="false" name="DbUtils" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -390,6 +424,25 @@
       <module name="TTR_Mediacenter" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Rtest" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/develop/source/python" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="TTR_Mediacenter" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/develop/source/python/Rtest.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -544,14 +597,16 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method />
     </configuration>
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="Python.DbUtils" />
       <item index="1" class="java.lang.String" itemvalue="Python.TTR_Mediacenter" />
+      <item index="2" class="java.lang.String" itemvalue="Python.Rtest" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Python.TTR_Mediacenter" />
-        <item index="1" class="java.lang.String" itemvalue="Python.DbUtils" />
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Python.Rtest" />
+        <item index="1" class="java.lang.String" itemvalue="Python.TTR_Mediacenter" />
+        <item index="2" class="java.lang.String" itemvalue="Python.DbUtils" />
       </list>
     </recent_temporary>
   </component>
@@ -615,26 +670,27 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="56" y="15" width="1264" height="655" extended-state="0" />
+    <frame x="107" y="51" width="1725" height="951" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1963141" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3229358" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3285151" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32223544" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39910313" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19602107" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936978" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3983353" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -667,39 +723,18 @@
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
       <option name="time" value="8" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/develop/source/python/database/Film.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1462">
-          <caret line="90" column="124" lean-forward="false" selection-start-line="90" selection-start-column="124" selection-end-line="90" selection-end-column="124" />
-          <folding>
-            <element signature="e#25#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/develop/source/python/database/Genre.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/develop/source/python/database/FileType.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding>
-            <element signature="e#25#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/develop/source/python/database/ObjectCache.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="527">
@@ -747,6 +782,9 @@
           <caret line="18" column="16" lean-forward="true" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
           <folding>
             <element signature="e#25#39#0" expanded="true" />
+            <marker date="1497560859362" expanded="true" signature="2273:2319" ph="SELECT genre... FilmGenre" />
+            <marker date="1497560859362" expanded="true" signature="4509:4573" ph="DELETE FROM " />
+            <marker date="1497560859362" expanded="true" signature="4819:4829" ph="DELETE FROM " />
           </folding>
         </state>
       </provider>
@@ -813,6 +851,9 @@
           <caret line="41" column="23" lean-forward="false" selection-start-line="41" selection-start-column="23" selection-end-line="41" selection-end-column="23" />
           <folding>
             <element signature="e#25#39#0" expanded="true" />
+            <marker date="1497560859362" expanded="true" signature="2273:2319" ph="SELECT genre... FilmGenre" />
+            <marker date="1497560859362" expanded="true" signature="4509:4573" ph="DELETE FROM " />
+            <marker date="1497560859362" expanded="true" signature="4819:4829" ph="DELETE FROM " />
           </folding>
         </state>
       </provider>
@@ -857,6 +898,9 @@
           <caret line="8" column="74" lean-forward="false" selection-start-line="8" selection-start-column="74" selection-end-line="8" selection-end-column="74" />
           <folding>
             <element signature="e#25#39#0" expanded="true" />
+            <marker date="1497560859362" expanded="true" signature="2273:2319" ph="SELECT genre... FilmGenre" />
+            <marker date="1497560859362" expanded="true" signature="4509:4573" ph="DELETE FROM " />
+            <marker date="1497560859362" expanded="true" signature="4819:4829" ph="DELETE FROM " />
           </folding>
         </state>
       </provider>
@@ -886,6 +930,9 @@
           <caret line="34" column="19" lean-forward="false" selection-start-line="34" selection-start-column="19" selection-end-line="34" selection-end-column="19" />
           <folding>
             <element signature="e#25#39#0" expanded="true" />
+            <marker date="1497560859362" expanded="true" signature="2273:2319" ph="SELECT genre... FilmGenre" />
+            <marker date="1497560859362" expanded="true" signature="4509:4573" ph="DELETE FROM " />
+            <marker date="1497560859362" expanded="true" signature="4819:4829" ph="DELETE FROM " />
           </folding>
         </state>
       </provider>
@@ -985,33 +1032,10 @@
       </provider>
     </entry>
     <entry file="file:///usr/lib64/python2.7/site-packages/gi/overrides/Gtk.py" />
-    <entry file="file://$PROJECT_DIR$/develop/source/python/gui/TTRFileChooser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/develop/source/python/database/DbUtils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/develop/source/python/database/ObjectCache.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="697">
           <caret line="41" column="42" lean-forward="false" selection-start-line="41" selection-start-column="42" selection-end-line="41" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/develop/source/python/database/Persistable.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="52" column="0" lean-forward="false" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1034,20 +1058,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/develop/source/python/FilmCrawler.py">
+    <entry file="file://$PROJECT_DIR$/develop/source/python/gui/TTRFileChooser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="748">
-          <caret line="46" column="27" lean-forward="false" selection-start-line="46" selection-start-column="27" selection-end-line="46" selection-end-column="27" />
-          <folding>
-            <element signature="e#25#55#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="17">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/abc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="80" column="66" lean-forward="true" selection-start-line="80" selection-start-column="66" selection-end-line="80" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/develop/source/python/database/Persistable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="33" lean-forward="true" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/develop/source/python/test.glade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="165" column="29" lean-forward="false" selection-start-line="165" selection-start-column="28" selection-end-line="165" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="952">
-          <caret line="120" column="6" lean-forward="false" selection-start-line="120" selection-start-column="6" selection-end-line="120" selection-end-column="6" />
+        <state relative-caret-position="170">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="35" />
           <folding>
             <element signature="e#38#48#0" expanded="true" />
             <element signature="e#496#857#0" expanded="false" />
@@ -1056,13 +1102,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/develop/source/python/FilmCrawler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="65" column="44" lean-forward="false" selection-start-line="65" selection-start-column="44" selection-end-line="65" selection-end-column="44" />
+          <folding>
+            <element signature="e#25#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/develop/source/python/database/DbUtils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1530">
+          <caret line="108" column="26" lean-forward="false" selection-start-line="108" selection-start-column="26" selection-end-line="108" selection-end-column="26" />
+          <folding>
+            <marker date="1497554221479" expanded="true" signature="1691:1721" ph="DROP TABLE I... " />
+            <marker date="1497554221479" expanded="true" signature="1745:1951" ph="CREATE TABLE... FileTypes" />
+            <marker date="1497554221479" expanded="true" signature="2326:2377" ph="INSERT INTO FileTypes... " />
+            <marker date="1497554221479" expanded="true" signature="2541:2568" ph="DROP TABLE I... " />
+            <marker date="1497554221479" expanded="true" signature="2592:2749" ph="CREATE TABLE... Genres" />
+            <marker date="1497554221479" expanded="true" signature="3021:3055" ph="INSERT INTO Genres... " />
+            <marker date="1497554221479" expanded="true" signature="3183:3209" ph="DROP TABLE I... " />
+            <marker date="1497554221479" expanded="true" signature="3233:3620" ph="CREATE TABLE... Filme" />
+            <marker date="1497554221479" expanded="true" signature="3233:3725" ph="CREATE TABLE... Filme" />
+            <marker date="1497554221479" expanded="true" signature="4024:4054" ph="DROP TABLE I... " />
+            <marker date="1497554221479" expanded="true" signature="4082:4475" ph="CREATE TABLE... Filme" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/develop/source/python/database/Film.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="159" column="26" lean-forward="false" selection-start-line="159" selection-start-column="26" selection-end-line="159" selection-end-column="26" />
+        <state relative-caret-position="293">
+          <caret line="177" column="68" lean-forward="false" selection-start-line="177" selection-start-column="68" selection-end-line="177" selection-end-column="68" />
           <folding>
             <element signature="e#25#39#0" expanded="true" />
+            <marker date="1497560859362" expanded="true" signature="2273:2319" ph="SELECT genre... FilmGenre" />
+            <marker date="1497560859362" expanded="true" signature="4509:4573" ph="DELETE FROM " />
+            <marker date="1497560859362" expanded="true" signature="4819:4829" ph="DELETE FROM " />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/develop/source/python/Rtest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="127" column="37" lean-forward="false" selection-start-line="127" selection-start-column="37" selection-end-line="127" selection-end-column="37" />
+          <folding />
         </state>
       </provider>
     </entry>
