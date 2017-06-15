@@ -49,10 +49,9 @@ class DbUtils:
 
         # Tabellen erzeugen, ggf. vorher löschen
         self.createTableFilme(cur)
-
         self.createTableGenres(cur)
-
         self.createTableFileTypes(cur)
+        self.createTableFilmGenre(cur)
 
         # Statements auf DB ausführen
         con.commit()
@@ -114,18 +113,18 @@ class DbUtils:
         # Index zum Suchen, wenn eine neue Datei hinzugefügt wird
         cur.execute("CREATE INDEX index_pfad ON Filme(pfad, filename)")
 
-        # Tabelle Filme anlegen
-        def createTableFilmGenre(self, cur):
-            # Table für die Filme
-            cur.execute("DROP TABLE IF EXISTS FilmGenre")
-            cur.execute("CREATE TABLE FilmGenre("
-                        "film_id INTEGER NOT NULL, "
-                        "genre_id INTEGER NOT NULL, "
-                        "UNIQUE (film_id, genre_id), "
-                        "FOREIGN KEY(film_id) REFERENCES Film(db_id) ON DELETE CASCADE, "
-                        "FOREIGN KEY(genre_id) REFERENCES Genre(db_id) ON DELETE CASCADE"
-                        ")"
-                        )
-            # Index zum Suchen, wenn eine neue Datei hinzugefügt wird
-            cur.execute("CREATE INDEX index_film_genre ON Filme(film_id, genre_id)")
+    # Tabelle Filme anlegen
+    def createTableFilmGenre(self, cur):
+        # Table für die Filme
+        cur.execute("DROP TABLE IF EXISTS FilmGenre")
+        cur.execute("CREATE TABLE FilmGenre("
+                    "film_id INTEGER NOT NULL, "
+                    "genre_id INTEGER NOT NULL, "
+                    "UNIQUE (film_id, genre_id), "
+                    "FOREIGN KEY(film_id) REFERENCES Film(db_id) ON DELETE CASCADE, "
+                    "FOREIGN KEY(genre_id) REFERENCES Genre(db_id) ON DELETE CASCADE"
+                    ")"
+                    )
+        # Index zum Suchen, wenn eine neue Datei hinzugefügt wird
+        cur.execute("CREATE INDEX index_film_genre ON FilmGenre(film_id, genre_id)")
 

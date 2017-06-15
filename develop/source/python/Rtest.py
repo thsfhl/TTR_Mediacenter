@@ -123,7 +123,14 @@ class RtestWindow:
         # "Echte" Filmobjekte erzeugen:
         db = DbUtils()
         db.create_database()
-        film_liste = FilmCrawler.crawl_folder('D:\Breaking Bad\Breakin_Bad_S01')
+        filme = FilmCrawler.crawl_folder('D:\Breaking Bad\Breakin_Bad_S01', True)
+
+        if filme:
+            for film in filme:
+                Film.persist(film)
+
+        film_liste = Film.get_all()
+
         for film in film_liste:
             listStore.append((film, ))
 

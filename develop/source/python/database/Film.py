@@ -84,7 +84,7 @@ class Film(Persistable, GObject.GObject):
         """ Overridden aus Persistable """
         con = Film.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, genre, filetype, image FROM " + Film.get_table_name())
+        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Film.get_table_name())
 
         instances = []
         for row in cur:
@@ -120,7 +120,7 @@ class Film(Persistable, GObject.GObject):
             cur.execute("UPDATE " + self.get_table_name() + " SET titel=?, pfad=?, filename=?, checksum=?, filetype=?, image=? WHERE id=?",
                         (self.get_titel(), self.get_pfad(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image(), self.get_db_id()))
         else:
-            cur.execute("INSERT INTO " + self.get_table_name() + " (titel, pfad, filename, checksum, filetype) VALUES (?, ?, ?, ?, ?, ?)",
+            cur.execute("INSERT INTO " + self.get_table_name() + " (titel, pfad, filename, checksum, filetype, image) VALUES (?, ?, ?, ?, ?, ?)",
                         (self.get_titel(), self.get_pfad(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image()))
             self.set_db_id(cur.lastrowid)
         con.commit()
@@ -130,12 +130,13 @@ class Film(Persistable, GObject.GObject):
         for genre in self.get_genres():
             genre_ids.append(genre.get_db_id())
 
-        placeholders = ', '.join('?' * len(genre_ids))
+        if genre_ids:
+            placeholders = ', '.join('?' * len(genre_ids))
 
-        query = "DELETE FROM FilmGenre WHERE film_id = ? AND genre_id NOT IN (%s)" % placeholders
-        parameters = [self.get_db_id()] + genre_ids
-        cur.execute(query, parameters)
-        con.commit()
+            query = "DELETE FROM FilmGenre WHERE film_id = ? AND genre_id NOT IN (%s)" % placeholders
+            parameters = [self.get_db_id()] + genre_ids
+            cur.execute(query, parameters)
+            con.commit()
 
         # ToDo: Genre-Assoziationen erzeugen, die genre_list zusätzlich enthält
         query = "INSERT IGNORE INTO FilmGenre SET film_id = ? AND genre_id = ?"
