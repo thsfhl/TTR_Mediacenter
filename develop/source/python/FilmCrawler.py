@@ -9,7 +9,8 @@ class FilmCrawler:
     def __init__(self):
         pass
 
-    def crawl_folder(self, base_path, crawl_subfolders=False, rel_path=""):
+    @staticmethod
+    def crawl_folder(base_path, crawl_subfolders=False, rel_path=""):
         """
         Sucht Dateien innerhalb des übergebenen Pfades aus und ruft sich selbst
         für jeden Eintrag auf, der wiederum ein Ordner ist, falls crawl_subfolder == true
@@ -62,7 +63,7 @@ class FilmCrawler:
 
                 # Falls option aktiv, dass Subfolder auch durchsucht werden sollen oder basisfolder
                 if crawl_subfolders or (fullpath == base_path):
-                    neue_filme = self.crawl_folder(base_path, crawl_subfolders, os.path.join(rel_path, item))
+                    neue_filme = FilmCrawler.crawl_folder(base_path, crawl_subfolders, os.path.join(rel_path, item))
 
                     # Falls neue Filme gefunden wurden, werden diese der Liste hinzugefügt
                     if neue_filme:
