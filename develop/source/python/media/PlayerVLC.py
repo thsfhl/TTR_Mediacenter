@@ -7,17 +7,18 @@ from gi.repository import Gtk
 gi.require_version('GdkX11', '3.0')
 from gi.repository import GdkX11
 
+gi.require_version('Gdk', '3.0')
+from gi.repository import Gdk
+
 import vlc
 
-MediaResourceLocator = ""
-
-
-class VLCPlayer(Gtk.Window):
-    def __init__(self):
-        Gtk.Window.__init__(self, title="Python-Vlc Media Player")
+class PlayerVLC(Gtk.Window):
+    def __init__(self, myMedia = None):
+        Gtk.Window.__init__(self, title="Vlc Media Player with Python")
         self.player_paused = False
         self.is_player_active = False
         self.connect("destroy", Gtk.main_quit)
+        self._media = myMedia
 
     def show(self):
         self.show_all()
@@ -67,7 +68,8 @@ class VLCPlayer(Gtk.Window):
     def toggle_player_playback(self, widget, data=None):
 
         """
-        Handler for Player's Playback Button (Play/Pause).
+        Handler für Schnittstelle zum Player VLC
+        Buttons anzeigen als aktiv oder deaktiviert
         """
 
         if self.is_player_active == False and self.player_paused == False:
@@ -88,26 +90,16 @@ class VLCPlayer(Gtk.Window):
             pass
 
     def _realized(self, widget, data=None):
-        self.vlcInstance = vlc.Instance("--no-xlib")
-        self.player = self.vlcInstance.media_player_new()
+        if 'linux' in sys.platform:
+            # Inform libvlc that Xlib is not initialized for threads
+            self.instance = vlc.Instance("--no-xlib")
+        else:
+            self.instance = vlc.Instance()
+        self.player = self.instance.media_player_new()
         win_id = widget.get_window().get_xid()
         self.player.set_xwindow(win_id)
-        self.player.set_mrl(MediaResourceLocator)
+        self.player.set_mrl(self._media)
         self.player.play()
         self.playback_button.set_image(self.pause_image)
         self.is_player_active = True
 
-
-if __name__ == '__main__':
-    if not sys.argv[1:]:
-        print ("Exiting! \n")
-        print ("Must provide the MediaResourceLocator.")
-        sys.exit(1)
-    if len(sys.argv[1:]) == 1:
-        MediaResourceLocator = sys.argv[1]
-        window = VLCPlayer()
-        window.setup_objects_and_events()
-        window.show()
-        Gtk.main()
-        window.player.stop()
-        window.vlcInstance.release()

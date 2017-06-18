@@ -1,8 +1,8 @@
 import gi
+from database.FileType import FileType
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
 
 class TTRFileChooser(Gtk.Window):
     def __init__(self):
@@ -18,6 +18,8 @@ class TTRFileChooser(Gtk.Window):
         button2 = Gtk.Button("Verzeichnis auswaehlen")
         button2.connect("clicked", self.on_folder_clicked)
         box.add(button2)
+        self._folder = None
+        self._file = None
 
     def on_file_clicked(self, widget):
         dialog = Gtk.FileChooserDialog("Bitte waehle eine Datei aus", self,
@@ -28,16 +30,15 @@ class TTRFileChooser(Gtk.Window):
         self.add_filters(dialog)
 
         response = dialog.run()
-        file = ""
+        self._file = ""
         if response == Gtk.ResponseType.OK:
             print("Datei auswaehlen wurde geklickt")
-            file = dialog.get_filename()
-            print("Selektierte Datei: " + file)
+            self._file = dialog.get_filename()
+            print("Selektierte Datei: " + self._file)
         elif response == Gtk.ResponseType.CANCEL:
             print("Vorgang wurde durch den Benutzer abgebrochen")
 
         dialog.destroy()
-        return file
 
     def add_filters(self, dialog):
         filter = Gtk.FileFilter()
@@ -45,11 +46,9 @@ class TTRFileChooser(Gtk.Window):
         filter.add_mime_type("image/png")
         filter.add_mime_type("image/jpeg")
         filter.add_mime_type("image/gif")
-        filter.add_pattern("*.png")
-        filter.add_pattern("*.jpg")
-        filter.add_pattern("*.gif")
-        filter.add_pattern("*.tif")
-        filter.add_pattern("*.xpm")
+
+        for f in FileType.get_all():
+            filter.add_pattern("*%s" % f.get_extension())
         dialog.add_filter(filter)
 
 
@@ -61,13 +60,18 @@ class TTRFileChooser(Gtk.Window):
         dialog.set_default_size(800, 400)
 
         response = dialog.run()
-        folder = ""
+        self._folder = ""
         if response == Gtk.ResponseType.OK:
             print("Verzeichnis auswaehlen wurde geklickt")
-            folder = dialog.get_filename()
-            print("Folder selected: " + folder)
+            self._folder = dialog.get_filename()
+            print("Folder selected: " + self._folder)
         elif response == Gtk.ResponseType.CANCEL:
             print("Vorgang wurde durch den Benutzer abgebrochen")
 
         dialog.destroy()
-        return folder
+
+    def getFileOrFolder(self):
+        if (None != self._folder):
+            return self._folder
+        else:
+            return self._file

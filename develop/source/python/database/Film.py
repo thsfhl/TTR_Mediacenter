@@ -2,10 +2,15 @@
 
 import hashlib
 import os
-from Persistable import Persistable
-from Genre import Genre
-from FileType import FileType
-from ObjectCache import ObjectCache
+from database.Persistable import Persistable
+from database.Genre import Genre
+from database.FileType import FileType
+from database.ObjectCache import ObjectCache
+
+import gi
+gi.require_version('Gtk', '3.0')
+
+# from gi.repository import Gtk
 from gi.repository import GObject
 
 class Film(Persistable, GObject.GObject):
@@ -17,9 +22,9 @@ class Film(Persistable, GObject.GObject):
 
     _cache = None
 
-    def __init__(self, db_id=None, titel=None, pfad=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
+    def __init__(self, db_id=0, titel=None, pfad=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
         """ Constructor """
-        Persistable.__init__(self)
+        Persistable.__init__(self, db_id)
         GObject.GObject.__init__(self)
         self._titel = titel
         self._pfad = pfad
@@ -218,7 +223,7 @@ class Film(Persistable, GObject.GObject):
             return film_aus_db
 
         # Falls der Film noch nicht in der Datenbank war
-        film_neu = Film(None, file_root, path_folder, filename, Film.md5(path), None, filetype)
+        film_neu = Film(0, file_root, path_folder, filename, Film.md5(path), None, filetype)
 
         return film_neu
 

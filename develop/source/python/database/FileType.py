@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from Persistable import Persistable
-from ObjectCache import ObjectCache
+from database.Persistable import Persistable
+from database.ObjectCache import ObjectCache
 
 
 class FileType(Persistable):
@@ -13,10 +13,9 @@ class FileType(Persistable):
 
     _cache = None
 
-    def __init__(self, db_id=None, name=None, extension=None):
+    def __init__(self, db_id=0, name=None, extension=None):
         """ Constructor """
-        Persistable.__init__(self)
-        self.set_db_id(db_id)
+        Persistable.__init__(self, db_id)
         self._name = name
         self._extension = None
         self.set_extension(extension)

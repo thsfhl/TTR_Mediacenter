@@ -16,6 +16,8 @@ from database.FileType import FileType
 from database.Film import Film
 from database.Genre import Genre
 from FilmCrawler import FilmCrawler
+from Rtest import RtestWindow
+from media.PlayerVLC import PlayerVLC
 
 from gui.TTRFileChooser import TTRFileChooser
 
@@ -78,34 +80,36 @@ def dbTests():
     print(fromdb2a)
 
     fromdb2b = Film.get_by_id(film2.get_db_id())
-    print "ID Film (aus DB):    "
-    print fromdb2b
+    print ("ID Film (aus DB):    ")
+    print (fromdb2b)
 
     # Film 2 löschen und testen, ob es funktioniert hat
-    print Film.get_cache().instances
+    print (Film.get_cache().instances)
     Film.delete(fromdb2)
     deleted = Film.get_by_id(film2.get_db_id())
     if deleted:
-        print str(deleted.id) + deleted.get_titel() + ", " + deleted.get_pfad()
+        print (str(deleted.id) + deleted.get_titel() + ", " + deleted.get_pfad())
     else:
-        print "Der Film mit der id %i wurde aus der Datenbank gelöscht!" % (film2.get_db_id())
+        print ("Der Film mit der id %i wurde aus der Datenbank gelöscht!" % (film2.get_db_id()))
 
-def crawlerTest():
+def crawlerTest(folderOrFile = None):
         # Datenbank leeren und neu erstellen für Test
         db = DbUtils()
         db.create_database()
 
         # Eigentlicher Test
         crawler = FilmCrawler()
-        filme = crawler.crawl_folder("C:\\temp\\video_test", True)
-        print filme
+        if (folderOrFile == None):
+            folderOrFile = "C:\\temp\\video_test"
+        filme = crawler.crawl_folder(folderOrFile, True)
+        print (filme)
         if filme:
             for film in filme:
                 Film.persist(film)
 
         # Test ob ID von Film auch in DB landet
         test_db_film = Film.get_by_id(1)
-        print test_db_film
+        print (test_db_film)
 
 
 if __name__ == '__main__':
@@ -116,20 +120,28 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", action="store_true")
 
-    # Achtung, hier muss ein sinnvolles Verzeichnis angegeben werden
-    crawlerTest()
     # dbTests()
 
     args = parser.parse_args()
     if (args.d == True):
         dbTests()
 
-    '''
+
     win = TTRFileChooser()
     win.connect("delete-event", Gtk.main_quit)
     win.show_all()
-    fileOrFolder = Gtk.main()
-    print fileOrFolder
-    '''
+    Gtk.main()
+    fileOrFolder = win.getFileOrFolder()
+    print (fileOrFolder)
+    # Achtung, hier muss ein sinnvolles Verzeichnis angegeben werden
+    crawlerTest(fileOrFolder)
 
+    player = PlayerVLC(fileOrFolder)
+    player.setup_objects_and_events()
+    player.show()
+    Gtk.main()
+    player.player.stop()
+    player.instance.release()
 
+#    main = RtestWindow() # create an instance of our class
+#    Gtk.main()

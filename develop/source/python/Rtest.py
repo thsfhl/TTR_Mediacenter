@@ -1,10 +1,13 @@
 import gi
+
+from develop.source.python.database.DbUtils import DbUtils
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GdkPixbuf
 
 from database.Film import Film
 from FilmCrawler import FilmCrawler
-from database.DbUtils import DbUtils
+from database.Persistable import Persistable
 
 #Handler Klasse
 class Handler:
@@ -16,7 +19,7 @@ class Handler:
     def on_dlg_destroy(self, widget, data=None):
         pass
     
-    #Bei Auswahl eines Filmes, werden die Attribute der Filme und das passendne Bilde geladen
+    #Bei Auswahl eines Filmes, werden die Attribute der Filme und das passende Bilde geladen
     def onSelectionChanged(self, tree_selection):
         (model, pathlist) = tree_selection.get_selected_rows()
         for path in pathlist:
@@ -129,7 +132,9 @@ class RtestWindow:
             for film in filme:
                 Film.persist(film)
 
-        film_liste = Film.get_all()
+        film_liste = []
+        if (Persistable.get_db() != None):
+            film_liste = Film.get_all()
 
         for film in film_liste:
             listStore.append((film, ))

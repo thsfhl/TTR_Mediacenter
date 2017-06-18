@@ -3,14 +3,18 @@
 '''
 Klasse für Entities, die in der DB gespeichert werden
 '''
+from http.client import NO_CONTENT
 
-from DbUtils import DbUtils
+from database.DbUtils import DbUtils
+
+# from develop.source.python.database import DbUtils
+
 
 class Persistable(object):
 
     _db = None
 
-    def __init__(self, db_id=None):
+    def __init__(self, db_id=0):
         """ Constructor """
         self._db_id = db_id
         Persistable._db = DbUtils()
@@ -49,6 +53,8 @@ class Persistable(object):
 
     @staticmethod
     def get_db():
+        if (Persistable._db == None):
+            Persistable._db = DbUtils()
         return Persistable._db
 
     # set_db() gibt es nicht, da im Constructor gesetzt

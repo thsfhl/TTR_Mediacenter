@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from Persistable import Persistable
-from ObjectCache import ObjectCache
+from database.Persistable import Persistable
+from database.ObjectCache import ObjectCache
 
 
 class Genre(Persistable):
@@ -13,9 +13,9 @@ class Genre(Persistable):
 
     _cache = None
 
-    def __init__(self, db_id=None, name=None):
+    def __init__(self, db_id=0, name=None):
         """ Constructor """
-        Persistable.__init__(self)
+        Persistable.__init__(self, db_id)
         self._db_id = db_id
         self._name = name
 
