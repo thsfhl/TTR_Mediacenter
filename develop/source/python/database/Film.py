@@ -6,9 +6,9 @@ from Persistable import Persistable
 from Genre import Genre
 from FileType import FileType
 from ObjectCache import ObjectCache
+from gi.repository import GObject
 
-
-class Film(Persistable):
+class Film(Persistable, GObject.GObject):
     """
     Klasse in der die Datenbankverbindung hergestellt wird
     - Datenbank aktualisieren und erstellen
@@ -17,16 +17,21 @@ class Film(Persistable):
 
     _cache = None
 
-    def __init__(self, db_id=None, titel=None, pfad=None, filename=None, checksum=None, genre=None, filetype=None, status=0):
+    def __init__(self, db_id=None, titel=None, pfad=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
         """ Constructor """
         Persistable.__init__(self)
+        GObject.GObject.__init__(self)
         self._titel = titel
         self._pfad = pfad
         self._filename = filename
         self._checksum = checksum
-        self._genre = genre
+        if genre_list:
+            self._genre_list = genre_list
+        else:
+            self._genre_list = []
         self._filetype = filetype
         self._status = status # Status 0 = OK, 1 = Changed, 2 = Deleted
+        self._image = None
 
     @staticmethod
     def get_cache():
@@ -54,21 +59,32 @@ class Film(Persistable):
         # Falls nicht aus Datenbank holen
         con = Film.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, genre, filetype FROM " + Film.get_table_name() + " WHERE db_id=?", (db_id,))
+        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Film.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
         if row:
             film = Film.film_from_row(row)
+
             Film.get_cache().add_to_cache(film)
             return film
         else:
             return None
+
+    def fetch_genres_from_db(self):
+        con = Film.get_db().get_connection()
+        cur = con.cursor()
+        row = cur.execute(
+            "SELECT genre_id FROM FilmGenre WHERE film_id=?", (self.get_db_id(),))
+
+        for row in cur:
+            genre = Genre.get_by_id(row[0])
+            self.add_genre(genre)
 
     @staticmethod
     def get_all():
         """ Overridden aus Persistable """
         con = Film.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, genre, filetype FROM " + Film.get_table_name())
+        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Film.get_table_name())
 
         instances = []
         for row in cur:
@@ -86,9 +102,9 @@ class Film(Persistable):
         :param row: Passende Datenbankzeile 
         :return: Film-Objekt
         """
-        genre = Genre.get_cache().get_by_id(row[4])
         filetype = FileType.get_cache().get_by_id(row[4])
-        film = Film(row[0], row[1], row[2], row[3], row[4], genre, filetype)
+        film = Film(row[0], row[1], row[2], row[3], row[4], filetype)
+        film.fetch_genres_from_db()
         return film
 
     def persist(self):
@@ -96,21 +112,36 @@ class Film(Persistable):
         con = Film.get_db().get_connection()
         cur = con.cursor()
 
-        genre_id = 0
-        if self.get_genre():
-            genre_id = self.get_genre().get_db_id()
-
         filetype_id = 0
         if self.get_filetype():
             filetype_id = self.get_filetype().get_db_id()
 
         if (self.get_db_id() > 0):
-            cur.execute("UPDATE " + self.get_table_name() + " SET titel=?, pfad=?, filename=?, checksum=?, genre, filetype WHERE id=?",
-                        (self.get_titel(), self.get_pfad(), self.get_filename(), self.get_checksum(), genre_id, filetype_id, self.get_db_id()))
+            cur.execute("UPDATE " + self.get_table_name() + " SET titel=?, pfad=?, filename=?, checksum=?, filetype=?, image=? WHERE id=?",
+                        (self.get_titel(), self.get_pfad(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image(), self.get_db_id()))
         else:
-            cur.execute("INSERT INTO " + self.get_table_name() + " (titel, pfad, filename, checksum, genre, filetype) VALUES (?,?,?,?,?,?)",
-                        (self.get_titel(), self.get_pfad(), self.get_filename(), self.get_checksum(), genre_id, filetype_id))
+            cur.execute("INSERT INTO " + self.get_table_name() + " (titel, pfad, filename, checksum, filetype, image) VALUES (?, ?, ?, ?, ?, ?)",
+                        (self.get_titel(), self.get_pfad(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image()))
             self.set_db_id(cur.lastrowid)
+        con.commit()
+
+        # ToDo: Genre-Assoziationen löschen, die genre_list nicht hergibt
+        genre_ids = []
+        for genre in self.get_genres():
+            genre_ids.append(genre.get_db_id())
+
+        if genre_ids:
+            placeholders = ', '.join('?' * len(genre_ids))
+
+            query = "DELETE FROM FilmGenre WHERE film_id = ? AND genre_id NOT IN (%s)" % placeholders
+            parameters = [self.get_db_id()] + genre_ids
+            cur.execute(query, parameters)
+            con.commit()
+
+        # ToDo: Genre-Assoziationen erzeugen, die genre_list zusätzlich enthält
+        query = "INSERT IGNORE INTO FilmGenre SET film_id = ? AND genre_id = ?"
+        for genre in self.get_genres():
+            cur.execute(query, (self.get_db_id(), genre.get_db_id()))
         con.commit()
 
         # Cache aktualsieren
@@ -145,7 +176,7 @@ class Film(Persistable):
         """
         con = Film.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, genre, filetype FROM " + Film.get_table_name() + " WHERE pfad=?", (path,))
+        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Film.get_table_name() + " WHERE pfad=?", (path,))
         row = cur.fetchone()
         if row:
             film = Film.get_cache().get_by_id(row[0])
@@ -219,17 +250,26 @@ class Film(Persistable):
     def set_checksum(self, checksum):
         self._checksum = checksum
 
-    def get_genre(self):
-        return self._genre
+    def get_genres(self):
+        return self._genre_list
 
-    def set_genre(self, genre):
-        self._genre = genre
+    def add_genre(self, genre):
+        self._genre_list.append(genre)
+
+    def remove_genre(self, genre):
+        self._genre_list.remove(genre)
 
     def get_filetype(self):
         return self._filetype
 
     def set_filetype(self, filetype):
         self._filetype = filetype
+
+    def get_image(self):
+        return self._image
+
+    def set_image(self, image):
+        self._image = image
         
     def get_status(self):
         return self._status

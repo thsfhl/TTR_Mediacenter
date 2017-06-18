@@ -4,11 +4,9 @@
 Klasse für Entities, die in der DB gespeichert werden
 '''
 
-import abc
 from DbUtils import DbUtils
 
-class Persistable:
-    __metaclass__ = abc.ABCMeta
+class Persistable(object):
 
     _db = None
 
@@ -18,24 +16,20 @@ class Persistable:
         Persistable._db = DbUtils()
 
     @staticmethod
-    @abc.abstractmethod
     def get_table_name():
         """ Gibt den Namen der Tabelle für diese Entity zurück. Benötigt für DB-Zugriff. """
         raise NotImplementedError
 
     @staticmethod
-    @abc.abstractmethod
     def get_by_id(db_id):
         """ Gibt das Objekt mit der passenden ID aus der Datenbank zurück oder Null """
         raise NotImplementedError
 
     @staticmethod
-    @abc.abstractmethod
     def get_all():
         """ Gibt das Objekt mit der passenden ID aus der Datenbank zurück oder Null """
         raise NotImplementedError
 
-    @abc.abstractmethod
     def persist(self):
         """ Speichert das Objekt in die Datenbank """
         raise NotImplementedError
