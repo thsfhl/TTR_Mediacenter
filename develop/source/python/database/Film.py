@@ -2,11 +2,12 @@
 
 import hashlib
 import os
-from Persistable import Persistable
-from Genre import Genre
-from FileType import FileType
-from ObjectCache import ObjectCache
 from gi.repository import GObject
+
+from .Persistable import Persistable
+from .Genre import Genre
+from .FileType import FileType
+from .ObjectCache import ObjectCache
 
 class Film(Persistable, GObject.GObject):
     """

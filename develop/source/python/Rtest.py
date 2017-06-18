@@ -3,12 +3,12 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GdkPixbuf
+from random import randint
 
 from database.Film import Film
 from database.Genre import Genre
-from FilmCrawler import FilmCrawler
 from database.DbUtils import DbUtils
-from random import randint
+from .FilmCrawler import FilmCrawler
 
 #Handler Klasse
 class Handler:

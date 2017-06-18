@@ -4,7 +4,7 @@
 Klasse für Entities, die in der DB gespeichert werden
 '''
 
-from DbUtils import DbUtils
+from .DbUtils import DbUtils
 
 class Persistable(object):
 

@@ -2,7 +2,7 @@
 
 import sqlite3 as sl
 import sys
-from Singleton import *
+from .Singleton import *
 
 
 @singleton

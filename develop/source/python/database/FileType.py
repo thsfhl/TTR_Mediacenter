@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from Persistable import Persistable
-from ObjectCache import ObjectCache
+from .Persistable import Persistable
+from .ObjectCache import ObjectCache
 
 
 class FileType(Persistable):
