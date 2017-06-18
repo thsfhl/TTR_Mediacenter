@@ -156,14 +156,19 @@ class Film(Persistable, GObject.GObject):
     @staticmethod
     def md5(fname):
         """
-        Erzeugt eine MD5-Checksum für eine Datei
+        Erzeugt eine MD5-Checksum für max. die ersten 8MB einer Datei.
         Datei wird in Chunks von 4096 Bytes eingelesen, für den Fall,
         dass die Datei selbst zu groß ist, was bei Filmen ja durchaus möglich ist
         """
         hash_md5 = hashlib.md5()
         with open(fname, "rb") as f:
+            blocks_read = 0
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_md5.update(chunk)
+                blocks_read += 1
+                # Nur erste 2000 Blöcke lesen 4086 Bytes * 2000 = 8 MB
+                if blocks_read >= 100:
+                    break
         return hash_md5.hexdigest()
 
     def checksum_changed(self):
