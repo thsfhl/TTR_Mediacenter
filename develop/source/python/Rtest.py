@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GdkPixbuf
 
 from database.Film import Film
+from database.Genre import Genre
 from FilmCrawler import FilmCrawler
 from database.DbUtils import DbUtils
+from random import randint
 
 #Handler Klasse
 class Handler:
@@ -22,7 +26,8 @@ class Handler:
         for path in pathlist:
             tree_iter = model.get_iter(path)
             selected_film = model.get_value(tree_iter,0)
-            main.update_image(selected_film.get_image())
+            if selected_film.get_image():
+                main.update_image(selected_film.get_image())
             main.update_genre(main.get_genre_string(selected_film.get_genres()))
             
     #handler fuer doppelclick und Enter
@@ -127,6 +132,10 @@ class RtestWindow:
 
         if filme:
             for film in filme:
+                # 1-3 Genres hinzufügen
+                for i in range(randint(1, 3)):
+                    # Zufälliges Genre hinzufügen
+                    film.add_genre(Genre.get_by_id(randint(1, 5)))
                 Film.persist(film)
 
         film_liste = Film.get_all()

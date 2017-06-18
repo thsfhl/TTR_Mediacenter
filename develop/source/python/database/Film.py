@@ -16,11 +16,11 @@ class Film(Persistable, GObject.GObject):
     """
 
     _cache = None
-
     def __init__(self, db_id=None, titel=None, pfad=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
         """ Constructor """
         Persistable.__init__(self)
         GObject.GObject.__init__(self)
+        self._db_id = db_id
         self._titel = titel
         self._pfad = pfad
         self._filename = filename
@@ -70,9 +70,13 @@ class Film(Persistable, GObject.GObject):
             return None
 
     def fetch_genres_from_db(self):
+        """
+        Holt zu einem Film die Liste der Genres aus der Datenbank und fügt sie dem Objekt hinzu
+        :return: 
+        """
         con = Film.get_db().get_connection()
         cur = con.cursor()
-        row = cur.execute(
+        cur.execute(
             "SELECT genre_id FROM FilmGenre WHERE film_id=?", (self.get_db_id(),))
 
         for row in cur:
@@ -102,8 +106,8 @@ class Film(Persistable, GObject.GObject):
         :param row: Passende Datenbankzeile 
         :return: Film-Objekt
         """
-        filetype = FileType.get_cache().get_by_id(row[4])
-        film = Film(row[0], row[1], row[2], row[3], row[4], filetype)
+        filetype = FileType.get_by_id(row[5])
+        film = Film(row[0], row[1], row[2], row[3], row[4], None, filetype, row[6])
         film.fetch_genres_from_db()
         return film
 
@@ -139,7 +143,7 @@ class Film(Persistable, GObject.GObject):
             con.commit()
 
         # ToDo: Genre-Assoziationen erzeugen, die genre_list zusätzlich enthält
-        query = "INSERT IGNORE INTO FilmGenre SET film_id = ? AND genre_id = ?"
+        query = "INSERT INTO FilmGenre(film_id, genre_id) VALUES (?, ?)"
         for genre in self.get_genres():
             cur.execute(query, (self.get_db_id(), genre.get_db_id()))
         con.commit()
@@ -214,7 +218,7 @@ class Film(Persistable, GObject.GObject):
                 film_aus_db.set_checksum(film_aus_db.md5(path))
                 film_aus_db.set_status(
                     1)  # Status auf "geänderte Datei" setzen / ggf. später auch Metadaten neu lesen
-                Film.get_cache().persist(film_aus_db)
+                Film.persist(film_aus_db)
             return film_aus_db
 
         # Falls der Film noch nicht in der Datenbank war
@@ -254,7 +258,8 @@ class Film(Persistable, GObject.GObject):
         return self._genre_list
 
     def add_genre(self, genre):
-        self._genre_list.append(genre)
+        if genre not in self._genre_list:
+            self._genre_list.append(genre)
 
     def remove_genre(self, genre):
         self._genre_list.remove(genre)
