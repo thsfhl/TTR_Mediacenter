@@ -32,7 +32,7 @@ class ObjectCache:
 
     def get_by_property(self, prop_name, prop_value):
         """ Holt nur Objekt aus dem Cache, ohne alternativ in der Datenbank zu suchen """
-        for key, value in self.instances.iteritems():
+        for key, value in self.instances.items():
             if getattr(value, "_" + prop_name) == prop_value:
                 return value
         return None

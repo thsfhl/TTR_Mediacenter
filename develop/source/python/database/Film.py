@@ -121,7 +121,7 @@ class Film(Persistable, GObject.GObject):
         if self.get_filetype():
             filetype_id = self.get_filetype().get_db_id()
 
-        if (self.get_db_id() > 0):
+        if (not self.get_db_id() is None and  self.get_db_id()):
             cur.execute("UPDATE " + self.get_table_name() + " SET titel=?, pfad=?, filename=?, checksum=?, filetype=?, image=? WHERE id=?",
                         (self.get_titel(), self.get_pfad(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image(), self.get_db_id()))
         else:

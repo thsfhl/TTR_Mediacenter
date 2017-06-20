@@ -36,10 +36,10 @@ class DbUtils:
 
             return self.con
 
-        except sl.Error, e:
+        except sl.Error as e:
 
             # Fehlermeldung, falls Verbindung nicht hergestellt werden konnte
-            print "Error %s:" % e.args[0]
+            print("Error %s:" % e.args[0])
             sys.exit(1)
 
     def create_database(self):

@@ -26,10 +26,6 @@ class FilmCrawler:
 
         filme = []
 
-        # Dateinamen in Unicode umwandeln, damit diese später sauber in SQLite geschrieben werden können
-        base_path = unicode(base_path)
-        rel_path = unicode(rel_path)
-
         # Ordner durchsuchen und Filme in Liste verstauen
 
         # Verzweigung für erste Iteration (hier ist der volle Pfad identisch mit dem base_path)
@@ -70,7 +66,7 @@ class FilmCrawler:
                         for film_neu in neue_filme:
                             filme.append(film_neu)
 
-        print filme # ToDo: print Entfernen, ist nur zum Testen, ob und/oder wie die Dateien eingelesen werden
+        print(filme) # ToDo: print Entfernen, ist nur zum Testen, ob und/oder wie die Dateien eingelesen werden
         return filme
 
 

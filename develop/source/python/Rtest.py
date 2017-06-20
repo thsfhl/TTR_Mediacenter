@@ -8,7 +8,7 @@ from random import randint
 from database.Film import Film
 from database.Genre import Genre
 from database.DbUtils import DbUtils
-from .FilmCrawler import FilmCrawler
+from FilmCrawler import FilmCrawler
 
 #Handler Klasse
 class Handler:
