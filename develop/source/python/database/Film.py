@@ -29,7 +29,7 @@ class Film(Persistable, GObject.GObject):
 
     def __init__(self, db_id=0, titel=None, pfad=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
         """ Constructor """
-        Persistable.__init__(self, db_id)
+        Persistable.__init__(self)
         GObject.GObject.__init__(self)
         self._db_id = db_id
         self._titel = titel
@@ -82,7 +82,7 @@ class Film(Persistable, GObject.GObject):
 
     def fetch_genres_from_db(self):
         """
-        Holt zu einem Film die Liste der Genres aus der Datenbank und fügt sie dem Objekt hinzu
+        Holt zu einem Film die Liste der Genres aus der Datenbank und fï¿½gt sie dem Objekt hinzu
         :return: 
         """
         con = Film.get_db().get_connection()
@@ -167,7 +167,7 @@ class Film(Persistable, GObject.GObject):
     @staticmethod
     def md5(fname):
         """
-        Erzeugt eine MD5-Checksum für max. die ersten 8MB einer Datei.
+        Erzeugt eine MD5-Checksum fï¿½r max. die ersten 8MB einer Datei.
         Datei wird in Chunks von 4096 Bytes eingelesen, fÃ¼r den Fall,
         dass die Datei selbst zu groÃŸ ist, was bei Filmen ja durchaus mÃ¶glich ist
         """
@@ -177,7 +177,7 @@ class Film(Persistable, GObject.GObject):
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_md5.update(chunk)
                 blocks_read += 1
-                # Nur erste 2000 Blöcke lesen 4086 Bytes * 2000 = 8 MB
+                # Nur erste 2000 Blï¿½cke lesen 4086 Bytes * 2000 = 8 MB
                 if blocks_read >= 100:
                     break
         return hash_md5.hexdigest()

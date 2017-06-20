@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from database.Film import Film
+from .database.Film import Film
 
 import os
 

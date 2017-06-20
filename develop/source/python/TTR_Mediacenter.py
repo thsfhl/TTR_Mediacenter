@@ -10,15 +10,15 @@ from gi.repository import Gtk
 import argparse
 
 # DB-Klasse importieren
-from database.DbUtils import DbUtils
-from database.FileType import FileType
-from database.Film import Film
-from database.Genre import Genre
-from FilmCrawler import FilmCrawler
-from Rtest import RtestWindow
-from media.PlayerVLC import PlayerVLC
+from develop.source.python.database.DbUtils import DbUtils
+from develop.source.python.database.FileType import FileType
+from develop.source.python.database.Film import Film
+from develop.source.python.database.Genre import Genre
+from develop.source.python.FilmCrawler import FilmCrawler
+from develop.source.python.Rtest import RtestWindow
+from develop.source.python.media.PlayerVLC import PlayerVLC
 
-from gui.TTRFileChooser import TTRFileChooser
+from develop.source.python.gui.TTRFileChooser import TTRFileChooser
 
 # nur zum Test
 import hashlib

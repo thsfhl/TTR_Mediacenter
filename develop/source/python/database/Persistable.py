@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-Klasse für Entities, die in der DB gespeichert werden
+Klasse fï¿½r Entities, die in der DB gespeichert werden
 '''
 
 
@@ -11,9 +11,8 @@ class Persistable(object):
 
     _db = None
 
-    def __init__(self, db_id=0):
+    def __init__(self):
         """ Constructor """
-        self._db_id = db_id
         Persistable._db = DbUtils()
 
     @staticmethod

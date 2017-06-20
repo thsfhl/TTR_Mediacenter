@@ -6,11 +6,10 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GdkPixbuf
 from random import randint
 
-from .database.Film import Film
-from .database.Genre import Genre
-from .database.Persistable import Persistable
-from .FilmCrawler import FilmCrawler
-from .database.DbUtils import DbUtils
+from develop.source.python.database.Film import Film
+from develop.source.python.database.Genre import Genre
+from develop.source.python.FilmCrawler import FilmCrawler
+from develop.source.python.database.DbUtils import DbUtils
 
 #Handler Klasse
 class Handler:
@@ -134,9 +133,9 @@ class RtestWindow:
 
         if filme:
             for film in filme:
-                # 1-3 Genres hinzufügen
+                # 1-3 Genres hinzufï¿½gen
                 for i in range(randint(1, 3)):
-                    # Zufälliges Genre hinzufügen
+                    # Zufï¿½lliges Genre hinzufï¿½gen
                     film.add_genre(Genre.get_by_id(randint(1, 5)))
                 Film.persist(film)
 
