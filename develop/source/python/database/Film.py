@@ -2,6 +2,15 @@
 
 import hashlib
 import os
+from database.Persistable import Persistable
+from database.Genre import Genre
+from database.FileType import FileType
+from database.ObjectCache import ObjectCache
+
+import gi
+gi.require_version('Gtk', '3.0')
+
+# from gi.repository import Gtk
 from gi.repository import GObject
 
 from .Persistable import Persistable
@@ -17,9 +26,10 @@ class Film(Persistable, GObject.GObject):
     """
 
     _cache = None
-    def __init__(self, db_id=None, titel=None, pfad=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
+
+    def __init__(self, db_id=0, titel=None, pfad=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
         """ Constructor """
-        Persistable.__init__(self)
+        Persistable.__init__(self, db_id)
         GObject.GObject.__init__(self)
         self._db_id = db_id
         self._titel = titel
@@ -72,7 +82,7 @@ class Film(Persistable, GObject.GObject):
 
     def fetch_genres_from_db(self):
         """
-        Holt zu einem Film die Liste der Genres aus der Datenbank und fügt sie dem Objekt hinzu
+        Holt zu einem Film die Liste der Genres aus der Datenbank und f�gt sie dem Objekt hinzu
         :return: 
         """
         con = Film.get_db().get_connection()
@@ -157,7 +167,7 @@ class Film(Persistable, GObject.GObject):
     @staticmethod
     def md5(fname):
         """
-        Erzeugt eine MD5-Checksum für max. die ersten 8MB einer Datei.
+        Erzeugt eine MD5-Checksum f�r max. die ersten 8MB einer Datei.
         Datei wird in Chunks von 4096 Bytes eingelesen, für den Fall,
         dass die Datei selbst zu groß ist, was bei Filmen ja durchaus möglich ist
         """
@@ -167,7 +177,7 @@ class Film(Persistable, GObject.GObject):
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_md5.update(chunk)
                 blocks_read += 1
-                # Nur erste 2000 Blöcke lesen 4086 Bytes * 2000 = 8 MB
+                # Nur erste 2000 Bl�cke lesen 4086 Bytes * 2000 = 8 MB
                 if blocks_read >= 100:
                     break
         return hash_md5.hexdigest()
@@ -228,7 +238,7 @@ class Film(Persistable, GObject.GObject):
             return film_aus_db
 
         # Falls der Film noch nicht in der Datenbank war
-        film_neu = Film(None, file_root, path_folder, filename, Film.md5(path), None, filetype)
+        film_neu = Film(0, file_root, path_folder, filename, Film.md5(path), None, filetype)
 
         return film_neu
 

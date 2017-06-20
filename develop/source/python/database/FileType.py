@@ -13,7 +13,7 @@ class FileType(Persistable):
 
     _cache = None
 
-    def __init__(self, db_id=None, name=None, extension=None):
+    def __init__(self, db_id=0, name=None, extension=None):
         """ Constructor """
         Persistable.__init__(self)
         self.set_db_id(db_id)

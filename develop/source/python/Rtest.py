@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import gi
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GdkPixbuf
 from random import randint
 
-from database.Film import Film
-from database.Genre import Genre
-from database.DbUtils import DbUtils
-from FilmCrawler import FilmCrawler
+from .database.Film import Film
+from .database.Genre import Genre
+from .database.Persistable import Persistable
+from .FilmCrawler import FilmCrawler
+from .database.DbUtils import DbUtils
 
 #Handler Klasse
 class Handler:
@@ -20,7 +22,7 @@ class Handler:
     def on_dlg_destroy(self, widget, data=None):
         pass
     
-    #Bei Auswahl eines Filmes, werden die Attribute der Filme und das passendne Bilde geladen
+    #Bei Auswahl eines Filmes, werden die Attribute der Filme und das passende Bilde geladen
     def onSelectionChanged(self, tree_selection):
         (model, pathlist) = tree_selection.get_selected_rows()
         for path in pathlist:
@@ -132,9 +134,9 @@ class RtestWindow:
 
         if filme:
             for film in filme:
-                # 1-3 Genres hinzufÃ¼gen
+                # 1-3 Genres hinzufügen
                 for i in range(randint(1, 3)):
-                    # ZufÃ¤lliges Genre hinzufÃ¼gen
+                    # Zufälliges Genre hinzufügen
                     film.add_genre(Genre.get_by_id(randint(1, 5)))
                 Film.persist(film)
 

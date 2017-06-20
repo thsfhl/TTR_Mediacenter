@@ -5,7 +5,7 @@ import sys
 from .Singleton import *
 
 
-@singleton
+@Singleton
 class DbUtils:
     """
     Klasse in der die Datenbankverbindung hergestellt wird
@@ -37,7 +37,6 @@ class DbUtils:
             return self.con
 
         except sl.Error as e:
-
             # Fehlermeldung, falls Verbindung nicht hergestellt werden konnte
             print("Error %s:" % e.args[0])
             sys.exit(1)
@@ -72,7 +71,11 @@ class DbUtils:
                      ('MPEG', '.mpg'),
                      ('Windows Media Video', '.wmv'),
                      ('Flash Video', '.flv'),
-                     ('QuickTime File Format', '.mov')
+                     ('QuickTime File Format', '.mov'),
+                     ('Containerformat / MOTION PICTURE EXPERTS GROUP 4,' , '.mp4'),
+                     ('Joint Photographic Experts Group', '.jpeg'),
+                     ('Joint Photographic Experts Group', '.jpg'),
+                     ('Portable Network Graphics', '.png')
                      ]
         cur.executemany("INSERT INTO FileTypes(name, extension) VALUES(?, ?)", filetypes)
 
