@@ -1,7 +1,13 @@
 import gi
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GdkPixbuf
 from pathlib import Path
+from database.Film import Film
+from FilmCrawler import FilmCrawler
+from database.Persistable import Persistable
+from database.DbUtils import DbUtils
+
 
 ##############################################################################################################
 ##################################################  Handler  #################################################
@@ -121,6 +127,19 @@ class ImportMovieWindowHandler:
         if selectedMovie is not None:
             #keine Fehlermeldung, wenn nur der Text geändert wird
             main.ImportMovieWindow.movie.name = widget.get_text()
+    
+    def on_ImportFolderFileChooser_file_set(self, widget):
+        filme = FilmCrawler.crawl_folder('K:/downloads/The.Boss.Baby.German.DL.AC3.1080p.WebHD.h264-PsO - filecrypt.cc/The.Boss.Baby.German.DL.AC3.1080p.WebHD.h264-PsO/', True)
+        if filme:
+            for film in filme:
+                Film.persist(film)
+
+        film_liste = []
+        if (Persistable.get_db() != None):
+            film_liste = Film.get_all()
+
+        for film in film_liste:
+            main.ImportMovieWindow.movieListStore.append((film, ))
       
 
 #Alle Handler für das Film bearbeiten Fenster
@@ -204,14 +223,15 @@ def set_treeview_cell_txt_colone(tree_column, cell, tree_model, iter, data):
     #model fuer aktuelle Zeile holen
     obj = tree_model[iter][0]    
     #text fuer aktuelle Zeile setzen
-    cell.set_property('text', obj.name)
+    cell.set_property('text', obj.get_titel())
+    
     
 #Funktion um allen Zellen in Spalte 2 des Treeviews zu einer Textzelle zu machen    
 def set_treeview_cell_txt_coltwo(tree_column, cell, tree_model, iter, data):
     #model fuer aktuelle Zeile holen
     obj = tree_model[iter][1]    #
     #text fuer aktuelle Zeile setzen
-    cell.set_property('text', obj.name)
+    cell.set_property('text', obj.get_titel())
 #Funktion um ein Bild zu laden und anschließend zu skalieren    
 def update_image(filePath, x=1280, y=720):
     myfile = Path(filePath)
@@ -255,7 +275,7 @@ class MainWindow:
         self.builder = Gtk.Builder()
         #Glade File dem Builder zuweisen
         #todo: umbenennen der Gladefile
-        self.builder.add_from_file("test.glade")         
+        self.builder.add_from_file("MainWindow.glade")         
         #Eventhandler zuweisen
         self.builder.connect_signals(MainWindowHandler())
         #Das Fenster zuweisen (Hier hat man Zugriff auf alle Funktionen des Hauptfensters)
@@ -312,7 +332,7 @@ class MainWindow:
         movieListStore.append((Film1,))
         movieListStore.append((Film2,))
         movieListStore.append((Film3,))
-        
+
         #setzen des Models
         self.TreeView.set_model(movieListStore)   
 
@@ -390,7 +410,7 @@ class EditMovieWindow:
     def __init__(self, movie=Movie()):
         #
         self.builder = Gtk.Builder()
-        self.builder.add_from_file('EditMovie.glade')
+        self.builder.add_from_file('EditMovieWindow.glade')
         #Das Fenster zuweisen (Hier hat man Zugriff auf alle Funktionen des Hauptfensters)
         self.window = self.builder.get_object("EditMovieWindow") 
         self.window.set_modal(True)
@@ -433,7 +453,7 @@ class ImportMovieWindow:
         self.genreText = self.builder.get_object("GenreText")
         
         
-        movieListStore = Gtk.ListStore(Movie)
+        self.movieListStore = Gtk.ListStore(Film)
         self.TreeView = self.builder.get_object("MovieTreeView")  
         #Spalte fuer die Filme erzeugen    
         cellrenderer = Gtk.CellRendererText()
@@ -460,12 +480,16 @@ class ImportMovieWindow:
         Film3.genreList.append(Genre('Adventure'))
         Film3.genreList.append(Genre('Sci-Fi'))
         
-        movieListStore.append((Film1,))
-        movieListStore.append((Film2,))
-        movieListStore.append((Film3,))        
+        #todo frische änderung
+        db = DbUtils()
+        db.create_database()
+
+        #movieListStore.append((Film1,))
+        #movieListStore.append((Film2,))
+        #movieListStore.append((Film3,))        
         
         #setzen des Models
-        self.TreeView.set_model(movieListStore)   
+        self.TreeView.set_model(self.movieListStore)   
         
         show_window(self)
 
