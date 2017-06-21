@@ -18,7 +18,7 @@ from .Genre import Genre
 from .FileType import FileType
 from .ObjectCache import ObjectCache
 
-class Film(Persistable, GObject.GObject):
+class Movie(Persistable, GObject.GObject):
     """
     Klasse in der die Datenbankverbindung hergestellt wird
     - Datenbank aktualisieren und erstellen
@@ -27,13 +27,13 @@ class Film(Persistable, GObject.GObject):
 
     _cache = None
 
-    def __init__(self, db_id=0, titel=None, pfad=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
+    def __init__(self, db_id=0, titel=None, path=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
         """ Constructor """
         Persistable.__init__(self)
         GObject.GObject.__init__(self)
         self._db_id = db_id
         self._titel = titel
-        self._pfad = pfad
+        self._path = path
         self._filename = filename
         self._checksum = checksum
         if genre_list:
@@ -48,47 +48,47 @@ class Film(Persistable, GObject.GObject):
     def get_cache():
         """
         Liefert entweder das Cache-Objekt oder legt den Cache an, falls nicht vorhanden
-        :return: ObjectCache zu Film
+        :return: ObjectCache zu Movie
         """
-        if not Film._cache:
-            Film._cache = ObjectCache(Film().__class__)
-        return Film._cache
+        if not Movie._cache:
+            Movie._cache = ObjectCache(Movie().__class__)
+        return Movie._cache
 
     @staticmethod
     def get_table_name():
         """ Overridden aus Persistable """
-        return "Filme"
+        return "Movies"
 
     @staticmethod
     def get_by_id(db_id):
         """ Overridden aus Persistable """
         # Im Cache nachschauen, ob es eine Instanz gibt
-        film = Film.get_cache().get_by_id(db_id)
-        if film:
-            return film
+        movie = Movie.get_cache().get_by_id(db_id)
+        if movie:
+            return movie
 
         # Falls nicht aus Datenbank holen
-        con = Film.get_db().get_connection()
+        con = Movie.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Film.get_table_name() + " WHERE db_id=?", (db_id,))
+        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
         if row:
-            film = Film.film_from_row(row)
+            movie = Movie.movie_from_row(row)
 
-            Film.get_cache().add_to_cache(film)
-            return film
+            Movie.get_cache().add_to_cache(movie)
+            return movie
         else:
             return None
 
     def fetch_genres_from_db(self):
         """
-        Holt zu einem Film die Liste der Genres aus der Datenbank und f�gt sie dem Objekt hinzu
+        Holt zu einem Movie die Liste der Genres aus der Datenbank und f�gt sie dem Objekt hinzu
         :return: 
         """
-        con = Film.get_db().get_connection()
+        con = Movie.get_db().get_connection()
         cur = con.cursor()
         cur.execute(
-            "SELECT genre_id FROM FilmGenre WHERE film_id=?", (self.get_db_id(),))
+            "SELECT genre_id FROM MovieGenre WHERE movie_id=?", (self.get_db_id(),))
 
         for row in cur:
             genre = Genre.get_by_id(row[0])
@@ -97,34 +97,34 @@ class Film(Persistable, GObject.GObject):
     @staticmethod
     def get_all():
         """ Overridden aus Persistable """
-        con = Film.get_db().get_connection()
+        con = Movie.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Film.get_table_name())
+        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Movie.get_table_name())
 
         instances = []
         for row in cur:
-            film = Film.film_from_row(row)
-            instances.append(film)
-            Film.get_cache().add_to_cache(film)
+            movie = Movie.movie_from_row(row)
+            instances.append(movie)
+            Movie.get_cache().add_to_cache(movie)
 
         return instances
 
     @staticmethod
-    def film_from_row(row):
+    def movie_from_row(row):
         """
-        Erzeugt ein Film-Objekt aus einer Datenbankzeile
+        Erzeugt ein Movie-Objekt aus einer Datenbankzeile
         
         :param row: Passende Datenbankzeile 
-        :return: Film-Objekt
+        :return: Movie-Objekt
         """
         filetype = FileType.get_by_id(row[5])
-        film = Film(row[0], row[1], row[2], row[3], row[4], None, filetype, row[6])
-        film.fetch_genres_from_db()
-        return film
+        movie = Movie(row[0], row[1], row[2], row[3], row[4], None, filetype, row[6])
+        movie.fetch_genres_from_db()
+        return movie
 
     def persist(self):
         """ Overridden aus Persistable """
-        con = Film.get_db().get_connection()
+        con = Movie.get_db().get_connection()
         cur = con.cursor()
 
         filetype_id = 0
@@ -133,34 +133,34 @@ class Film(Persistable, GObject.GObject):
 
         if (not self.get_db_id() is None and  self.get_db_id()):
             cur.execute("UPDATE " + self.get_table_name() + " SET titel=?, pfad=?, filename=?, checksum=?, filetype=?, image=? WHERE id=?",
-                        (self.get_titel(), self.get_pfad(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image(), self.get_db_id()))
+                        (self.get_titel(), self.get_path(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image(), self.get_db_id()))
         else:
             cur.execute("INSERT INTO " + self.get_table_name() + " (titel, pfad, filename, checksum, filetype, image) VALUES (?, ?, ?, ?, ?, ?)",
-                        (self.get_titel(), self.get_pfad(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image()))
+                        (self.get_titel(), self.get_path(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image()))
             self.set_db_id(cur.lastrowid)
         con.commit()
 
         # ToDo: Genre-Assoziationen löschen, die genre_list nicht hergibt
         genre_ids = []
-        for genre in self.get_genres():
+        for genre in self.get_genre_list():
             genre_ids.append(genre.get_db_id())
 
         if genre_ids:
             placeholders = ', '.join('?' * len(genre_ids))
 
-            query = "DELETE FROM FilmGenre WHERE film_id = ? AND genre_id NOT IN (%s)" % placeholders
+            query = "DELETE FROM MovieGenre WHERE movie_id = ? AND genre_id NOT IN (%s)" % placeholders
             parameters = [self.get_db_id()] + genre_ids
             cur.execute(query, parameters)
             con.commit()
 
         # ToDo: Genre-Assoziationen erzeugen, die genre_list zusätzlich enthält
-        query = "INSERT INTO FilmGenre(film_id, genre_id) VALUES (?, ?)"
-        for genre in self.get_genres():
+        query = "INSERT INTO MovieGenre(movie_id, genre_id) VALUES (?, ?)"
+        for genre in self.get_genre_list():
             cur.execute(query, (self.get_db_id(), genre.get_db_id()))
         con.commit()
 
         # Cache aktualsieren
-        Film.get_cache().add_to_cache(self)
+        Movie.get_cache().add_to_cache(self)
 
     # ------------ Für Crawler ------------
 
@@ -169,7 +169,7 @@ class Film(Persistable, GObject.GObject):
         """
         Erzeugt eine MD5-Checksum f�r max. die ersten 8MB einer Datei.
         Datei wird in Chunks von 4096 Bytes eingelesen, für den Fall,
-        dass die Datei selbst zu groß ist, was bei Filmen ja durchaus möglich ist
+        dass die Datei selbst zu groß ist, was bei Movieen ja durchaus möglich ist
         """
         hash_md5 = hashlib.md5()
         with open(fname, "rb") as f:
@@ -184,37 +184,37 @@ class Film(Persistable, GObject.GObject):
 
     def checksum_changed(self):
         """
-        Vergleicht die gespeicherte Checksum des Films mit Datei auf die der Pfad zeigt
+        Vergleicht die gespeicherte Checksum des Movie mit Datei auf die der Pfad zeigt
         """
-        checksum = Film.md5(self.get_pfad())
+        checksum = Movie.md5(self.get_path())
         return self.get_checksum() == checksum
 
     @staticmethod
     def get_by_path(path):
         """
-        Sucht einen Film anhand des Pfads. Wird keiner gefunden wird None zurückgegeben, sonst der Film
+        Sucht einen Movie anhand des Pfads. Wird keiner gefunden wird None zurückgegeben, sonst der Movie
         """
-        con = Film.get_db().get_connection()
+        con = Movie.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Film.get_table_name() + " WHERE pfad=?", (path,))
+        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE pfad=?", (path,))
         row = cur.fetchone()
         if row:
-            film = Film.get_cache().get_by_id(row[0])
-            if not film:
-                film = Film.film_from_row(row)
-                Film.get_cache().add_to_cache(film)
-            return film
+            movie = Movie.get_cache().get_by_id(row[0])
+            if not movie:
+                movie = Movie.movie_from_row(row)
+                Movie.get_cache().add_to_cache(movie)
+            return movie
         else:
             return None
 
     @staticmethod
-    def read_file_to_film(path):
+    def read_file_to_movie(path):
         """
-        Nimmt eine Datei entgegen und liefert, falls es sich um einen Film handelt,
-        ein Film-Objekt zurück. Anderenfalls None
+        Nimmt eine Datei entgegen und liefert, falls es sich um einen Movie handelt,
+        ein Movie-Objekt zurück. Anderenfalls None
 
         :param path: Pfad zur Datei 
-        :return: Film oder None
+        :return: Movie oder None
         """
         # Dateiendung prüfen und dabei FileType ermitteln
         path_folder, filename = os.path.split(path)
@@ -226,22 +226,62 @@ class Film(Persistable, GObject.GObject):
 
         # Eigenschaften auslesen
         # Genre = Null, falls nicht in Metadaten vorhanden
-        film_aus_db = Film.get_by_path(path)
-        if film_aus_db:
-            # Ein Film mit diesem Pfad existiert bereits in der DB
-            if film_aus_db.checksum_changed():
+        movie_aus_db = Movie.get_by_path(path)
+        if movie_aus_db:
+            # Ein Movie mit diesem Pfad existiert bereits in der DB
+            if movie_aus_db.checksum_changed():
                 # Checksum neu setzen
-                film_aus_db.set_checksum(film_aus_db.md5(path))
-                film_aus_db.set_status(
+                movie_aus_db.set_checksum(movie_aus_db.md5(path))
+                movie_aus_db.set_status(
                     1)  # Status auf "geänderte Datei" setzen / ggf. später auch Metadaten neu lesen
-                Film.persist(film_aus_db)
-            return film_aus_db
+                Movie.persist(movie_aus_db)
+            return movie_aus_db
 
-        # Falls der Film noch nicht in der Datenbank war
-        film_neu = Film(0, file_root, path_folder, filename, Film.md5(path), None, filetype)
+        # Falls der Movie noch nicht in der Datenbank war
+        movie_neu = Movie(0, file_root, path_folder, filename, Movie.md5(path), None, filetype)
 
-        return film_neu
+        return movie_neu
 
+    @staticmethod
+    def update_from_copy(self, movie):
+        """
+        Holt existierendes Movie aus der Datenbank und aktualisiert
+        es mit den übergebenen Daten
+        """
+        # Bestehendes Movie anhand der ID aus DB holen
+        movieToUpdate = Movie.get_by_id(movie.get_db_id())
+        
+        # Werte aktualisieren
+        movieToUpdate.update_values(movie)
+
+        # Zurückgeben
+        return movieToUpdate
+    
+    def update_values(self, movie):
+        """
+        Aktualisiert bestehendes Movie mit den Properties eines existierenden Movies
+        :param movie:
+        :return:
+        """
+        self.set_titel(movie.get_titel())
+        self.set_path(movie.get_path())
+        self.set_filename(movie.get_filename())
+        self.set_checksum(movie.get_checksum())
+        self._genre_list = movie.get_genre_list()
+        self.set_filetype(movie.get_filetype())
+        self.set_status(movie.get_status())
+        self.set_image(movie.get_image())
+    
+    def get_copy(self):
+        """
+        Erzeugt eine Kopie eines bestehenden Movies. Ist nur gedacht, um Änderungen an einer Kopie
+        vorzunehmen, die später per updateFromCopy() wieder in ein "echtes" Movie zurückgeführt werden.
+        """
+        copy = Movie(self.get_db())
+        copy.update_values(self)
+        return copy
+        
+        
     # -------------- Getter und Setter -------------------
 
     # get/set db_id ist bereits in Persistable drin
@@ -252,17 +292,21 @@ class Film(Persistable, GObject.GObject):
     def set_titel(self, titel):
         self._titel = titel
 
-    def get_pfad(self):
-        return self._pfad
+    def get_path(self):
+        return self._path
 
-    def set_pfad(self, pfad):
-        self._pfad = pfad
+    def set_path(self, pfad):
+        self._path = pfad
 
     def get_filename(self):
         return self._filename
 
     def set_filename(self, filename):
         self._filename = filename
+
+    #Zusammengesetzt aus path und filename
+    def get_full_path(self):
+        return os.path.join(self.get_path(), self.get_filename())
     
     def get_checksum(self):
         return self._checksum
@@ -270,7 +314,7 @@ class Film(Persistable, GObject.GObject):
     def set_checksum(self, checksum):
         self._checksum = checksum
 
-    def get_genres(self):
+    def get_genre_list(self):
         return self._genre_list
 
     def add_genre(self, genre):
