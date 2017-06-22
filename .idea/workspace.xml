@@ -2,25 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c1d102d-c77f-4949-bf28-1003b899cf10" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/develop/source/python/gui/TTRFileChooser.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/develop/source/python/gui/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/develop/source/python/media/Logan-fanart.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/develop/source/python/media/Rogue One-fanart.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/develop/source/python/media/xXx III-fanart.jpg" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/EditGenreWindow.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/EditGenreWindow.glade" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/EditMovie.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/EditMovie.glade" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/EditMovieWindow.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/EditMovieWindow.glade" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/ImportMovieWindow.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/ImportMovieWindow.glade" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/Logan-fanart.jpg" afterPath="$PROJECT_DIR$/develop/source/temp/Logan-fanart.jpg" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/MainWindow.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/MainWindow.glade" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/Rogue One-fanart.jpg" afterPath="$PROJECT_DIR$/develop/source/temp/Rogue One-fanart.jpg" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/Rtest.py" afterPath="$PROJECT_DIR$/develop/source/python/layout/Rtest.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/TTRFileChooser.py" afterPath="$PROJECT_DIR$/develop/source/python/layout/TTRFileChooser.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/default movie.jpg" afterPath="$PROJECT_DIR$/develop/source/temp/default movie.jpg" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/test.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/test.glade" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/xXx III-fanart.jpg" afterPath="$PROJECT_DIR$/develop/source/temp/xXx III-fanart.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/Rtest.py" afterPath="$PROJECT_DIR$/develop/source/python/Rtest.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/layout/Rtest.py" afterPath="$PROJECT_DIR$/develop/source/python/layout/Rtest.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/layout/TTRFileChooser.py" afterPath="$PROJECT_DIR$/develop/source/python/layout/TTRFileChooser.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -36,13 +20,25 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="FilmCrawler.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="FilmCrawler.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/develop/source/python/FilmCrawler.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="117">
               <caret line="57" column="13" lean-forward="true" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
               <folding>
                 <element signature="e#25#57#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TTR_Mediacenter.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="141" column="14" lean-forward="true" selection-start-line="141" selection-start-column="14" selection-end-line="141" selection-end-column="14" />
+              <folding>
+                <element signature="e#38#48#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -541,7 +537,14 @@
       <option name="project" value="LOCAL" />
       <updated>1498159617173</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="merging with branch_GUI">
+      <created>1498161179562</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1498161179563</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -784,16 +787,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="835">
-          <caret line="141" column="14" lean-forward="true" selection-start-line="141" selection-start-column="14" selection-end-line="141" selection-end-column="14" />
-          <folding>
-            <element signature="e#38#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/develop/source/python/database/DbUtils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1338">
@@ -837,6 +830,16 @@
           <caret line="57" column="13" lean-forward="true" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
           <folding>
             <element signature="e#25#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="141" column="14" lean-forward="true" selection-start-line="141" selection-start-column="14" selection-end-line="141" selection-end-column="14" />
+          <folding>
+            <element signature="e#38#48#0" expanded="true" />
           </folding>
         </state>
       </provider>
