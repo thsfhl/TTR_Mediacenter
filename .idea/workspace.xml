@@ -2,12 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c1d102d-c77f-4949-bf28-1003b899cf10" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/database/Film.py" afterPath="$PROJECT_DIR$/develop/source/python/database/Movie.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/develop/source/python/gui/TTRFileChooser.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/develop/source/python/gui/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/develop/source/python/media/Logan-fanart.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/develop/source/python/media/Rogue One-fanart.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/develop/source/python/media/xXx III-fanart.jpg" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/EditGenreWindow.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/EditGenreWindow.glade" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/EditMovie.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/EditMovie.glade" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/EditMovieWindow.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/EditMovieWindow.glade" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/ImportMovieWindow.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/ImportMovieWindow.glade" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/Logan-fanart.jpg" afterPath="$PROJECT_DIR$/develop/source/temp/Logan-fanart.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/MainWindow.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/MainWindow.glade" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/Rogue One-fanart.jpg" afterPath="$PROJECT_DIR$/develop/source/temp/Rogue One-fanart.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/Rtest.py" afterPath="$PROJECT_DIR$/develop/source/python/layout/Rtest.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/TTRFileChooser.py" afterPath="$PROJECT_DIR$/develop/source/python/layout/TTRFileChooser.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/default movie.jpg" afterPath="$PROJECT_DIR$/develop/source/temp/default movie.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/test.glade" afterPath="$PROJECT_DIR$/develop/source/python/layout/test.glade" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/develop/source/python/Gui/xXx III-fanart.jpg" afterPath="$PROJECT_DIR$/develop/source/temp/xXx III-fanart.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/FilmCrawler.py" afterPath="$PROJECT_DIR$/develop/source/python/FilmCrawler.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/Rtest.py" afterPath="$PROJECT_DIR$/develop/source/python/Rtest.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py" afterPath="$PROJECT_DIR$/develop/source/python/TTR_Mediacenter.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/develop/source/python/database/DbUtils.py" afterPath="$PROJECT_DIR$/develop/source/python/database/DbUtils.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,8 +39,8 @@
       <file leaf-file-name="FilmCrawler.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/develop/source/python/FilmCrawler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="52" column="37" lean-forward="true" selection-start-line="52" selection-start-column="37" selection-end-line="52" selection-end-column="37" />
+            <state relative-caret-position="117">
+              <caret line="57" column="13" lean-forward="true" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
               <folding>
                 <element signature="e#25#57#0" expanded="true" />
               </folding>
@@ -181,6 +194,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="temp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TTR_Mediacenter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TTR_Mediacenter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="develop" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="python" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -233,33 +268,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="gui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TTR_Mediacenter" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TTR_Mediacenter" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="develop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="source" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="python" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="database" />
+              <option name="myItemId" value="layout" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -272,6 +281,10 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/develop/source/temp" />
+      <recent name="$PROJECT_DIR$/develop/source/python/Gui" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/develop/source/python/database" />
     </key>
@@ -521,7 +534,14 @@
       <option name="project" value="LOCAL" />
       <updated>1497813520276</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="merging with branch_GUI">
+      <created>1498159617173</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1498159617173</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -565,7 +585,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="from FileChooser to player with vlc" />
-    <option name="LAST_COMMIT_MESSAGE" value="from FileChooser to player with vlc" />
+    <MESSAGE value="merging with branch_GUI" />
+    <option name="LAST_COMMIT_MESSAGE" value="merging with branch_GUI" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -576,7 +597,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/develop/source/python/Rtest.py</url>
-          <line>472</line>
+          <line>469</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -759,9 +780,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="935">
           <caret line="55" column="31" lean-forward="true" selection-start-line="55" selection-start-column="31" selection-end-line="55" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#9#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -814,8 +833,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/develop/source/python/FilmCrawler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="52" column="37" lean-forward="true" selection-start-line="52" selection-start-column="37" selection-end-line="52" selection-end-column="37" />
+        <state relative-caret-position="117">
+          <caret line="57" column="13" lean-forward="true" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
           <folding>
             <element signature="e#25#57#0" expanded="true" />
           </folding>
