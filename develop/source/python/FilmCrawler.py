@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from database.Film import Film
+from database.Movie import Movie
 from database.FileType import FileType
 import os
 
@@ -45,7 +45,7 @@ class FilmCrawler:
 
         # Falls Datei, prüfen ob FileType passt und ggf. auslesen
         if os.path.isfile(fullpath):
-            film_neu = Film.read_file_to_film(fullpath)
+            film_neu = Movie.read_file_to_film(fullpath)
             if film_neu:
                 filme.append(film_neu)
 

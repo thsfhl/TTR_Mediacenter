@@ -13,7 +13,7 @@ import argparse
 # DB-Klasse importieren
 from database.DbUtils import DbUtils
 from database.FileType import FileType
-from database.Film import Film
+from database.Movie import Movie
 from database.Genre import Genre
 from FilmCrawler import FilmCrawler
 from Rtest import RtestWindow
@@ -26,8 +26,8 @@ import hashlib
 
 def addFilm(id, titel, pfad, filename, genre_id, filetype_id):
     # Film1 erzeugen und in DB speichern
-    film = Film()
-    film.set_pfad(pfad)
+    film = Movie()
+    film.set_path(pfad)
     film.set_titel(titel)
     film.set_filename(filename)
     md5 = hashlib.md5()
@@ -35,7 +35,7 @@ def addFilm(id, titel, pfad, filename, genre_id, filetype_id):
     film.set_checksum(md5.hexdigest())
     film.set_genre(Genre.get_by_id(genre_id))
     film.set_filetype(FileType.get_by_id(filetype_id))
-    Film.persist(film)
+    Movie.persist(film)
     return film
 
 def dbTests():
@@ -65,30 +65,30 @@ def dbTests():
     film2 = addFilm(id, titel, pfad, filename, id, id)
 
     # Filme 1 und 2 ausgeben
-    fromdb1 = Film.get_by_id(film1.get_db_id())
-    print(str(fromdb1.get_db_id()) + " - " + fromdb1.get_titel() + ", " + fromdb1.get_pfad() + ", " + fromdb1.get_genre().get_name() + ", " + fromdb1.get_filetype().get_name() + ", " + str(fromdb1.get_checksum()))
+    fromdb1 = Movie.get_by_id(film1.get_db_id())
+    print(str(fromdb1.get_db_id()) + " - " + fromdb1.get_titel() + ", " + fromdb1.get_path() + ", " + fromdb1.get_genre().get_name() + ", " + fromdb1.get_filetype().get_name() + ", " + str(fromdb1.get_checksum()))
 
-    fromdb2 = Film.get_by_id(film2.get_db_id())
-    print(str(fromdb2.get_db_id()) + " - " + fromdb2.get_titel() + ", " + fromdb2.get_pfad() + ", " + fromdb2.get_genre().get_name() + ", " + fromdb2.get_filetype().get_name() + ", " + str(fromdb2.get_checksum()))
+    fromdb2 = Movie.get_by_id(film2.get_db_id())
+    print(str(fromdb2.get_db_id()) + " - " + fromdb2.get_titel() + ", " + fromdb2.get_path() + ", " + fromdb2.get_genre().get_name() + ", " + fromdb2.get_filetype().get_name() + ", " + str(fromdb2.get_checksum()))
     print("ID Film (original):  ")
     print(fromdb2)
 
     # ------ Test ob das gleiche Objekt aus dem Cache geholt wird ------
 
-    fromdb2a = Film.get_by_id(film2.get_db_id())
+    fromdb2a = Movie.get_by_id(film2.get_db_id())
     print("ID Film (aus Cache): ")
     print(fromdb2a)
 
-    fromdb2b = Film.get_by_id(film2.get_db_id())
+    fromdb2b = Movie.get_by_id(film2.get_db_id())
     print ("ID Film (aus DB):    ")
     print (fromdb2b)
 
     # Film 2 löschen und testen, ob es funktioniert hat
-    print (Film.get_cache().instances)
-    Film.delete(fromdb2)
-    deleted = Film.get_by_id(film2.get_db_id())
+    print (Movie.get_cache().instances)
+    Movie.delete(fromdb2)
+    deleted = Movie.get_by_id(film2.get_db_id())
     if deleted:
-        print (str(deleted.id) + deleted.get_titel() + ", " + deleted.get_pfad())
+        print (str(deleted.id) + deleted.get_titel() + ", " + deleted.get_path())
     else:
         print ("Der Film mit der id %i wurde aus der Datenbank gelöscht!" % (film2.get_db_id()))
 
@@ -105,10 +105,10 @@ def crawlerTest(folderOrFile = None):
         print (filme)
         if filme:
             for film in filme:
-                Film.persist(film)
+                Movie.persist(film)
 
         # Test ob ID von Film auch in DB landet
-        test_db_film = Film.get_by_id(1)
+        test_db_film = Movie.get_by_id(1)
         print (test_db_film)
 
 

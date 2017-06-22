@@ -47,10 +47,10 @@ class DbUtils:
         cur = con.cursor()
 
         # Tabellen erzeugen, ggf. vorher löschen
-        self.createTableFilme(cur)
+        self.createTableMovies(cur)
         self.createTableGenres(cur)
         self.createTableFileTypes(cur)
-        self.createTableFilmGenre(cur)
+        self.createTableMovieGenre(cur)
 
         # Statements auf DB ausführen
         con.commit()
@@ -97,37 +97,37 @@ class DbUtils:
                   ]
         cur.executemany("INSERT INTO Genres(name) VALUES(?)", genres)
 
-    # Tabelle Filme anlegen
-    def createTableFilme(self, cur):
-        # Table für die Filme
-        cur.execute("DROP TABLE IF EXISTS Filme")
-        cur.execute("CREATE TABLE Filme("
+    # Tabelle Movies anlegen
+    def createTableMovies(self, cur):
+        # Table für die Movies
+        cur.execute("DROP TABLE IF EXISTS Movies")
+        cur.execute("CREATE TABLE Movies("
                     "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     "titel Text NOT NULL, "
-                    "pfad Text NOT NULL, "
+                    "path Text NOT NULL, "
                     "filename Text NOT NULL, "
                     "checksum Text NOT NULL, "
                     "filetype INTEGER, "
                     "image Text, "
-                    "UNIQUE (pfad, filename), "
+                    "UNIQUE (path, filename), "
                     "FOREIGN KEY(filetype) REFERENCES FileTypes(db_id)"        
                     ")"
                     )
         # Index zum Suchen, wenn eine neue Datei hinzugefügt wird
-        cur.execute("CREATE INDEX index_pfad ON Filme(pfad, filename)")
+        cur.execute("CREATE INDEX index_path ON Movies(path, filename)")
 
-    # Tabelle Filme anlegen
-    def createTableFilmGenre(self, cur):
-        # Table für die Filme
-        cur.execute("DROP TABLE IF EXISTS FilmGenre")
-        cur.execute("CREATE TABLE FilmGenre("
-                    "film_id INTEGER NOT NULL, "
+    # Tabelle Movies anlegen
+    def createTableMovieGenre(self, cur):
+        # Table für die Movies
+        cur.execute("DROP TABLE IF EXISTS MovieGenre")
+        cur.execute("CREATE TABLE MovieGenre("
+                    "movie_id INTEGER NOT NULL, "
                     "genre_id INTEGER NOT NULL, "
-                    "UNIQUE (film_id, genre_id), "
-                    "FOREIGN KEY(film_id) REFERENCES Film(db_id) ON DELETE CASCADE, "
+                    "UNIQUE (movie_id, genre_id), "
+                    "FOREIGN KEY(movie_id) REFERENCES Movies(db_id) ON DELETE CASCADE, "
                     "FOREIGN KEY(genre_id) REFERENCES Genre(db_id) ON DELETE CASCADE"
                     ")"
                     )
         # Index zum Suchen, wenn eine neue Datei hinzugefügt wird
-        cur.execute("CREATE INDEX index_film_genre ON FilmGenre(film_id, genre_id)")
+        cur.execute("CREATE INDEX index_movie_genre ON MovieGenre(movie_id, genre_id)")
 
