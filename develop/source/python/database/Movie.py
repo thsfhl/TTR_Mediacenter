@@ -2,15 +2,9 @@
 
 import hashlib
 import os
-from database.Persistable import Persistable
-from database.Genre import Genre
-from database.FileType import FileType
-from database.ObjectCache import ObjectCache
 
 import gi
 gi.require_version('Gtk', '3.0')
-
-# from gi.repository import Gtk
 from gi.repository import GObject
 
 from .Persistable import Persistable
@@ -24,6 +18,11 @@ class Movie(Persistable, GObject.GObject):
     - Datenbank aktualisieren und erstellen
     - Wrapper für Abfragen
     """
+
+    # Konstanten für den Dateistatus
+    STATUS_OK = 0
+    STATUS_CHANGED = 1
+    STATUS_DELETED = 2
 
     _cache = None
 
@@ -120,6 +119,7 @@ class Movie(Persistable, GObject.GObject):
         filetype = FileType.get_by_id(row[5])
         movie = Movie(row[0], row[1], row[2], row[3], row[4], None, filetype, row[6])
         movie.fetch_genres_from_db()
+        movie.determine_status()
         return movie
 
     def persist(self):
@@ -162,8 +162,6 @@ class Movie(Persistable, GObject.GObject):
         # Cache aktualsieren
         Movie.get_cache().add_to_cache(self)
 
-    # ------------ Für Crawler ------------
-
     @staticmethod
     def md5(fname):
         """
@@ -182,12 +180,24 @@ class Movie(Persistable, GObject.GObject):
                     break
         return hash_md5.hexdigest()
 
-    def checksum_changed(self):
+    def determine_status(self):
         """
-        Vergleicht die gespeicherte Checksum des Movie mit Datei auf die der Pfad zeigt
+        Prueft ob der Pfad noch existiert und vergleicht die gespeicherte Checksum
+        des Movie mit Datei auf die der Pfad zeigt. Entsprechend wird der Status
+        des Movies gesetzt und als Wert zurueckgegeben.
         """
-        checksum = Movie.md5(self.get_path())
-        return self.get_checksum() == checksum
+        if(os.path.isfile(self.get_full_path())):
+            checksum = Movie.md5(self.get_full_path())
+            if(self.get_checksum() == checksum):
+                self.set_status(Movie.STATUS_OK)
+
+            else:
+                self.set_status(Movie.STATUS_CHANGED)
+        else:
+            self.set_status(Movie.STATUS_DELETED)
+
+        # Neuen Status zurueckgeben
+        return self.get_status
 
     @staticmethod
     def get_by_path(path):
@@ -226,16 +236,16 @@ class Movie(Persistable, GObject.GObject):
 
         # Eigenschaften auslesen
         # Genre = Null, falls nicht in Metadaten vorhanden
-        movie_aus_db = Movie.get_by_path(path)
-        if movie_aus_db:
+        movie_from_db = Movie.get_by_path(path)
+        if movie_from_db:
             # Ein Movie mit diesem Pfad existiert bereits in der DB
-            if movie_aus_db.checksum_changed():
+            if movie_from_db.checksum_changed():
                 # Checksum neu setzen
-                movie_aus_db.set_checksum(movie_aus_db.md5(path))
-                movie_aus_db.set_status(
+                movie_from_db.set_checksum(movie_from_db.md5(path))
+                movie_from_db.set_status(
                     1)  # Status auf "geänderte Datei" setzen / ggf. später auch Metadaten neu lesen
-                Movie.persist(movie_aus_db)
-            return movie_aus_db
+                Movie.persist(movie_from_db)
+            return movie_from_db
 
         # Falls der Movie noch nicht in der Datenbank war
         movie_neu = Movie(0, file_root, path_folder, filename, Movie.md5(path), None, filetype)
@@ -323,6 +333,9 @@ class Movie(Persistable, GObject.GObject):
 
     def remove_genre(self, genre):
         self._genre_list.remove(genre)
+
+    def clear_genre_list(self):
+        self._genre_list = []
 
     def get_filetype(self):
         return self._filetype

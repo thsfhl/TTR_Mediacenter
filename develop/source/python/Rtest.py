@@ -1,3 +1,4 @@
+import os
 import gi
 
 gi.require_version('Gtk', '3.0')
@@ -16,13 +17,15 @@ from develop.source.python.database.DbUtils import DbUtils
 #Alle Handler für das Hauptfenster
 class MainWindowHandler:
     
-    #Beenden des Programmes
+    # Beenden des Programmes
     def on_QuitMenu_activate(self, *args):
         Gtk.main_quit(*args)
         
-    #Beenden des Dialogs
+    # Beenden des Dialogs
     def on_dlg_destroy(self, widget, data=None):
         pass
+
+    # Film abspielen bzw. in VLC-Player oeffnen
     def play_movie_handler(self, menuItem):
         if get_selected_movie(main.TreeView) is None:
             #todo: errodialog anzeigen
@@ -42,7 +45,7 @@ class MainWindowHandler:
             selectedMovie = get_selected_movie(main.TreeView)
             movie = selectedMovie.get_copy()
             main.EditMovieWindow = EditMovieWindow(movie) 
-            main.EditMovieWindow.image.set_from_pixbuf(update_image(selectedMovie.imageFilePath))  
+            main.EditMovieWindow.image.set_from_pixbuf(update_image(selectedMovie.get_image()))
         
     def on_EditFileExtensionsMenu_activate(self, menuItemm):
         print('open fileext admin')     
@@ -130,14 +133,16 @@ class ImportMovieWindowHandler:
     
     def on_ImportFolderFileChooser_file_set(self, widget):
         # Filme crawlen und anschließend speichern
+        # ToDo: Chooser für Folder zum Crawlen aufrufen
         movies = FilmCrawler.crawl_folder('K:/downloads/The.Boss.Baby.German.DL.AC3.1080p.WebHD.h264-PsO - filecrypt.cc/The.Boss.Baby.German.DL.AC3.1080p.WebHD.h264-PsO/', True)
+
         if movies:
             for movie in movies:
                 movie.persist()
 
         # Sämtliche Filme aus der DB laden
         movie_list = []
-        if (Persistable.get_db() != None):
+        if (Movie.get_db() != None):
             movie_list = Movie.get_all()
 
         # Alle Filme der aktuellen Ansicht hinzufügen
@@ -180,12 +185,9 @@ class EditGenreWindowHandler:
         del main.EditGenreWindow.callWindow.movie.get_genre_list()[:]
         for genre in main.EditGenreWindow.liststore:
             if genre[0] == True:
-                # ToDo: Bin hier nicht sicher was hier erfolgen soll, bitte mal schauen
-                # genre.get_name() gibt den String des Namens zurück
-                # movie.add_genre(<Genre-Objekt) fügr der Genre-Liste eines Movies etwas hinzu
-                main.EditGenreWindow.callWindow.movie.genreList.append(Genre(genre[1].name))                         
+                main.EditGenreWindow.callWindow.movie.add_genre(genre[1])
         main.EditGenreWindow.callWindow.genreText.set_text(get_genre_string(main.EditGenreWindow.callWindow.movie.get_genre_list()))
-        main.EditGenreWindow.window.destroy() 
+        main.EditGenreWindow.window.destroy()
         
 
 ##############################################################################################################
@@ -200,21 +202,22 @@ def set_treeview_cell_txt_colone(tree_column, cell, tree_model, iter, data):
     cell.set_property('text', obj.get_title())
     
     
-#Funktion um allen Zellen in Spalte 2 des Treeviews zu einer Textzelle zu machen    
+# Funktion um allen Zellen in Spalte 2 des Treeviews zu einer Textzelle zu machen
 def set_treeview_cell_txt_coltwo(tree_column, cell, tree_model, iter, data):
     #model fuer aktuelle Zeile holen
     obj = tree_model[iter][1]    #
     #text fuer aktuelle Zeile setzen
-    cell.set_property('text', obj.get_title())
-#Funktion um ein Bild zu laden und anschließend zu skalieren    
+    cell.set_property('text', obj.get_name())
+
+# Funktion um ein Bild zu laden und anschließend zu skalieren
 def update_image(filePath, x=1280, y=720):
     bgImage = None
-    if(filePath):
+    if(filePath and os.path.isfile(filePath)):
         myfile = Path(filePath)
         if myfile.is_file():
-            bgImage =  GdkPixbuf.Pixbuf().new_from_file(filePath)
+            bgImage = GdkPixbuf.Pixbuf().new_from_file(filePath)
         else:
-            bgImage =  GdkPixbuf.Pixbuf().new_from_file('default movie.jpg')
+            bgImage = GdkPixbuf.Pixbuf().new_from_file('default movie.jpg')
         bgImage = bgImage.scale_simple(x, y, GdkPixbuf.InterpType.BILINEAR)
     return bgImage
 
@@ -251,10 +254,10 @@ class MainWindow:
         #Gtk.Builder zuweisen 
         self.builder = Gtk.Builder()
         #Glade File dem Builder zuweisen
-        #todo: umbenennen der Gladefile
         self.builder.add_from_file("layout\MainWindow.glade")
         #Eventhandler zuweisen
         self.builder.connect_signals(MainWindowHandler())
+
         #Das Fenster zuweisen (Hier hat man Zugriff auf alle Funktionen des Hauptfensters)
         self.window = self.builder.get_object("MainWindow")
         #Das Image zuweisen (Noetig, damit man das den Bildbereich bearbeiten kann)
@@ -263,11 +266,11 @@ class MainWindow:
         self.TreeView = self.builder.get_object("MovieTreeView")        
         self.textviewGenre = self.builder.get_object("genreTextView")        
         self.moviePopup = self.builder.get_object("moviePopUp")
+
         self.delDlg = self.builder.get_object("delDlg")
         #Loeschdialog ans Fenster anhaengen
         self.delDlg.set_transient_for(self.window)
         self.genreBuffer = self.textviewGenre.get_buffer()
-
 
         #Einen Liststore erstellen. Hier kommt die Filmliste rein. Die Filme werden als Objekte angehaengt.
         movieListStore = Gtk.ListStore(Movie)
@@ -277,7 +280,6 @@ class MainWindow:
         treeviewcolumn = Gtk.TreeViewColumn('FilmTitel')        
         #Setzen des anzeigetextes und Objektes
         treeviewcolumn.set_cell_data_func(cellrenderer, set_treeview_cell_txt_colone)
-
         
         #CellRenderer zur Spalte, und Spalte zum TreeView hinzufgen
         treeviewcolumn.pack_start(cellrenderer, True)
@@ -327,11 +329,11 @@ class EditGenreWindow:
             self.liststore.append([False, genre])
         
         #Übergebene Genres mit der Genreliste vergleichen und die bisher gewählten Genres als aktiv setzen
-        # ToDo: Sind das hier auch schon Genre-Objekte oder eine Textliste aus der GUI
-        for movieGenre in genreList:   
-            for genre in self.liststore:
-                if movieGenre.name == genre[-1].name:  
-                    genre[0] = True
+        # ToDo: Das hier sind Genre-Objekte ABER es müssen die Genres am Film verglichen werden:
+        for movie_genre in self.liststore:
+            for genre in self.callWindow.movie.get_genre_list():
+                if movie_genre[1].get_name() == genre.get_name():
+                    movie_genre[0] = True
                     break
                     
         #Das Fenster zuweisen 
@@ -379,7 +381,8 @@ class EditMovieWindow:
         self.movieFileChooser.set_filename(self.movie.get_full_path())
         
         self.fanartFileChooser = self.builder.get_object("FanartFileChooser")
-        self.fanartFileChooser.set_filename(self.movie.get_image())
+        if(self.movie.get_image()):
+            self.fanartFileChooser.set_filename(self.movie.get_image())
         
         self.movieName = self.builder.get_object("MovieText")
         self.movieName.set_text(self.movie.get_title())
@@ -460,7 +463,7 @@ if __name__ == "__main__":
     filme = FilmCrawler.crawl_folder("D:\Breaking Bad", True)
     for film in filme:
         film.persist()
-    print("Filme importiert")
+    # ------------- Ende Testzeilen ---------------
 
     main = MainWindow() # create an instance of our class
     Gtk.main() # run the darn thing
