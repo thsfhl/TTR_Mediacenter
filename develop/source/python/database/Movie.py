@@ -132,7 +132,7 @@ class Movie(Persistable, GObject.GObject):
             filetype_id = self.get_filetype().get_db_id()
 
         if (not self.get_db_id() is None and  self.get_db_id()):
-            cur.execute("UPDATE " + self.get_table_name() + " SET title=?, path=?, filename=?, checksum=?, filetype=?, image=? WHERE id=?",
+            cur.execute("UPDATE " + self.get_table_name() + " SET title=?, path=?, filename=?, checksum=?, filetype=?, image=? WHERE db_id=?",
                         (self.get_title(), self.get_path(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image(), self.get_db_id()))
         else:
             cur.execute("INSERT INTO " + self.get_table_name() + " (title, path, filename, checksum, filetype, image) VALUES (?, ?, ?, ?, ?, ?)",
@@ -154,7 +154,7 @@ class Movie(Persistable, GObject.GObject):
             con.commit()
 
         # ToDo: Genre-Assoziationen erzeugen, die genre_list zusätzlich enthält
-        query = "INSERT INTO MovieGenre(movie_id, genre_id) VALUES (?, ?)"
+        query = "INSERT OR IGNORE INTO MovieGenre(movie_id, genre_id) VALUES (?, ?)"
         for genre in self.get_genre_list():
             cur.execute(query, (self.get_db_id(), genre.get_db_id()))
         con.commit()
@@ -252,21 +252,6 @@ class Movie(Persistable, GObject.GObject):
 
         return movie_neu
 
-    @staticmethod
-    def update_from_copy(self, movie):
-        """
-        Holt existierendes Movie aus der Datenbank und aktualisiert
-        es mit den übergebenen Daten
-        """
-        # Bestehendes Movie anhand der ID aus DB holen
-        movieToUpdate = Movie.get_by_id(movie.get_db_id())
-        
-        # Werte aktualisieren
-        movieToUpdate.update_values(movie)
-
-        # Zurückgeben
-        return movieToUpdate
-    
     def update_values(self, movie):
         """
         Aktualisiert bestehendes Movie mit den Properties eines existierenden Movies

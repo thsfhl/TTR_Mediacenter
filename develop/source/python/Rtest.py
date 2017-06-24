@@ -76,7 +76,13 @@ class MainWindowHandler:
         main.delDlg.hide()
         if response == 1:
             #todo: hier movie loeschen einfuegen
-            print("The OK button was clicked")
+            movie = get_selected_movie(main.TreeView)
+            movie.delete()
+            list_store = main.TreeView.get_model()
+            for row in main.TreeView.get_model():
+                if(row[0] == movie):
+                    list_store.remove(row.iter)
+                    break
             
 class ImportMovieWindowHandler:
     def on_GenreButton_clicked(self, button):        
@@ -89,7 +95,7 @@ class ImportMovieWindowHandler:
     
     #Handler, wenn der Editierte Film gespeichert werden soll
     def on_SaveButton_clicked(self, button):    
-        #todo savefunktion der Filmliste aufrufen und anschließend den Treeview vom Hauptfenster aktualisierenhier gespeichert werden        
+        #todo savefunktion der Filmliste aufrufen und anschließend den Treeview vom Hauptfenster aktualisierenhier gespeichert werden
         main.ImportMovieWindow.window.destroy()
     
     #Handler zum schließen ohne speichern
@@ -158,12 +164,13 @@ class EditMovieWindowHandler:
     
     #Handler, wenn der Editierte Film gespeichert werden soll
     def on_SaveButton_clicked(self, button):        
-        main.EditMovieWindow.movie.name = main.EditMovieWindow.movieName.get_text()
-        main.selectedMovie.update_from_copy(main.EditMovieWindow.movie)
+        main.EditMovieWindow.movie.set_title(main.EditMovieWindow.movieName.get_text())
+        main.selectedMovie.update_values(main.EditMovieWindow.movie)
+        main.selectedMovie.persist()
         main.image.set_from_pixbuf(update_image(main.selectedMovie.get_image()))
         genreBuffer = main.genreBuffer
         genreBuffer.set_text(get_genre_string(main.selectedMovie.get_genre_list()))
-        #todo: main.selectedMovie muss hier gespeichert werden        
+        main.selectedMovie.persist()
         main.EditMovieWindow.window.destroy()
     
     #Handler zum schließen ohne speichern
@@ -182,7 +189,7 @@ class EditMovieWindowHandler:
 class EditGenreWindowHandler:
     #Hander zum Speicern der ausgewählten Genres (Kein speichern in der Datenbank, dazu muss noch der Speichern Button beim Film editieren genutzt werden
     def on_SaveButton_clicked(self, widget):
-        del main.EditGenreWindow.callWindow.movie.get_genre_list()[:]
+        main.EditGenreWindow.callWindow.movie.clear_genre_list()
         for genre in main.EditGenreWindow.liststore:
             if genre[0] == True:
                 main.EditGenreWindow.callWindow.movie.add_genre(genre[1])
@@ -298,7 +305,7 @@ class MainWindow:
             movieListStore.append((movie,))
 
         #setzen des Models
-        self.TreeView.set_model(movieListStore)   
+        self.TreeView.set_model(movieListStore)
 
         #Hauptfenster anzeigen
         show_window(self) # this shows the 'window1' object
@@ -458,11 +465,13 @@ class ImportMovieWindow:
         
 if __name__ == "__main__":
     # Erstmal nur zum Testen, bis Import-Dialog funktioniert
+    '''
     db = DbUtils()
     db.create_database()
     filme = FilmCrawler.crawl_folder("D:\Breaking Bad", True)
     for film in filme:
-        film.persist()
+      film.persist()
+    '''
     # ------------- Ende Testzeilen ---------------
 
     main = MainWindow() # create an instance of our class
