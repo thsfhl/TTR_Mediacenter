@@ -8,7 +8,7 @@ from random import randint
 
 from develop.source.python.database.Movie import Movie
 from develop.source.python.database.Genre import Genre
-from develop.source.python.FilmCrawler import FilmCrawler
+from develop.source.python.MovieCrawler import FilmCrawler
 from develop.source.python.database.DbUtils import DbUtils
 
 #Handler Klasse
@@ -151,5 +151,8 @@ class RtestWindow:
     
 
 if __name__ == "__main__":
+    DbUtils.create_database()
+    print("DB erzeugt")
+
     main = RtestWindow() # create an instance of our class
     Gtk.main() # run the darn thing

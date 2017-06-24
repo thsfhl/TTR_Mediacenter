@@ -103,7 +103,7 @@ class DbUtils:
         cur.execute("DROP TABLE IF EXISTS Movies")
         cur.execute("CREATE TABLE Movies("
                     "db_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    "titel Text NOT NULL, "
+                    "title Text NOT NULL, "
                     "path Text NOT NULL, "
                     "filename Text NOT NULL, "
                     "checksum Text NOT NULL, "

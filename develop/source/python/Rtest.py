@@ -5,7 +5,7 @@ from gi.repository import Gtk, GObject, GdkPixbuf
 from pathlib import Path
 from develop.source.python.database.Movie import Movie
 from develop.source.python.database.Genre import Genre
-from develop.source.python.FilmCrawler import FilmCrawler
+from develop.source.python.MovieCrawler import FilmCrawler
 from develop.source.python.database.Persistable import Persistable
 from develop.source.python.database.DbUtils import DbUtils
 
@@ -197,7 +197,7 @@ def set_treeview_cell_txt_colone(tree_column, cell, tree_model, iter, data):
     #model fuer aktuelle Zeile holen
     obj = tree_model[iter][0]    
     #text fuer aktuelle Zeile setzen
-    cell.set_property('text', obj.get_titel())
+    cell.set_property('text', obj.get_title())
     
     
 #Funktion um allen Zellen in Spalte 2 des Treeviews zu einer Textzelle zu machen    
@@ -205,15 +205,17 @@ def set_treeview_cell_txt_coltwo(tree_column, cell, tree_model, iter, data):
     #model fuer aktuelle Zeile holen
     obj = tree_model[iter][1]    #
     #text fuer aktuelle Zeile setzen
-    cell.set_property('text', obj.get_titel())
+    cell.set_property('text', obj.get_title())
 #Funktion um ein Bild zu laden und anschließend zu skalieren    
 def update_image(filePath, x=1280, y=720):
-    myfile = Path(filePath)
-    if myfile.is_file():
-        bgImage =  GdkPixbuf.Pixbuf().new_from_file(filePath)      
-    else:
-        bgImage =  GdkPixbuf.Pixbuf().new_from_file('default movie.jpg')  
-    bgImage = bgImage.scale_simple(x, y, GdkPixbuf.InterpType.BILINEAR)   
+    bgImage = None
+    if(filePath):
+        myfile = Path(filePath)
+        if myfile.is_file():
+            bgImage =  GdkPixbuf.Pixbuf().new_from_file(filePath)
+        else:
+            bgImage =  GdkPixbuf.Pixbuf().new_from_file('default movie.jpg')
+        bgImage = bgImage.scale_simple(x, y, GdkPixbuf.InterpType.BILINEAR)
     return bgImage
 
 #Funktion zum sichtbar machen von Fenstern
@@ -287,27 +289,11 @@ class MainWindow:
         #todo movieListStore benötigt Filmobjekte. Diese sollen normal aus der Datenbank geladen werden. Entweder man 
         #nimmt eine Objektliste, lädt dort alle Filme hinein und nutzt dann eine schleife mit movieListStore.append
         #oder man lädt die Filme direkt in einen Liststore (der Liststore ist nötig, weil er das Model des Treeviews wird
-        Film1 = Movie(None, 'Logan','K:downloads\\Filme\\Logan', 'Logan.mkv')
-        Film1.set_image('media\\Logan-fanart.jpg')
-        Film1.add_genre(Genre.get_by_id(1))
-        Film1.add_genre(Genre.get_by_id(2))
-        Film1.add_genre(Genre.get_by_id(3))
 
-        Film2 = Movie(None, 'xXx','K:\\downloads\\Filme\\xXx III', 'xXx III.mkv')
-        Film2.set_image('media\\xXx III-fanart.jpg')
-        Film2.add_genre(Genre.get_by_id(4))
-        Film2.add_genre(Genre.get_by_id(2))
-        Film2.add_genre(Genre.get_by_id(5))
-        
-        Film3 = Movie(None, 'Rogue One','c:\\Filme', 'Film3.mkv')
-        Film3.set_image('media\\Rogue One-fanart.jpg')
-        Film3.add_genre(Genre.get_by_id(3))
-        Film3.add_genre(Genre.get_by_id(5))
-        Film3.add_genre(Genre.get_by_id(1))
-        
-        movieListStore.append((Film1,))
-        movieListStore.append((Film2,))
-        movieListStore.append((Film3,))
+        movies_from_db = Movie.get_all()
+
+        for movie in movies_from_db:
+            movieListStore.append((movie,))
 
         #setzen des Models
         self.TreeView.set_model(movieListStore)   
@@ -468,5 +454,13 @@ class ImportMovieWindow:
 
         
 if __name__ == "__main__":
+    # Erstmal nur zum Testen, bis Import-Dialog funktioniert
+    db = DbUtils()
+    db.create_database()
+    filme = FilmCrawler.crawl_folder("D:\Breaking Bad", True)
+    for film in filme:
+        film.persist()
+    print("Filme importiert")
+
     main = MainWindow() # create an instance of our class
     Gtk.main() # run the darn thing

@@ -14,7 +14,7 @@ from develop.source.python.database.DbUtils import DbUtils
 from develop.source.python.database.FileType import FileType
 from develop.source.python.database.Movie import Movie
 from develop.source.python.database.Genre import Genre
-from develop.source.python.FilmCrawler import FilmCrawler
+from develop.source.python.MovieCrawler import FilmCrawler
 from develop.source.python.Rtest_alt import RtestWindow
 from develop.source.python.media.PlayerVLC import PlayerVLC
 

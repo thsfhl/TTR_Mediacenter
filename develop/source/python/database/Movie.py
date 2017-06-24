@@ -27,12 +27,12 @@ class Movie(Persistable, GObject.GObject):
 
     _cache = None
 
-    def __init__(self, db_id=0, titel=None, path=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
+    def __init__(self, db_id=0, title=None, path=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
         """ Constructor """
         Persistable.__init__(self)
         GObject.GObject.__init__(self)
         self._db_id = db_id
-        self._titel = titel
+        self._title = title
         self._path = path
         self._filename = filename
         self._checksum = checksum
@@ -70,7 +70,7 @@ class Movie(Persistable, GObject.GObject):
         # Falls nicht aus Datenbank holen
         con = Movie.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE db_id=?", (db_id,))
+        cur.execute("SELECT db_id, title, path, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
         if row:
             movie = Movie.movie_from_row(row)
@@ -99,7 +99,7 @@ class Movie(Persistable, GObject.GObject):
         """ Overridden aus Persistable """
         con = Movie.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Movie.get_table_name())
+        cur.execute("SELECT db_id, title, path, filename, checksum, filetype, image FROM " + Movie.get_table_name())
 
         instances = []
         for row in cur:
@@ -132,11 +132,11 @@ class Movie(Persistable, GObject.GObject):
             filetype_id = self.get_filetype().get_db_id()
 
         if (not self.get_db_id() is None and  self.get_db_id()):
-            cur.execute("UPDATE " + self.get_table_name() + " SET titel=?, pfad=?, filename=?, checksum=?, filetype=?, image=? WHERE id=?",
-                        (self.get_titel(), self.get_path(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image(), self.get_db_id()))
+            cur.execute("UPDATE " + self.get_table_name() + " SET title=?, path=?, filename=?, checksum=?, filetype=?, image=? WHERE id=?",
+                        (self.get_title(), self.get_path(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image(), self.get_db_id()))
         else:
-            cur.execute("INSERT INTO " + self.get_table_name() + " (titel, pfad, filename, checksum, filetype, image) VALUES (?, ?, ?, ?, ?, ?)",
-                        (self.get_titel(), self.get_path(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image()))
+            cur.execute("INSERT INTO " + self.get_table_name() + " (title, path, filename, checksum, filetype, image) VALUES (?, ?, ?, ?, ?, ?)",
+                        (self.get_title(), self.get_path(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image()))
             self.set_db_id(cur.lastrowid)
         con.commit()
 
@@ -196,7 +196,7 @@ class Movie(Persistable, GObject.GObject):
         """
         con = Movie.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE pfad=?", (path,))
+        cur.execute("SELECT db_id, title, path, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE path=?", (path,))
         row = cur.fetchone()
         if row:
             movie = Movie.get_cache().get_by_id(row[0])
@@ -263,7 +263,7 @@ class Movie(Persistable, GObject.GObject):
         :param movie:
         :return:
         """
-        self.set_titel(movie.get_titel())
+        self.set_title(movie.get_title())
         self.set_path(movie.get_path())
         self.set_filename(movie.get_filename())
         self.set_checksum(movie.get_checksum())
@@ -286,17 +286,17 @@ class Movie(Persistable, GObject.GObject):
 
     # get/set db_id ist bereits in Persistable drin
 
-    def get_titel(self):
-        return self._titel
+    def get_title(self):
+        return self._title
 
-    def set_titel(self, titel):
-        self._titel = titel
+    def set_title(self, title):
+        self._title = title
 
     def get_path(self):
         return self._path
 
-    def set_path(self, pfad):
-        self._path = pfad
+    def set_path(self, path):
+        self._path = path
 
     def get_filename(self):
         return self._filename

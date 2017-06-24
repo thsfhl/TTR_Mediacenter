@@ -24,7 +24,7 @@ class FilmCrawler:
         :return: Kein Rückgabewert, sondern Ausgabe auf der Konsole
         """
 
-        filme = []
+        movies = []
 
         # Ordner durchsuchen und Filme in Liste verstauen
 
@@ -41,9 +41,9 @@ class FilmCrawler:
 
         # Falls Datei, prüfen ob FileType passt und ggf. auslesen
         if os.path.isfile(fullpath):
-            film_neu = Movie.read_file_to_film(fullpath)
-            if film_neu:
-                filme.append(film_neu)
+            movie_neu = Movie.read_file_to_movie(fullpath)
+            if movie_neu:
+                movies.append(movie_neu)
 
         # Falls Ordner, diesen ausgeben und weitere Rekursion der Inhalte
         elif os.path.isdir(fullpath):
@@ -59,15 +59,15 @@ class FilmCrawler:
 
                 # Falls option aktiv, dass Subfolder auch durchsucht werden sollen oder basisfolder
                 if crawl_subfolders or (fullpath == base_path):
-                    neue_filme = FilmCrawler.crawl_folder(base_path, crawl_subfolders, os.path.join(rel_path, item))
+                    new_movies = FilmCrawler.crawl_folder(base_path, crawl_subfolders, os.path.join(rel_path, item))
 
                     # Falls neue Filme gefunden wurden, werden diese der Liste hinzugefügt
-                    if neue_filme:
-                        for film_neu in neue_filme:
-                            filme.append(film_neu)
+                    if new_movies:
+                        for new_movie in new_movies:
+                            movies.append(new_movie)
 
-        print(filme) # ToDo: print Entfernen, ist nur zum Testen, ob und/oder wie die Dateien eingelesen werden
-        return filme
+        print(movies) # ToDo: print Entfernen, ist nur zum Testen, ob und/oder wie die Dateien eingelesen werden
+        return movies
 
 
 
