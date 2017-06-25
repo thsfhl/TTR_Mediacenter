@@ -1,1 +1,3 @@
 *.pyc
+.idea/
+develop/source/python/ttr_mediacenter.db

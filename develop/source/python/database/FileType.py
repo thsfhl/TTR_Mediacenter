@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from database.Persistable import Persistable
-from database.ObjectCache import ObjectCache
+from .Persistable import Persistable
+from .ObjectCache import ObjectCache
 
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import GObject
 
-class FileType(Persistable):
+class FileType(Persistable, GObject.GObject):
     """
     Klasse in der die Datenbankverbindung hergestellt wird
     - Datenbank aktualisieren und erstellen
@@ -15,7 +18,9 @@ class FileType(Persistable):
 
     def __init__(self, db_id=0, name=None, extension=None):
         """ Constructor """
-        Persistable.__init__(self, db_id)
+        Persistable.__init__(self)
+        GObject.GObject.__init__(self)
+        self.set_db_id(db_id)
         self._name = name
         self._extension = None
         self.set_extension(extension)

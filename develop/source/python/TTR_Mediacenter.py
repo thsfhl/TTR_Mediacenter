@@ -6,20 +6,19 @@ import sys
 import os
 import gi
 gi.require_version('Gtk', '3.0')
-
 from gi.repository import Gtk
 import argparse
 
 # DB-Klasse importieren
-from database.DbUtils import DbUtils
-from database.FileType import FileType
-from database.Movie import Movie
-from database.Genre import Genre
-from FilmCrawler import FilmCrawler
-# from Rtest import RtestWindow
-from media.PlayerVLC import PlayerVLC
+from develop.source.python.database.DbUtils import DbUtils
+from develop.source.python.database.FileType import FileType
+from develop.source.python.database.Movie import Movie
+from develop.source.python.database.Genre import Genre
+from develop.source.python.MovieCrawler import FilmCrawler
+from develop.source.python.Rtest_alt import RtestWindow
+from develop.source.python.media.PlayerVLC import PlayerVLC
 
-from layout.TTRFileChooser import TTRFileChooser
+from develop.source.python.gui.TTRFileChooser import TTRFileChooser
 
 # nur zum Test
 import hashlib
@@ -112,7 +111,7 @@ def crawlerTest(folderOrFile = None):
                 Movie.persist(film)
 
         # Test ob ID von Film auch in DB landet
-        # test_db_film = Movie.get_by_id(1)
+        test_db_film = Movie.get_by_id(1)
         # print (test_db_film)
 
 

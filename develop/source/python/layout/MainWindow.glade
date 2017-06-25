@@ -361,7 +361,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Film löschen</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="del_film_handler" swapped="no"/>
+        <signal name="activate" handler="del_movie_handler" swapped="no"/>
       </object>
     </child>
   </object>
