@@ -95,8 +95,11 @@ class PlayerVLC(Gtk.Window):
         else:
             self.instance = vlc.Instance()
         self.player = self.instance.media_player_new()
-        win_id = widget.get_window().get_xid()
-        self.player.set_xwindow(win_id)
+        if 'linux' in sys.platform:
+            win_id = widget.get_window().get_xid()
+            self.player.set_xwindow(win_id)
+        else:
+            self.player.set_hwnd(self.get_window().get_handle())
         self.player.set_mrl(self._media)
         self.player.play()
         self._is_player_active = True
