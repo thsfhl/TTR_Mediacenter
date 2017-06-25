@@ -1,14 +1,15 @@
 import gi
 
-from database.DbUtils import DbUtils
-
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GdkPixbuf
-
+from pathlib import Path
 from database.Movie import Movie
 from database.Genre import Genre
 from FilmCrawler import FilmCrawler
 from database.Persistable import Persistable
+from database.DbUtils import DbUtils
+import os
+
 
 ##############################################################################################################
 ##################################################  Handler  #################################################
@@ -41,7 +42,8 @@ class MainWindowHandler:
             print('error')
         else:
             selectedMovie = get_selected_movie(main.TreeView)
-            movie = selectedMovie.get_copy()
+            movie = Movie()
+            movie.assign(selectedMovie)
             main.EditMovieWindow = EditMovieWindow(movie)
             main.EditMovieWindow.image.set_from_pixbuf(update_image(selectedMovie.imageFilePath))
 
@@ -185,7 +187,6 @@ class EditGenreWindowHandler:
         main.EditGenreWindow.callWindow.genreText.set_text(get_genre_string(main.EditGenreWindow.callWindow.movie.get_genre_list()))
         main.EditGenreWindow.window.destroy()
 
-
 ##############################################################################################################
 ########################################  Allgemeine Funktionen  #############################################
 ##############################################################################################################
@@ -248,7 +249,8 @@ class MainWindow:
         self.builder = Gtk.Builder()
         #Glade File dem Builder zuweisen
         #todo: umbenennen der Gladefile
-        self.builder.add_from_file("layout\MainWindow.glade")
+        mainPath = os.getcwd()
+        self.builder.add_from_file(os.path.join(mainPath, "layout/MainWindow.glade"))
         #Eventhandler zuweisen
         self.builder.connect_signals(MainWindowHandler())
         #Das Fenster zuweisen (Hier hat man Zugriff auf alle Funktionen des Hauptfensters)
@@ -275,6 +277,7 @@ class MainWindow:
         treeviewcolumn.set_cell_data_func(cellrenderer, set_treeview_cell_txt_colone)
 
         
+
         #CellRenderer zur Spalte, und Spalte zum TreeView hinzufgen
         treeviewcolumn.pack_start(cellrenderer, True)
         self.TreeView.append_column(treeviewcolumn)
@@ -285,20 +288,17 @@ class MainWindow:
         #todo movieListStore benötigt Filmobjekte. Diese sollen normal aus der Datenbank geladen werden. Entweder man
         #nimmt eine Objektliste, lädt dort alle Filme hinein und nutzt dann eine schleife mit movieListStore.append
         #oder man lädt die Filme direkt in einen Liststore (der Liststore ist nötig, weil er das Model des Treeviews wird
-        Film1 = Movie(None, 'Logan','c:\\downloads\\Filme\\Logan', 'Logan.mkv')
-        Film1.set_image('temp\\Logan-fanart.jpg')
+        Film1 = Movie('Logan','c:/downloads/Filme/Logan/Logan.mkv','c:/downloads/Filme/Logan/Logan-fanart.jpg')
         Film1.add_genre(Genre.get_by_id(1))
         Film1.add_genre(Genre.get_by_id(2))
         Film1.add_genre(Genre.get_by_id(3))
 
-        Film2 = Movie(None, 'xXx','c:\\downloads\\Filme\\xXx III', 'xXx III.mkv')
-        Film2.set_image('temp\\xXx III-fanart.jpg')
+        Film2 = Movie('xXx','c:/downloads/Filme/xXx III/xXx III.mkv','c:/downloads/Filme/xXx III/xXx III-fanart.jpg')
         Film2.add_genre(Genre.get_by_id(4))
         Film2.add_genre(Genre.get_by_id(2))
         Film2.add_genre(Genre.get_by_id(5))
 
-        Film3 = Movie(None, 'Rogue One','c:\\Filme', 'Film3.mkv')
-        Film3.set_image('temp\\Rogue One-fanart.jpg')
+        Film3 = Movie('Rogue One','c:\Filme\Film3.mkv','Rogue One-fanart.jpg')
         Film3.add_genre(Genre.get_by_id(3))
         Film3.add_genre(Genre.get_by_id(5))
         Film3.add_genre(Genre.get_by_id(1))
@@ -339,7 +339,6 @@ class EditGenreWindow:
             self.liststore.append([False, genre])
 
         #Übergebene Genres mit der Genreliste vergleichen und die bisher gewählten Genres als aktiv setzen
-        # ToDo: Sind das hier auch schon Genre-Objekte oder eine Textliste aus der GUI
         for movieGenre in genreList:
             for genre in self.liststore:
                 if movieGenre.name == genre[-1].name:
@@ -450,7 +449,6 @@ class ImportMovieWindow:
         Film3.genreList.append(Genre('Adventure'))
         Film3.genreList.append(Genre('Sci-Fi'))
 
-        #todo frische änderung
         db = DbUtils()
         db.create_database()
 
