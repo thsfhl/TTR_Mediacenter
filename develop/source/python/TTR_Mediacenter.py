@@ -10,15 +10,15 @@ from gi.repository import Gtk
 import argparse
 
 # DB-Klasse importieren
-from develop.source.python.database.DbUtils import DbUtils
-from develop.source.python.database.FileType import FileType
-from develop.source.python.database.Movie import Movie
-from develop.source.python.database.Genre import Genre
-from develop.source.python.MovieCrawler import FilmCrawler
-from develop.source.python.Rtest_alt import RtestWindow
-from develop.source.python.media.PlayerVLC import PlayerVLC
+from database.DbUtils import DbUtils
+from database.FileType import FileType
+from database.Movie import Movie
+from database.Genre import Genre
+from MovieCrawler import FilmCrawler
+from Rtest_alt import RtestWindow
+from media.PlayerVLC import PlayerVLC
 
-from develop.source.python.gui.TTRFileChooser import TTRFileChooser
+from layout.TTRFileChooser import TTRFileChooser
 
 # nur zum Test
 import hashlib
@@ -120,6 +120,7 @@ if __name__ == '__main__':
     The main method of this python-script.
     Here the subprocedures are called with the initial directory where to start from 
     '''
+
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", action="store_true")
 
