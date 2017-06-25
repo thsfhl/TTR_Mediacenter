@@ -504,11 +504,6 @@ class ImportMovieWindow:
         treeviewcolumn.pack_start(cellrenderer, True)
         self.TreeView.append_column(treeviewcolumn)
         
-
-        #todo frische änderung
-        db = DbUtils()
-        db.create_database()
-
         #setzen des Models
         self.TreeView.set_model(self.movieListStore)   
         

@@ -98,7 +98,7 @@ class Movie(Persistable, GObject.GObject):
         """ Overridden aus Persistable """
         con = Movie.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, title, path, filename, checksum, filetype, image FROM " + Movie.get_table_name())
+        cur.execute("SELECT db_id, title, path, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " ORDER BY title")
 
         instances = []
         for row in cur:
