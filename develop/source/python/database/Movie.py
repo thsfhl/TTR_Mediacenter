@@ -19,7 +19,7 @@ class Movie(Persistable, GObject.GObject):
     - Wrapper fuer Abfragen
     """
 
-    # Konstanten f�r den Dateistatus
+    # Konstanten fuer den Dateistatus
     STATUS_OK = 0
     STATUS_CHANGED = 1
     STATUS_DELETED = 2
