@@ -19,6 +19,11 @@ class TTRFileChooser(Gtk.Window):
         button2 = Gtk.Button("Verzeichnis auswaehlen")
         button2.connect("clicked", self.on_folder_clicked)
         box.add(button2)
+
+        button3 = Gtk.Button("Fertig")
+        button3.connect("clicked", Gtk.main_quit)
+        box.add(button3)
+
         self._folder = None
         self._file = None
 

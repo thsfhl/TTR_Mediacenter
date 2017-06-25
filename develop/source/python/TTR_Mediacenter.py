@@ -9,15 +9,16 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import argparse
 
+mainPath = os.path.dirname(__file__)
+sys.path.append(mainPath)
+
 # DB-Klasse importieren
 from database.DbUtils import DbUtils
 from database.FileType import FileType
 from database.Movie import Movie
 from database.Genre import Genre
 from MovieCrawler import FilmCrawler
-from Rtest_alt import RtestWindow
 from media.PlayerVLC import PlayerVLC
-
 from layout.TTRFileChooser import TTRFileChooser
 
 # nur zum Test
@@ -160,5 +161,3 @@ if __name__ == '__main__':
         player.player.stop()
         player.instance.release()
 
-#    main = RtestWindow() # create an instance of our class
-#    Gtk.main()
