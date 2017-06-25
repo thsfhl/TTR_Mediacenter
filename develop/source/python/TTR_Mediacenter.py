@@ -20,6 +20,7 @@ from database.Genre import Genre
 from MovieCrawler import FilmCrawler
 from media.PlayerVLC import PlayerVLC
 from layout.TTRFileChooser import TTRFileChooser
+from Rtest import MainWindow
 
 # nur zum Test
 import hashlib
@@ -146,22 +147,25 @@ if __name__ == '__main__':
 
     crawlerTest(fileOrFolder)
 
-    movies = Movie.get_all()
-    if (None != movies) and (len(movies) > 0):
-        for m in movies:
-            if (m.get_filetype().get_extension() != '.jpeg') and (m.get_filetype().get_extension() != '.jpg') and (m.get_filetype().get_extension() != '.png'):
-                print ("Playing %s\n" % os.path.join(m.get_path(), m.get_filename()))
-                player = PlayerVLC(os.path.join(m.get_path(),m.get_filename()))
-                player.setup_objects_and_events()
-                player.show()
-                Gtk.main()
-                player.player.stop()
-                player.instance.release()
-    else:
-        player = PlayerVLC(fileOrFolder)
-        player.setup_objects_and_events()
-        player.show()
-        Gtk.main()
-        player.player.stop()
-        player.instance.release()
-
+    # movies = Movie.get_all()
+    # if (None != movies) and (len(movies) > 0):
+    #     for m in movies:
+    #         if (m.get_filetype().get_extension() != '.jpeg') and (m.get_filetype().get_extension() != '.jpg') and (m.get_filetype().get_extension() != '.png'):
+    #             print ("Playing %s\n" % os.path.join(m.get_path(), m.get_filename()))
+    #             player = PlayerVLC(os.path.join(m.get_path(),m.get_filename()))
+    #             player.setup_objects_and_events()
+    #             player.show()
+    #             Gtk.main()
+    #             player.player.stop()
+    #             player.instance.release()
+    # else:
+    #     player = PlayerVLC(fileOrFolder)
+    #     player.setup_objects_and_events()
+    #     player.show()
+    #     Gtk.main()
+    #     player.player.stop()
+    #     player.instance.release()
+    #
+    # global main
+    main = MainWindow(mainPath) # create an instance of our class
+    Gtk.main() # run the darn thing

@@ -4,21 +4,23 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GdkPixbuf
 from pathlib import Path
-from develop.source.python.database.Movie import Movie
-from develop.source.python.database.Genre import Genre
-from develop.source.python.MovieCrawler import FilmCrawler
-from develop.source.python.database.Persistable import Persistable
-from develop.source.python.database.DbUtils import DbUtils
-
+from database.Movie import Movie
+from database.Genre import Genre
+from MovieCrawler import FilmCrawler
+from database.Persistable import Persistable
 from database.DbUtils import DbUtils
-import os
+from media.PlayerVLC import PlayerVLC
+
 
 ##############################################################################################################
 ##################################################  Handler  #################################################
 ##############################################################################################################
 #Alle Handler für das Hauptfenster
 class MainWindowHandler:
-    
+
+    def __init__(self, parent):
+        self.main = parent
+
     #Beenden des Programmes
     def on_QuitMenu_activate(self, *args):
         Gtk.main_quit(*args)
@@ -29,25 +31,34 @@ class MainWindowHandler:
 
     # Film abspielen bzw. in VLC-Player oeffnen
     def play_movie_handler(self, menuItem):
-        if get_selected_movie(main.TreeView) is None:
+        if get_selected_movie(self.main.TreeView) is None:
             #todo: errodialog anzeigen
             print('error')
         else:
             print('play movie clicked')
-    
+            selectedMovie = get_selected_movie(self.main.TreeView)
+            movie = selectedMovie.get_copy()
+            myMedia = os.path.join(movie.get_path(), movie.get_filename())
+            player = PlayerVLC(myMedia)
+            player.setup_objects_and_events()
+            player.show()
+            Gtk.main()
+            player.player.stop()
+            player.instance.release()
+
     def on_ImportMenu_activate(self, menuItem):
-        main.ImportMovieWindow = ImportMovieWindow()
+        self.main.ImportMovieWindow = ImportMovieWindow(self.main.get_mainPath())
            
     #Wird "Film bearbeiten" gewählt"
     def edit_movie_handler(self, menuItem):
-        if get_selected_movie(main.TreeView) is None:
+        if get_selected_movie(self.main.TreeView) is None:
             #todo: errodialog anzeigen
             print('error')
         else:
-            selectedMovie = get_selected_movie(main.TreeView)
+            selectedMovie = get_selected_movie(self.main.TreeView)
             movie = selectedMovie.get_copy()
-            main.EditMovieWindow = EditMovieWindow(movie) 
-            main.EditMovieWindow.image.set_from_pixbuf(update_image(selectedMovie.get_image()))
+            self.main.EditMovieWindow = EditMovieWindow(movie, self.main.get_mainPath())
+            self.main.EditMovieWindow.image.set_from_pixbuf(update_image(selectedMovie.get_image()))
         
     def on_EditFileExtensionsMenu_activate(self, menuItemm):
         print('open fileext admin')     
@@ -58,10 +69,10 @@ class MainWindowHandler:
         (model, pathlist) = tree_selection.get_selected_rows()
         for path in pathlist :
             tree_iter = model.get_iter(path)
-            main.selectedMovie = model.get_value(tree_iter, 0)
-            main.image.set_from_pixbuf(update_image(main.selectedMovie.get_image()))
-            genreBuffer = main.genreBuffer
-            genreBuffer.set_text(get_genre_string(main.selectedMovie.get_genre_list()))
+            self.main.selectedMovie = model.get_value(tree_iter, 0)
+            self.main.image.set_from_pixbuf(update_image(self.main.selectedMovie.get_image()))
+            genreBuffer = self.main.genreBuffer
+            genreBuffer.set_text(get_genre_string(self.main.selectedMovie.get_genre_list()))
             
     #handler fuer doppelclick und Enter
     def on_MovieTreeView_row_activated(self, treeview, path, column):
@@ -70,50 +81,55 @@ class MainWindowHandler:
     #handler fuer Popupmenue    
     def on_MovieTreeView_Right_Click(self, widget, event):
         if event.button == 3:        
-            main.moviePopup.popup(None, None, None, None, event.button, event.time)
+            self.main.moviePopup.popup(None, None, None, None, event.button, event.time)
     
     #handler fuer Film loeschen auswaehlen
     def del_movie_handler(self, menuItem):
-        response = main.delDlg.run()
-        main.delDlg.hide()
+        response = self.main.delDlg.run()
+        self.main.delDlg.hide()
         if response == 1:
-            movie = get_selected_movie(main.TreeView)
+            movie = get_selected_movie(self.main.TreeView)
             movie.delete()
-            list_store = main.TreeView.get_model()
-            for row in main.TreeView.get_model():
+            list_store = self.main.TreeView.get_model()
+            for row in self.main.TreeView.get_model():
                 if(row[0] == movie):
                     list_store.remove(row.iter)
                     break
             
 class ImportMovieWindowHandler:
-    def on_GenreButton_clicked(self, button):        
-        selectedMovie = get_selected_movie(main.ImportMovieWindow.TreeView)
+
+    def __init__(self, parent):
+        self.main = parent
+
+
+    def on_GenreButton_clicked(self, button):
+        selectedMovie = get_selected_movie(self.main.ImportMovieWindow.TreeView)
         if selectedMovie is None:
             #todo: errodialog anzeigen
             print('error')
         else:
-            main.EditGenreWindow = EditGenreWindow(selectedMovie.get_genre_list(), main.ImportMovieWindow)
+            self.main.EditGenreWindow = EditGenreWindow(selectedMovie.get_genre_list(), self.main.ImportMovieWindow, self.main.get_mainPath())
     
     #Handler, wenn der Editierte Film gespeichert werden soll
     def on_SaveButton_clicked(self, button):    
         #todo savefunktion der Filmliste aufrufen und anschließend den Treeview vom Hauptfenster aktualisierenhier gespeichert werden
-        main.ImportMovieWindow.window.destroy()
+        self.main.ImportMovieWindow.window.destroy()
     
     #Handler zum schließen ohne speichern
     def on_AbortButton_clicked(self, button):
-        main.ImportMovieWindow.window.destroy()
+        self.main.ImportMovieWindow.window.destroy()
     
     def on_FanartFileChooser_file_set(self, widget):
-        selectedMovie = get_selected_movie(main.ImportMovieWindow.TreeView)
+        selectedMovie = get_selected_movie(self.main.ImportMovieWindow.TreeView)
         if selectedMovie is None:
             #todo: errodialog anzeigen
             print('error')
         else:
             selectedMovie.imageFilePath = widget.get_filename()
-            main.ImportMovieWindow.image.set_from_pixbuf(update_image(widget.get_filename(), 480, 272))
+            self.main.ImportMovieWindow.image.set_from_pixbuf(update_image(widget.get_filename(), 480, 272))
         
     def on_MovieFileChooser_file_set(self, widget):
-        selectedMovie = get_selected_movie(main.ImportMovieWindow.TreeView)
+        selectedMovie = get_selected_movie(self.main.ImportMovieWindow.TreeView)
         if selectedMovie is None:
             #todo: errodialog anzeigen
             print('error')
@@ -124,19 +140,19 @@ class ImportMovieWindowHandler:
         (model, pathlist) = tree_selection.get_selected_rows()
         for path in pathlist :
             tree_iter = model.get_iter(path)
-            main.ImportMovieWindow.movie = model.get_value(tree_iter, 0)
-            main.ImportMovieWindow.image.set_from_pixbuf(update_image(main.ImportMovieWindow.movie.imageFilePath, 480, 272))
-            main.ImportMovieWindow.genreText.set_text(get_genre_string(main.ImportMovieWindow.movie.get_genre_list()))
-            main.ImportMovieWindow.fanartFileChooser.set_filename(main.ImportMovieWindow.movie.get_image())
-            main.ImportMovieWindow.movieFileChooser.set_filename(main.ImportMovieWindow.movie.get_full_path())
-            main.ImportMovieWindow.movieName.set_text(main.ImportMovieWindow.movie.get_title())
+            self.main.ImportMovieWindow.movie = model.get_value(tree_iter, 0)
+            self.main.ImportMovieWindow.image.set_from_pixbuf(update_image(self.main.ImportMovieWindow.movie.imageFilePath, 480, 272))
+            self.main.ImportMovieWindow.genreText.set_text(get_genre_string(self.main.ImportMovieWindow.movie.get_genre_list()))
+            self.main.ImportMovieWindow.fanartFileChooser.set_filename(self.main.ImportMovieWindow.movie.get_image())
+            self.main.ImportMovieWindow.movieFileChooser.set_filename(self.main.ImportMovieWindow.movie.get_full_path())
+            self.main.ImportMovieWindow.movieName.set_text(self.main.ImportMovieWindow.movie.get_title())
 
 
     def on_MovieText_focus_out_event(self, widget, event):
-        selectedMovie = get_selected_movie(main.ImportMovieWindow.TreeView)
+        selectedMovie = get_selected_movie(self.main.ImportMovieWindow.TreeView)
         if selectedMovie is not None:
             #keine Fehlermeldung, wenn nur der Text geändert wird
-            main.ImportMovieWindow.movie.name = widget.get_text()
+            self.main.ImportMovieWindow.movie.name = widget.get_text()
 
     def on_ImportFolderFileChooser_file_set(self, widget):
         # Filme crawlen und anschließend speichern
@@ -152,46 +168,50 @@ class ImportMovieWindowHandler:
 
         # Alle Filme der aktuellen Ansicht hinzufügen
         for movie in movie_list:
-            main.ImportMovieWindow.movieListStore.append((movie, ))
+            self.main.ImportMovieWindow.movieListStore.append((movie, ))
 
 
 #Alle Handler für das Film bearbeiten Fenster
 class EditMovieWindowHandler:
+
+    def __init__(self, parent):
+        self.main = parent
+
     #Handler wenn der Button zum öffnen des GenreFensters genutzt wird
     def on_GenreButton_clicked(self, button):
-        main.EditGenreWindow = EditGenreWindow(main.EditMovieWindow.movie.get_genre_list(), main.EditMovieWindow)
+        self.main.EditGenreWindow = EditGenreWindow(self.main.EditMovieWindow.movie.get_genre_list(), self.main.EditMovieWindow, self.main.get_mainPath())
 
     #Handler, wenn der Editierte Film gespeichert werden soll
     def on_SaveButton_clicked(self, button):
-        main.EditMovieWindow.movie.name = main.EditMovieWindow.movieName.get_text()
-        main.selectedMovie.update_from_copy(main.EditMovieWindow.movie)
-        main.image.set_from_pixbuf(update_image(main.selectedMovie.get_image()))
-        genreBuffer = main.genreBuffer
-        genreBuffer.set_text(get_genre_string(main.selectedMovie.get_genre_list()))
-        #todo: main.selectedMovie muss hier gespeichert werden
-        main.EditMovieWindow.window.destroy()
+        self.main.EditMovieWindow.movie.name = self.main.EditMovieWindow.movieName.get_text()
+        self.main.selectedMovie.update_from_copy(self.main.EditMovieWindow.movie)
+        self.main.image.set_from_pixbuf(update_image(self.main.selectedMovie.get_image()))
+        genreBuffer = self.main.genreBuffer
+        genreBuffer.set_text(get_genre_string(self.main.selectedMovie.get_genre_list()))
+        #todo: self.main.selectedMovie muss hier gespeichert werden
+        self.main.EditMovieWindow.window.destroy()
 
     #Handler zum schließen ohne speichern
     def on_AbortButton_clicked(self, button):
-        main.EditMovieWindow.window.destroy()
+        self.main.EditMovieWindow.window.destroy()
         
     def on_treeviewMovieSelection_changed(self, tree_selection) :
         (model, pathlist) = tree_selection.get_selected_rows()
         for path in pathlist :
             tree_iter = model.get_iter(path)
-            main.ImportMovieWindow.movie = model.get_value(tree_iter, 0)
-            main.ImportMovieWindow.image.set_from_pixbuf(update_image(main.ImportMovieWindow.movie.imageFilePath, 480, 272))
-            main.ImportMovieWindow.genreText.set_text(get_genre_string(main.ImportMovieWindow.movie.get_genre_list()))
-            main.ImportMovieWindow.fanartFileChooser.set_filename(main.ImportMovieWindow.movie.get_image())
-            main.ImportMovieWindow.movieFileChooser.set_filename(main.ImportMovieWindow.movie.get_full_path())
-            main.ImportMovieWindow.movieName.set_text(main.ImportMovieWindow.movie.get_title())
+            self.main.ImportMovieWindow.movie = model.get_value(tree_iter, 0)
+            self.main.ImportMovieWindow.image.set_from_pixbuf(update_image(self.main.ImportMovieWindow.movie.imageFilePath, 480, 272))
+            self.main.ImportMovieWindow.genreText.set_text(get_genre_string(self.main.ImportMovieWindow.movie.get_genre_list()))
+            self.main.ImportMovieWindow.fanartFileChooser.set_filename(self.main.ImportMovieWindow.movie.get_image())
+            self.main.ImportMovieWindow.movieFileChooser.set_filename(self.main.ImportMovieWindow.movie.get_full_path())
+            self.main.ImportMovieWindow.movieName.set_text(self.main.ImportMovieWindow.movie.get_title())
 
     
     def on_MovieText_focus_out_event(self, widget, event):
-        selectedMovie = get_selected_movie(main.ImportMovieWindow.TreeView)
+        selectedMovie = get_selected_movie(self.main.ImportMovieWindow.TreeView)
         if selectedMovie is not None:
             #keine Fehlermeldung, wenn nur der Text geändert wird
-            main.ImportMovieWindow.movie.name = widget.get_text()
+            self.main.ImportMovieWindow.movie.name = widget.get_text()
     
     def on_ImportFolderFileChooser_file_set(self, widget):
         # Filme crawlen und anschließend speichern
@@ -209,60 +229,64 @@ class EditMovieWindowHandler:
 
         # Alle Filme der aktuellen Ansicht hinzufügen
         for movie in movie_list:
-            main.ImportMovieWindow.movieListStore.append((movie, ))
+            self.main.ImportMovieWindow.movieListStore.append((movie, ))
       
 
 #Alle Handler für das Film bearbeiten Fenster
 class EditMovieWindowHandler:
     #Handler wenn der Button zum öffnen des GenreFensters genutzt wird
     def on_GenreButton_clicked(self, button):               
-        main.EditGenreWindow = EditGenreWindow(main.EditMovieWindow.movie.get_genre_list(), main.EditMovieWindow)
+        self.main.EditGenreWindow = EditGenreWindow(self.main.EditMovieWindow.movie.get_genre_list(), self.main.EditMovieWindow, self.main.get_mainPath())
     
     #Handler, wenn der Editierte Film gespeichert werden soll
     def on_SaveButton_clicked(self, button):
         # ToDo: ACHTUNG. Den Pfad des Films zu ändern ist etwas komplizierter
         # ToDo: Es muss auch geprüft werden, ob dieser Film nicht bereits in der Datenbank existiert --> Fehlermeldung!!
-        if(main.EditMovieWindow.movie.get_full_path() != main.EditMovieWindow.movieFileChooser.get_filename()):
-            if(Movie.get_by_path(main.EditMovieWindow.movieFileChooser.get_filename())):
+        if(self.main.EditMovieWindow.movie.get_full_path() != self.main.EditMovieWindow.movieFileChooser.get_filename()):
+            if(Movie.get_by_path(self.main.EditMovieWindow.movieFileChooser.get_filename())):
                 pass
                 # ToDo: Fehlermeldung, dass dieser Film bereits in der Datenbank existiert
             else:
-                new_movie = Movie.read_file_to_movie(main.EditMovieWindow.movieFileChooser.get_filename())
-                for genre in main.EditMovieWindow.movie.get_full_path():
+                new_movie = Movie.read_file_to_movie(self.main.EditMovieWindow.movieFileChooser.get_filename())
+                for genre in self.main.EditMovieWindow.movie.get_full_path():
                     new_movie.add_genre(genre)
 
-        main.EditMovieWindow.movie.set_title(main.EditMovieWindow.movieName.get_text())
-        main.EditMovieWindow.movie.set_image(main.EditMovieWindow.fanartFileChooser.get_filename())
-        main.selectedMovie.update_values(main.EditMovieWindow.movie)
-        main.selectedMovie.persist()
+        self.main.EditMovieWindow.movie.set_title(self.main.EditMovieWindow.movieName.get_text())
+        self.main.EditMovieWindow.movie.set_image(self.main.EditMovieWindow.fanartFileChooser.get_filename())
+        self.main.selectedMovie.update_values(self.main.EditMovieWindow.movie)
+        self.main.selectedMovie.persist()
 
-        main.image.set_from_pixbuf(update_image(main.selectedMovie.get_image()))
-        genreBuffer = main.genreBuffer
-        genreBuffer.set_text(get_genre_string(main.selectedMovie.get_genre_list()))
-        main.EditMovieWindow.window.destroy()
+        self.main.image.set_from_pixbuf(update_image(self.main.selectedMovie.get_image()))
+        genreBuffer = self.main.genreBuffer
+        genreBuffer.set_text(get_genre_string(self.main.selectedMovie.get_genre_list()))
+        self.main.EditMovieWindow.window.destroy()
     
     #Handler zum schließen ohne speichern
     def on_AbortButton_clicked(self, button):
-        main.EditMovieWindow.window.destroy()
+        self.main.EditMovieWindow.window.destroy()
     
     def on_FanartFileChooser_file_set(self, widget):
-        main.EditMovieWindow.movie.imageFilePath = widget.get_filename()
-        main.EditMovieWindow.image.set_from_pixbuf(update_image(widget.get_filename()))          
+        self.main.EditMovieWindow.movie.imageFilePath = widget.get_filename()
+        self.main.EditMovieWindow.image.set_from_pixbuf(update_image(widget.get_filename()))
         
     def on_MovieFileChooser_file_set(self, widget):
-        main.EditMovieWindow.movie.filePath = widget.get_filename()
+        self.main.EditMovieWindow.movie.filePath = widget.get_filename()
                        
          
 #Alle Handler für das Genre bearbeiten Fenster      
 class EditGenreWindowHandler:
+
+    def __init__(self, parent):
+        self.main = parent
+
     #Hander zum Speicern der ausgewählten Genres (Kein speichern in der Datenbank, dazu muss noch der Speichern Button beim Film editieren genutzt werden
     def on_SaveButton_clicked(self, widget):
-        main.EditGenreWindow.callWindow.movie.clear_genre_list()
-        for genre in main.EditGenreWindow.liststore:
+        self.main.EditGenreWindow.callWindow.movie.clear_genre_list()
+        for genre in self.main.EditGenreWindow.liststore:
             if genre[0] == True:
-                main.EditGenreWindow.callWindow.movie.add_genre(genre[1])
-        main.EditGenreWindow.callWindow.genreText.set_text(get_genre_string(main.EditGenreWindow.callWindow.movie.get_genre_list()))
-        main.EditGenreWindow.window.destroy()
+                self.main.EditGenreWindow.callWindow.movie.add_genre(genre[1])
+        self.main.EditGenreWindow.callWindow.genreText.set_text(get_genre_string(self.main.EditGenreWindow.callWindow.movie.get_genre_list()))
+        self.main.EditGenreWindow.window.destroy()
         
 
 ##############################################################################################################
@@ -325,13 +349,16 @@ def get_genre_string(genre_list):
 
 #Hauptfenster
 class MainWindow:    
-    def __init__(self):        
+    def __init__(self, mainPath = None):
         #Gtk.Builder zuweisen 
         self.builder = Gtk.Builder()
         #Glade File dem Builder zuweisen
-        self.builder.add_from_file("layout\MainWindow.glade")
+        if (mainPath == None):
+            mainPath = "."
+        self._mainPath = mainPath
+        self.builder.add_from_file(os.path.join(self._mainPath, "layout", "MainWindow.glade"))
         #Eventhandler zuweisen
-        self.builder.connect_signals(MainWindowHandler())
+        self.builder.connect_signals(MainWindowHandler(self))
 
         #Das Fenster zuweisen (Hier hat man Zugriff auf alle Funktionen des Hauptfensters)
         self.window = self.builder.get_object("MainWindow")
@@ -377,6 +404,9 @@ class MainWindow:
 
         #Hauptfenster anzeigen
         show_window(self) # this shows the 'window1' object
+
+    def get_mainPath(self):
+        return self._mainPath
         
 #Genre Editieren Fenster
 class EditGenreWindow:
@@ -385,13 +415,16 @@ class EditGenreWindow:
         self.liststore[path][0] = not self.liststore[path][0]   
         
     #Initialisieren    
-    def __init__(self, genreList, callWindow):
+    def __init__(self, genreList, callWindow, mainPath = None):
         #Gtk.Builder zuweisen
         self.builder = Gtk.Builder()        
         #Glade File dem Builder zuweisen
-        self.builder.add_from_file('layout\EditGenreWindow.glade')
+        if (mainPath == None):
+            mainPath = "."
+        self._mainPath = mainPath
+        self.builder.add_from_file(os.path.join(self._mainPath, "layout", 'EditGenreWindow.glade'))
         #Eventhandler zuweisen
-        self.builder.connect_signals(EditGenreWindowHandler())
+        self.builder.connect_signals(EditGenreWindowHandler(self))
         #von welchem Fenster wurde EditGenreWindow aufgerufen?
         self.callWindow = callWindow
         #Liststore mit allen Möglichen Genres befüllen, hier mit Beispielen
@@ -440,15 +473,18 @@ class EditGenreWindow:
         
 class EditMovieWindow:        
     #Film bearbeiten Fenster initialisieren
-    def __init__(self, movie):
+    def __init__(self, movie, mainPath = None):
         #
         self.builder = Gtk.Builder()
-        self.builder.add_from_file('layout\EditMovieWindow.glade')
+        if (mainPath == None):
+            mainPath = "."
+        self._mainPath = mainPath
+        self.builder.add_from_file(os.path.join(self._mainPath, "layout", 'EditMovieWindow.glade'))
         #Das Fenster zuweisen (Hier hat man Zugriff auf alle Funktionen des Hauptfensters)
         self.window = self.builder.get_object("EditMovieWindow") 
         self.window.set_modal(True)
         show_window(self)
-        self.builder.connect_signals(EditMovieWindowHandler())
+        self.builder.connect_signals(EditMovieWindowHandler(self))
         self.movie = movie
         #Das Image zuweisen (Noetig, damit man das den Bildbereich bearbeiten kann)
         self.image = self.builder.get_object("FanArtImage")
@@ -470,11 +506,14 @@ class ImportMovieWindow:
     # ToDo: Bislang in dieser Klasse nichts angepasst (Thomas 22.06.2017)
 
     #Film bearbeiten Fenster initialisieren
-    def __init__(self):
+    def __init__(self, mainPath = None):
         #
         self.builder = Gtk.Builder()
-        self.builder.add_from_file('layout\ImportMovieWindow.glade')
-        self.builder.connect_signals(ImportMovieWindowHandler())
+        if (mainPath == None):
+            mainPath = "."
+        self._mainPath = mainPath
+        self.builder.add_from_file(os.path.join(self._mainPath, "layout", 'ImportMovieWindow.glade'))
+        self.builder.connect_signals(ImportMovieWindowHandler(self))
         
         #Das Fenster zuweisen (Hier hat man Zugriff auf alle Funktionen des Hauptfensters)
         self.window = self.builder.get_object("ImportMovieWindow") 
@@ -544,6 +583,7 @@ if __name__ == "__main__":
       film.persist()
     '''
     # ------------- Ende Testzeilen ---------------
-
-    main = MainWindow() # create an instance of our class
+    global main
+    mainPath = os.path.dirname(__file__)
+    main = MainWindow(mainPath) # create an instance of our class
     Gtk.main() # run the darn thing
