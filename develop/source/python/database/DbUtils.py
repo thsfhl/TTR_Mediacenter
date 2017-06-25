@@ -2,6 +2,7 @@
 
 import sqlite3 as sl
 import sys
+import os
 from .Singleton import *
 
 
@@ -17,6 +18,7 @@ class DbUtils:
         """ Constructor """
         # Datenbank-Attribut mit None initialisieren
         self.con = None
+        self.DB_NAME = "ttr_mediacenter.db"
 
     def __del__(self):
         """ Destructor - Beendet Datenbankverbindung beim Löschen """
@@ -32,7 +34,7 @@ class DbUtils:
         try:
             if not self.con:
                 # Falls noch keine Datenbankverbindung besteht, diese herstellen
-                self.con = sl.connect('ttr_mediacenter.db')
+                self.con = sl.connect(self.DB_NAME)
 
             return self.con
 
@@ -40,6 +42,10 @@ class DbUtils:
             # Fehlermeldung, falls Verbindung nicht hergestellt werden konnte
             print("Error %s:" % e.args[0])
             sys.exit(1)
+
+    def create_database_if_not_exists(self):
+        if not os.path.isfile(self.DB_NAME):
+            self.create_database()
 
     def create_database(self):
         """ Löscht und erstellt die Datenbank """

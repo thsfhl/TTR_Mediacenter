@@ -596,9 +596,11 @@ class ImportMovieWindow:
 
         
 if __name__ == "__main__":
+
+    db = DbUtils()
+    db.create_database_if_not_exists()
     # Erstmal nur zum Testen, bis Import-Dialog funktioniert
     '''
-    db = DbUtils()
     db.create_database()
     filme = FilmCrawler.crawl_folder("D:\Breaking Bad", True)
     for film in filme:
