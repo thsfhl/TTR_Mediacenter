@@ -9,20 +9,20 @@ class TTRFileChooser(Gtk.Window):
         Gtk.Window.__init__(self, title="Verzeichnisauswahl")
         self.set_position(Gtk.WindowPosition.CENTER)
 
-        box = Gtk.Box(spacing=6)
-        self.add(box)
+        self._box = Gtk.Box(spacing=6)
+        self.add(self._box)
 
-        button1 = Gtk.Button("Datei auswaehlen")
-        button1.connect("clicked", self.on_file_clicked)
-        box.add(button1)
+        self._button1 = Gtk.Button("Datei auswaehlen")
+        self._button1.connect("clicked", self.on_file_clicked)
+        self._box.add(self._button1)
 
-        button2 = Gtk.Button("Verzeichnis auswaehlen")
-        button2.connect("clicked", self.on_folder_clicked)
-        box.add(button2)
+        self._button2 = Gtk.Button("Verzeichnis auswaehlen")
+        self._button2.connect("clicked", self.on_folder_clicked)
+        self._box.add(self._button2)
 
-        button3 = Gtk.Button("Fertig")
-        button3.connect("clicked", Gtk.main_quit)
-        box.add(button3)
+        self._button3 = Gtk.Button(label="Cancel")
+        self._button3.connect("clicked", Gtk.main_quit)
+        self._box.add(self._button3)
 
         self._folder = None
         self._file = None
@@ -45,6 +45,7 @@ class TTRFileChooser(Gtk.Window):
             print("Vorgang wurde durch den Benutzer abgebrochen")
 
         dialog.destroy()
+        self._button3.set_label("Fertig")
 
     def add_filters(self, dialog):
         filter = Gtk.FileFilter()
@@ -75,6 +76,7 @@ class TTRFileChooser(Gtk.Window):
             print("Vorgang wurde durch den Benutzer abgebrochen")
 
         dialog.destroy()
+        self._button3.set_label("Fertig")
 
     def getFileOrFolder(self):
         if (None != self._folder):
