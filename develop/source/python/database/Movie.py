@@ -16,10 +16,10 @@ class Movie(Persistable, GObject.GObject):
     """
     Klasse in der die Datenbankverbindung hergestellt wird
     - Datenbank aktualisieren und erstellen
-    - Wrapper für Abfragen
+    - Wrapper fuer Abfragen
     """
 
-    # Konstanten für den Dateistatus
+    # Konstanten fï¿½r den Dateistatus
     STATUS_OK = 0
     STATUS_CHANGED = 1
     STATUS_DELETED = 2

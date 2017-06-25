@@ -330,7 +330,6 @@ class MainWindow:
         self.builder = Gtk.Builder()
         #Glade File dem Builder zuweisen
         self.builder.add_from_file("layout\MainWindow.glade")
-        self.builder.add_from_file(os.path.join(mainPath, "layout", "MainWindow.glade"))
         #Eventhandler zuweisen
         self.builder.connect_signals(MainWindowHandler())
 
@@ -347,7 +346,6 @@ class MainWindow:
         #Loeschdialog ans Fenster anhaengen
         self.delDlg.set_transient_for(self.window)
         self.genreBuffer = self.textviewGenre.get_buffer()
-        self.descBuffer = self.textviewDesc.get_buffer()
 
         #Einen Liststore erstellen. Hier kommt die Filmliste rein. Die Filme werden als Objekte angehaengt.
         movieListStore = Gtk.ListStore(Movie)
@@ -357,7 +355,6 @@ class MainWindow:
         treeviewcolumn = Gtk.TreeViewColumn('FilmTitel')        
         #Setzen des anzeigetextes und Objektes
         treeviewcolumn.set_cell_data_func(cellrenderer, set_treeview_cell_txt_colone)
-
         
 
         #CellRenderer zur Spalte, und Spalte zum TreeView hinzufgen
