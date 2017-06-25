@@ -34,8 +34,18 @@ class MainWindowHandler:
     # Film abspielen bzw. in VLC-Player oeffnen
     def play_movie_handler(self, menuItem):
         if get_selected_movie(self.main.TreeView) is None:
-            #todo: errodialog anzeigen
-            print('error')
+            def message_response(widget, response_id):
+                widget.destroy()
+
+            message = Gtk.MessageDialog(
+                parent=self.main.window,
+                flags=Gtk.DialogFlags.MODAL,
+                type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                message_format="Fehler! Es wurde kein Film zum Abspielen ausgewählt!"
+            )
+            message.connect("response", message_response)
+            message.show()
         else:
             print('play movie clicked')
             selectedMovie = get_selected_movie(self.main.TreeView)
@@ -76,8 +86,18 @@ class MainWindowHandler:
     #Wird "Film bearbeiten" gewählt"
     def edit_movie_handler(self, menuItem):
         if get_selected_movie(self.main.TreeView) is None:
-            #todo: errodialog anzeigen
-            print('error')
+            def message_response(widget, response_id):
+                widget.destroy()
+
+            message = Gtk.MessageDialog(
+                parent=self.main.window,
+                flags=Gtk.DialogFlags.MODAL,
+                type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                message_format="Fehler! Es wurde kein Film zum Bearbeiten ausgewählt!"
+            )
+            message.connect("response", message_response)
+            message.show()
         else:
             self.main.selectedMovie = get_selected_movie(self.main.TreeView)
             movie = self.main.selectedMovie.get_copy()
@@ -128,9 +148,22 @@ class ImportMovieWindowHandler:
 
     def on_GenreButton_clicked(self, button):
         selectedMovie = get_selected_movie(self.main.TreeView)
+
         if selectedMovie is None:
-            #todo: errodialog anzeigen
-            print('error')
+
+            def message_response(widget, response_id):
+                widget.destroy()
+
+            message = Gtk.MessageDialog(
+                parent=self.main.window,
+                flags=Gtk.DialogFlags.MODAL,
+                type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                message_format="Fehler! Es wurde kein Film zur Bearbeitung der Genres ausgewählt!"
+            )
+            message.connect("response", message_response)
+            message.show()
+
         else:
             self.main.EditGenreWindow = EditGenreWindow(selectedMovie.get_genre_list(), self.main, self.main.parent.get_mainPath())
     
@@ -148,8 +181,18 @@ class ImportMovieWindowHandler:
     def on_FanartFileChooser_file_set(self, widget):
         selectedMovie = get_selected_movie(self.main.TreeView)
         if selectedMovie is None:
-            #todo: errodialog anzeigen
-            print('error')
+            def message_response(widget, response_id):
+                widget.destroy()
+
+            message = Gtk.MessageDialog(
+                parent=self.main.window,
+                flags=Gtk.DialogFlags.MODAL,
+                type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                message_format="Fehler! Es wurde kein Film zur Bearbeitung des Fanarts/Vorschaubildes ausgewählt!"
+            )
+            message.connect("response", message_response)
+            message.show()
         else:
             selectedMovie.set_image(widget.get_filename())
             self.main.image.set_from_pixbuf(update_image(widget.get_filename(), 480, 272))
@@ -157,8 +200,18 @@ class ImportMovieWindowHandler:
     def on_MovieFileChooser_file_set(self, widget):
         selectedMovie = get_selected_movie(self.main.TreeView)
         if selectedMovie is None:
-            #todo: errodialog anzeigen
-            print('error')
+            def message_response(widget, response_id):
+                widget.destroy()
+
+            message = Gtk.MessageDialog(
+                parent=self.main.window,
+                flags=Gtk.DialogFlags.MODAL,
+                type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                message_format="Fehler! Es wurde kein Film ausgewählt, für den ein neuer Pfad gewählt werden soll!"
+            )
+            message.connect("response", message_response)
+            message.show()
         else:
             selectedMovie.filePath = widget.get_filename()        
    
@@ -392,7 +445,7 @@ class EditGenreWindow:
         #von welchem Fenster wurde EditGenreWindow aufgerufen?
         self.callWindow = callWindow
         #Liststore mit allen Möglichen Genres befüllen, hier mit Beispielen
-        #todo: hier muss die Genreliste geladen werden. Anschließend wird der Liststore mit [false,genre] befüllt
+
         self.liststore = Gtk.ListStore(bool, Genre)
 
         # Alle Genres aus DB laden
@@ -401,7 +454,7 @@ class EditGenreWindow:
             self.liststore.append([False, genre])
         
         #Übergebene Genres mit der Genreliste vergleichen und die bisher gewählten Genres als aktiv setzen
-        # ToDo: Das hier sind Genre-Objekte ABER es müssen die Genres am Film verglichen werden:
+
         for movie_genre in self.liststore:
             for genre in self.callWindow.movie.get_genre_list():
                 if movie_genre[1].get_name() == genre.get_name():
@@ -467,7 +520,6 @@ class EditMovieWindow:
         
         
 class ImportMovieWindow:
-    # ToDo: Bislang in dieser Klasse nichts angepasst (Thomas 22.06.2017)
 
     #Film bearbeiten Fenster initialisieren
     def __init__(self, parent, movieListStore, mainPath = None):
