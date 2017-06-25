@@ -65,7 +65,7 @@ class Movie(Persistable, GObject.GObject):
         # Falls nicht aus Datenbank holen
         con = Movie.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE db_id=?", (db_id,))
+        cur.execute("SELECT db_id, titel, path, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE db_id=?", (db_id,))
         row = cur.fetchone()
         if row:
             movie = Movie.movie_from_row(row)
@@ -94,7 +94,7 @@ class Movie(Persistable, GObject.GObject):
         """ Overridden aus Persistable """
         con = Movie.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Movie.get_table_name())
+        cur.execute("SELECT db_id, titel, path, filename, checksum, filetype, image FROM " + Movie.get_table_name())
 
         instances = []
         for row in cur:
@@ -127,10 +127,10 @@ class Movie(Persistable, GObject.GObject):
             filetype_id = self.get_filetype().get_db_id()
 
         if (self.get_db_id() != None and self.get_db_id() > 0):
-            cur.execute("UPDATE " + self.get_table_name() + " SET titel=?, pfad=?, filename=?, checksum=?, filetype=?, image=? WHERE id=?",
+            cur.execute("UPDATE " + self.get_table_name() + " SET titel=?, path=?, filename=?, checksum=?, filetype=?, image=? WHERE id=?",
                         (self.get_titel(), self.get_path(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image(), self.get_db_id()))
         else:
-            cur.execute("INSERT INTO " + self.get_table_name() + " (titel, pfad, filename, checksum, filetype, image) VALUES (?, ?, ?, ?, ?, ?)",
+            cur.execute("INSERT INTO " + self.get_table_name() + " (titel, path, filename, checksum, filetype, image) VALUES (?, ?, ?, ?, ?, ?)",
                         (self.get_titel(), self.get_path(), self.get_filename(), self.get_checksum(), filetype_id, self.get_image()))
             self.set_db_id(cur.lastrowid)
         con.commit()
@@ -191,7 +191,7 @@ class Movie(Persistable, GObject.GObject):
         """
         con = Movie.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, titel, pfad, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE pfad=?", (path,))
+        cur.execute("SELECT db_id, titel, path, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE path=?", (path,))
         row = cur.fetchone()
         if row:
             movie = Movie.get_cache().get_by_id(row[0])

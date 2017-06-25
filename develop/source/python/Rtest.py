@@ -205,6 +205,7 @@ def set_treeview_cell_txt_coltwo(tree_column, cell, tree_model, iter, data):
     obj = tree_model[iter][1]    #
     #text fuer aktuelle Zeile setzen
     cell.set_property('text', obj.get_titel())
+
 #Funktion um ein Bild zu laden und anschließend zu skalieren
 def update_image(filePath, x=1280, y=720):
     myfile = Path(filePath)
@@ -244,13 +245,12 @@ def get_genre_string(genre_list):
 
 #Hauptfenster
 class MainWindow:
-    def __init__(self):
+    def __init__(self, mainPath = "."):
         #Gtk.Builder zuweisen
         self.builder = Gtk.Builder()
         #Glade File dem Builder zuweisen
         #todo: umbenennen der Gladefile
-        mainPath = os.getcwd()
-        self.builder.add_from_file(os.path.join(mainPath, "layout/MainWindow.glade"))
+        self.builder.add_from_file(os.path.join(mainPath, "layout", "MainWindow.glade"))
         #Eventhandler zuweisen
         self.builder.connect_signals(MainWindowHandler())
         #Das Fenster zuweisen (Hier hat man Zugriff auf alle Funktionen des Hauptfensters)
@@ -320,11 +320,11 @@ class EditGenreWindow:
         self.liststore[path][0] = not self.liststore[path][0]
 
     #Initialisieren
-    def __init__(self, genreList, callWindow):
+    def __init__(self, genreList, callWindow, mainPath = "."):
         #Gtk.Builder zuweisen
         self.builder = Gtk.Builder()
         #Glade File dem Builder zuweisen
-        self.builder.add_from_file('layout\EditGenreWindow.glade')
+        self.builder.add_from_file(os.path.join(mainPath, 'layout', 'EditGenreWindow.glade'))
         #Eventhandler zuweisen
         self.builder.connect_signals(EditGenreWindowHandler())
         #von welchem Fenster wurde EditGenreWindow aufgerufen?
@@ -374,10 +374,10 @@ class EditGenreWindow:
 
 class EditMovieWindow:
     #Film bearbeiten Fenster initialisieren
-    def __init__(self, movie):
+    def __init__(self, movie, mainPath = "."):
         #
         self.builder = Gtk.Builder()
-        self.builder.add_from_file('layout\EditMovieWindow.glade')
+        self.builder.add_from_file(os.path.join(mainPath, 'layout', 'EditMovieWindow.glade'))
         #Das Fenster zuweisen (Hier hat man Zugriff auf alle Funktionen des Hauptfensters)
         self.window = self.builder.get_object("EditMovieWindow")
         self.window.set_modal(True)
@@ -403,10 +403,10 @@ class ImportMovieWindow:
     # ToDo: Bislang in dieser Klasse nichts angepasst (Thomas 22.06.2017)
 
     #Film bearbeiten Fenster initialisieren
-    def __init__(self):
+    def __init__(self, mainPath = "."):
         #
         self.builder = Gtk.Builder()
-        self.builder.add_from_file('layout\ImportMovieWindow.glade')
+        self.builder.add_from_file(os.path.join(mainPath, 'layout', 'ImportMovieWindow.glade'))
         self.builder.connect_signals(ImportMovieWindowHandler())
 
         #Das Fenster zuweisen (Hier hat man Zugriff auf alle Funktionen des Hauptfensters)
@@ -464,5 +464,6 @@ class ImportMovieWindow:
 
 
 if __name__ == "__main__":
-    main = MainWindow() # create an instance of our class
+    mainPath = os.getcwd()
+    main = MainWindow(mainPath) # create an instance of our class
     Gtk.main() # run the darn thing

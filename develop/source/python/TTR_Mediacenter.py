@@ -16,10 +16,10 @@ from database.FileType import FileType
 from database.Movie import Movie
 from database.Genre import Genre
 from FilmCrawler import FilmCrawler
-from Rtest import RtestWindow
+# from Rtest import RtestWindow
 from media.PlayerVLC import PlayerVLC
 
-from gui.TTRFileChooser import TTRFileChooser
+from layout.TTRFileChooser import TTRFileChooser
 
 # nur zum Test
 import hashlib
@@ -38,7 +38,7 @@ def addFilm(id, titel, pfad, filename, genre_id, filetype_id):
     Movie.persist(film)
     return film
 
-def dbTests():
+def dbTests(mainPath = None):
     # Reiner Testkram von Thomas - kann gerne wieder gelöscht werden
     # Test der Datenbank-Klasse
     db = DbUtils()
@@ -52,7 +52,9 @@ def dbTests():
 
     # Test von Einträgen und dem Cache
 
-    pfad = "c:\ordnername\\"
+    pfad = mainPath
+    if (pfad == None):
+       pfad = "c:\ordnername\\"
     filename = "erster_film.avi"
     titel = "Dat is der erste Film"
     id = 1
@@ -100,16 +102,18 @@ def crawlerTest(folderOrFile = None):
         # Eigentlicher Test
         crawler = FilmCrawler()
         if (folderOrFile == None):
-            folderOrFile = "C:\\temp\\video_test"
+            folderOrFile = os.path.join(os.getcwd(), "temp")
+        # search in folder for movies etcpp and receive an array of those movies etc
         filme = crawler.crawl_folder(folderOrFile, True)
-        print (filme)
+        # print (filme)
         if filme:
+            # persist these movies
             for film in filme:
                 Movie.persist(film)
 
         # Test ob ID von Film auch in DB landet
-        test_db_film = Movie.get_by_id(1)
-        print (test_db_film)
+        # test_db_film = Movie.get_by_id(1)
+        # print (test_db_film)
 
 
 if __name__ == '__main__':
@@ -124,24 +128,37 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     if (args.d == True):
-        dbTests()
+        dbTests(os.path.join(os.getcwd(), "temp"))
 
 
+    # try the filechooser to get a file or a folder where to use the crawler
     win = TTRFileChooser()
     win.connect("delete-event", Gtk.main_quit)
     win.show_all()
     Gtk.main()
+    # file or folder which has been selected in filechooser windows
     fileOrFolder = win.getFileOrFolder()
-    print (fileOrFolder)
-    # Achtung, hier muss ein sinnvolles Verzeichnis angegeben werden
+
     crawlerTest(fileOrFolder)
 
-    player = PlayerVLC(fileOrFolder)
-    player.setup_objects_and_events()
-    player.show()
-    Gtk.main()
-    player.player.stop()
-    player.instance.release()
+    movies = Movie.get_all()
+    if (None != movies) and (len(movies) > 0):
+        for m in movies:
+            if (m.get_filetype().get_extension() != '.jpeg') and (m.get_filetype().get_extension() != '.jpg') and (m.get_filetype().get_extension() != '.png'):
+                print ("Playing %s\n" % os.path.join(m.get_path(), m.get_filename()))
+                player = PlayerVLC(os.path.join(m.get_path(),m.get_filename()))
+                player.setup_objects_and_events()
+                player.show()
+                Gtk.main()
+                player.player.stop()
+                player.instance.release()
+    else:
+        player = PlayerVLC(fileOrFolder)
+        player.setup_objects_and_events()
+        player.show()
+        Gtk.main()
+        player.player.stop()
+        player.instance.release()
 
 #    main = RtestWindow() # create an instance of our class
 #    Gtk.main()

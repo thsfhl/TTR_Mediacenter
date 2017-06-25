@@ -45,7 +45,7 @@ class FilmCrawler:
 
         # Falls Datei, prüfen ob FileType passt und ggf. auslesen
         if os.path.isfile(fullpath):
-            film_neu = Movie.read_file_to_film(fullpath)
+            film_neu = Movie.read_file_to_movie(fullpath)
             if film_neu:
                 filme.append(film_neu)
 
@@ -69,7 +69,7 @@ class FilmCrawler:
                         for film_neu in neue_filme:
                             filme.append(film_neu)
 
-        print (filme) # ToDo: print Entfernen, ist nur zum Testen, ob und/oder wie die Dateien eingelesen werden
+        # print (filme) # ToDo: print Entfernen, ist nur zum Testen, ob und/oder wie die Dateien eingelesen werden
         return filme
 
 
