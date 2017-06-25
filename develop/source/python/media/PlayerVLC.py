@@ -15,33 +15,18 @@ import vlc
 class PlayerVLC(Gtk.Window):
     def __init__(self, myMedia = None):
         Gtk.Window.__init__(self, title="Vlc Media Player with Python")
-        self.player_paused = False
-        self.is_player_active = False
+        self._player_paused = False
+        self._is_player_active = False
         self.connect("destroy", Gtk.main_quit)
         self._media = myMedia
+        self._stopped = False
 
     def show(self):
         self.show_all()
 
     def setup_objects_and_events(self):
-        self.playback_button = Gtk.Button()
-        self.stop_button = Gtk.Button()
-
-        self.play_image = Gtk.Image.new_from_icon_name(
-            "gtk-media-play",
-            Gtk.IconSize.MENU
-        )
-        self.pause_image = Gtk.Image.new_from_icon_name(
-            "gtk-media-pause",
-            Gtk.IconSize.MENU
-        )
-        self.stop_image = Gtk.Image.new_from_icon_name(
-            "gtk-media-stop",
-            Gtk.IconSize.MENU
-        )
-
-        self.playback_button.set_image(self.play_image)
-        self.stop_button.set_image(self.stop_image)
+        self.playback_button = Gtk.Button(label='Play')
+        self.stop_button = Gtk.Button(label='Cancel')
 
         self.playback_button.connect("clicked", self.toggle_player_playback)
         self.stop_button.connect("clicked", self.stop_player)
@@ -62,8 +47,10 @@ class PlayerVLC(Gtk.Window):
 
     def stop_player(self, widget, data=None):
         self.player.stop()
-        self.is_player_active = False
-        self.playback_button.set_image(self.play_image)
+        self._stopped = True
+        self._is_player_active = False
+        self.playback_button.set_label('Replay')
+
 
     def toggle_player_playback(self, widget, data=None):
 
@@ -72,20 +59,27 @@ class PlayerVLC(Gtk.Window):
         Buttons anzeigen als aktiv oder deaktiviert
         """
 
-        if self.is_player_active == False and self.player_paused == False:
+        if self._is_player_active == False and self._player_paused == False:
             self.player.play()
-            self.playback_button.set_image(self.pause_image)
-            self.is_player_active = True
+            self.playback_button.set_label('Play')
+            self._is_player_active = True
 
-        elif self.is_player_active == True and self.player_paused == True:
+        elif self._is_player_active == True and self._player_paused == True:
             self.player.play()
-            self.playback_button.set_image(self.pause_image)
-            self.player_paused = False
+            self.playback_button.set_label('Stop')
+            self._player_paused = False
 
-        elif self.is_player_active == True and self.player_paused == False:
+        elif self._is_player_active == True and self._player_paused == False:
             self.player.pause()
-            self.playback_button.set_image(self.play_image)
-            self.player_paused = True
+            self.playback_button.set_label('Cont')
+            self._player_paused = True
+
+        elif self._stopped == True:
+            self.player.replay()
+            self.playback_button.set_label('Stop')
+            self._stopped = False
+            self._player_paused = False
+
         else:
             pass
 
@@ -100,6 +94,5 @@ class PlayerVLC(Gtk.Window):
         self.player.set_xwindow(win_id)
         self.player.set_mrl(self._media)
         self.player.play()
-        self.playback_button.set_image(self.pause_image)
-        self.is_player_active = True
+        self._is_player_active = True
 
