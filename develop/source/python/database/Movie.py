@@ -26,7 +26,7 @@ class Movie(Persistable, GObject.GObject):
 
     _cache = None
 
-    def __init__(self, db_id=0, title=None, path=None, filename=None, checksum=None, genre_list=None, filetype=None, status=0):
+    def __init__(self, db_id=0, title=None, path=None, filename=None, checksum=None, genre_list=None, filetype=None, image=None, status=0):
         """ Constructor """
         Persistable.__init__(self)
         GObject.GObject.__init__(self)
@@ -41,7 +41,7 @@ class Movie(Persistable, GObject.GObject):
             self._genre_list = []
         self._filetype = filetype
         self._status = status # Status 0 = OK, 1 = Changed, 2 = Deleted
-        self._image = None
+        self._image = image
 
     @staticmethod
     def get_cache():
@@ -130,6 +130,7 @@ class Movie(Persistable, GObject.GObject):
         filetype_id = 0
         if self.get_filetype():
             filetype_id = self.get_filetype().get_db_id()
+
 
         if (not self.get_db_id() is None and  self.get_db_id()):
             cur.execute("UPDATE " + self.get_table_name() + " SET title=?, path=?, filename=?, checksum=?, filetype=?, image=? WHERE db_id=?",

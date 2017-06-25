@@ -163,14 +163,26 @@ class EditMovieWindowHandler:
         main.EditGenreWindow = EditGenreWindow(main.EditMovieWindow.movie.get_genre_list(), main.EditMovieWindow)
     
     #Handler, wenn der Editierte Film gespeichert werden soll
-    def on_SaveButton_clicked(self, button):        
+    def on_SaveButton_clicked(self, button):
+        # ToDo: ACHTUNG. Den Pfad des Films zu ändern ist etwas komplizierter
+        # ToDo: Es muss auch geprüft werden, ob dieser Film nicht bereits in der Datenbank existiert --> Fehlermeldung!!
+        if(main.EditMovieWindow.movie.get_full_path() != main.EditMovieWindow.movieFileChooser.get_filename()):
+            if(Movie.get_by_path(main.EditMovieWindow.movieFileChooser.get_filename())):
+                pass
+                # ToDo: Fehlermeldung, dass dieser Film bereits in der Datenbank existiert
+            else:
+                new_movie = Movie.read_file_to_movie(main.EditMovieWindow.movieFileChooser.get_filename())
+                for genre in main.EditMovieWindow.movie.get_full_path():
+                    new_movie.add_genre(genre)
+
         main.EditMovieWindow.movie.set_title(main.EditMovieWindow.movieName.get_text())
+        main.EditMovieWindow.movie.set_image(main.EditMovieWindow.fanartFileChooser.get_filename())
         main.selectedMovie.update_values(main.EditMovieWindow.movie)
         main.selectedMovie.persist()
+
         main.image.set_from_pixbuf(update_image(main.selectedMovie.get_image()))
         genreBuffer = main.genreBuffer
         genreBuffer.set_text(get_genre_string(main.selectedMovie.get_genre_list()))
-        main.selectedMovie.persist()
         main.EditMovieWindow.window.destroy()
     
     #Handler zum schließen ohne speichern
