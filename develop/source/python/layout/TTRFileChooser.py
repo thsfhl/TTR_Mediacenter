@@ -7,6 +7,7 @@ from gi.repository import Gtk
 class TTRFileChooser(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Verzeichnisauswahl")
+        self.set_position(Gtk.WindowPosition.CENTER)
 
         box = Gtk.Box(spacing=6)
         self.add(box)
