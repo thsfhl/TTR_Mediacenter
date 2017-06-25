@@ -10,6 +10,8 @@ from gi.repository import GdkX11
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 
+import ctypes
+
 import vlc
 
 class PlayerVLC(Gtk.Window):
@@ -94,12 +96,22 @@ class PlayerVLC(Gtk.Window):
             self.instance = vlc.Instance("--no-xlib")
         else:
             self.instance = vlc.Instance()
+
         self.player = self.instance.media_player_new()
+
         if 'linux' in sys.platform:
             win_id = widget.get_window().get_xid()
             self.player.set_xwindow(win_id)
         else:
-            self.player.set_hwnd(self.get_window().get_handle())
+            video_window = self.draw_area.get_property('window')
+            ctypes.pythonapi.PyCapsule_GetPointer.restype = ctypes.c_void_p
+            ctypes.pythonapi.PyCapsule_GetPointer.argtypes = [ctypes.py_object]
+            drawingarea_gpointer = ctypes.pythonapi.PyCapsule_GetPointer(video_window.__gpointer__, None)
+            # get the win32 handle
+            gdkdll = ctypes.CDLL("libgdk-3-0.dll")
+            window_handle = gdkdll.gdk_win32_window_get_handle(drawingarea_gpointer)
+            self.player.set_hwnd(window_handle)
+
         self.player.set_mrl(self._media)
         self.player.play()
         self._is_player_active = True

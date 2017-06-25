@@ -145,7 +145,6 @@ class ImportMovieWindowHandler:
     def __init__(self, parent):
         self.main = parent
 
-
     def on_GenreButton_clicked(self, button):
         selectedMovie = get_selected_movie(self.main.TreeView)
 
