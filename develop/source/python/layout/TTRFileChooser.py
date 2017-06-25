@@ -26,6 +26,7 @@ class TTRFileChooser(Gtk.Window):
 
         self._folder = None
         self._file = None
+        self._canceled = True
 
     def on_file_clicked(self, widget):
         dialog = Gtk.FileChooserDialog("Bitte waehle eine Datei aus", self,
@@ -40,12 +41,14 @@ class TTRFileChooser(Gtk.Window):
         if response == Gtk.ResponseType.OK:
             print("Datei auswaehlen wurde geklickt")
             self._file = dialog.get_filename()
+            self._canceled = False
             print("Selektierte Datei: " + self._file)
         elif response == Gtk.ResponseType.CANCEL:
             print("Vorgang wurde durch den Benutzer abgebrochen")
 
         dialog.destroy()
-        self._button3.set_label("Fertig")
+        if (not self._canceled):
+            self._button3.set_label("Fertig")
 
     def add_filters(self, dialog):
         filter = Gtk.FileFilter()
@@ -71,15 +74,20 @@ class TTRFileChooser(Gtk.Window):
         if response == Gtk.ResponseType.OK:
             print("Verzeichnis auswaehlen wurde geklickt")
             self._folder = dialog.get_filename()
+            self._canceled = False
             print("Folder selected: " + self._folder)
         elif response == Gtk.ResponseType.CANCEL:
             print("Vorgang wurde durch den Benutzer abgebrochen")
 
         dialog.destroy()
-        self._button3.set_label("Fertig")
+        if (not self._canceled):
+            self._button3.set_label("Fertig")
 
     def getFileOrFolder(self):
-        if (None != self._folder):
+        if (None != self._folder) and ( '' != self._folder):
             return self._folder
         else:
             return self._file
+
+    def isCanceled(self):
+        return self._canceled

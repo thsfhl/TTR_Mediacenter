@@ -50,6 +50,7 @@ class PlayerVLC(Gtk.Window):
         self._stopped = True
         self._is_player_active = False
         self.playback_button.set_label('Replay')
+        self.stop_button.connect("clicked", Gtk.main_quit)
 
 
     def toggle_player_playback(self, widget, data=None):
@@ -63,22 +64,26 @@ class PlayerVLC(Gtk.Window):
             self.player.play()
             self.playback_button.set_label('Play')
             self._is_player_active = True
+            self.stop_button.connect("clicked", self.stop_player)
 
         elif self._is_player_active == True and self._player_paused == True:
             self.player.play()
             self.playback_button.set_label('Stop')
             self._player_paused = False
+            self.stop_button.connect("clicked", self.stop_player)
 
         elif self._is_player_active == True and self._player_paused == False:
             self.player.pause()
             self.playback_button.set_label('Cont')
             self._player_paused = True
+            self.stop_button.connect("clicked", self.stop_player)
 
         elif self._stopped == True:
             self.player.replay()
             self.playback_button.set_label('Stop')
             self._stopped = False
             self._player_paused = False
+            self.stop_button.connect("clicked", self.stop_player)
 
         else:
             pass

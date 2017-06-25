@@ -137,8 +137,12 @@ if __name__ == '__main__':
     win.connect("delete-event", Gtk.main_quit)
     win.show_all()
     Gtk.main()
-    # file or folder which has been selected in filechooser windows
-    fileOrFolder = win.getFileOrFolder()
+
+    fileOrFolder = None
+    # check if file/folder selection is canceled
+    if ( not win.isCanceled() ):
+        # file or folder which has been selected in filechooser windows
+        fileOrFolder = win.getFileOrFolder()
 
     crawlerTest(fileOrFolder)
 
