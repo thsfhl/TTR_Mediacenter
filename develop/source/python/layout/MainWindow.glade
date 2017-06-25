@@ -93,7 +93,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="ImportMenu">
-                        <property name="label">Filme Importieren</property>
+                        <property name="label">Filme importieren</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="image">image2</property>

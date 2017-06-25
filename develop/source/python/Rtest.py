@@ -10,6 +10,7 @@ from MovieCrawler import FilmCrawler
 from database.Persistable import Persistable
 from database.DbUtils import DbUtils
 from media.PlayerVLC import PlayerVLC
+from layout.TTRFileChooser import TTRFileChooser
 
 
 ##############################################################################################################
@@ -47,8 +48,29 @@ class MainWindowHandler:
             player.instance.release()
 
     def on_ImportMenu_activate(self, menuItem):
-        self.main.ImportMovieWindow = ImportMovieWindow(self.main.get_mainPath())
-           
+        # self.main.ImportMovieWindow = ImportMovieWindow(self.main.get_mainPath())
+        win = TTRFileChooser()
+        win.connect("delete-event", Gtk.main_quit)
+        win.show_all()
+        Gtk.main()
+
+        fileOrFolder = None
+        # check if file/folder selection is canceled
+        if (not win.isCanceled()):
+            # file or folder which has been selected in filechooser windows
+            fileOrFolder = win.getFileOrFolder()
+
+        crawler = FilmCrawler()
+        if (fileOrFolder == None):
+            fileOrFolder = os.path.join(os.getcwd(), "temp")
+        # search in folder for movies etcpp and receive an array of those movies etc
+        filme = crawler.crawl_folder(fileOrFolder, True)
+        if filme and (len(filme) > 0):
+            # persist these movies
+            for film in filme:
+                Movie.persist(film)
+
+
     #Wird "Film bearbeiten" gewählt"
     def edit_movie_handler(self, menuItem):
         if get_selected_movie(self.main.TreeView) is None:
@@ -583,7 +605,6 @@ if __name__ == "__main__":
       film.persist()
     '''
     # ------------- Ende Testzeilen ---------------
-    global main
     mainPath = os.path.dirname(__file__)
     main = MainWindow(mainPath) # create an instance of our class
     Gtk.main() # run the darn thing
