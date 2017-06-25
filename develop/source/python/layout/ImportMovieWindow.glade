@@ -162,6 +162,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="on_SaveButton_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -174,6 +175,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="on_AbortButton_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

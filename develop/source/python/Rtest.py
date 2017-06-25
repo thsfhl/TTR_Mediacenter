@@ -1,5 +1,6 @@
 import os
 import gi
+from gi.overrides.Gtk import ListStore
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GdkPixbuf
@@ -48,7 +49,7 @@ class MainWindowHandler:
             player.instance.release()
 
     def on_ImportMenu_activate(self, menuItem):
-        # self.main.ImportMovieWindow = ImportMovieWindow(self.main.get_mainPath())
+        #self.main.ImportMovieWindow = ImportMovieWindow(self.main.get_mainPath())
         win = TTRFileChooser()
         win.connect("delete-event", Gtk.main_quit)
         win.show_all()
@@ -59,28 +60,29 @@ class MainWindowHandler:
         if (not win.isCanceled()):
             # file or folder which has been selected in filechooser windows
             fileOrFolder = win.getFileOrFolder()
-
+            
+        movieListStore = Gtk.ListStore(Movie)
         crawler = FilmCrawler()
         if (fileOrFolder == None):
             fileOrFolder = os.path.join(os.getcwd(), "temp")
         # search in folder for movies etcpp and receive an array of those movies etc
         filme = crawler.crawl_folder(fileOrFolder, True)
-        if filme and (len(filme) > 0):
+        if filme:
             # persist these movies
-            for film in filme:
-                Movie.persist(film)
-
-
+            for film in filme:               
+                movieListStore.append((film, ))                
+        self.main.ImportMovieWindow = ImportMovieWindow(self.main, movieListStore, self.main.get_mainPath())
+        
     #Wird "Film bearbeiten" gewählt"
     def edit_movie_handler(self, menuItem):
         if get_selected_movie(self.main.TreeView) is None:
             #todo: errodialog anzeigen
             print('error')
         else:
-            selectedMovie = get_selected_movie(self.main.TreeView)
-            movie = selectedMovie.get_copy()
-            self.main.EditMovieWindow = EditMovieWindow(movie, self.main.get_mainPath())
-            self.main.EditMovieWindow.image.set_from_pixbuf(update_image(selectedMovie.get_image()))
+            self.main.selectedMovie = get_selected_movie(self.main.TreeView)
+            movie = self.main.selectedMovie.get_copy()
+            self.main.EditMovieWindow = EditMovieWindow(self.main, movie, self.main.get_mainPath())
+            self.main.EditMovieWindow.image.set_from_pixbuf(update_image(self.main.selectedMovie.get_image()))
         
     def on_EditFileExtensionsMenu_activate(self, menuItemm):
         print('open fileext admin')     
@@ -125,174 +127,113 @@ class ImportMovieWindowHandler:
 
 
     def on_GenreButton_clicked(self, button):
-        selectedMovie = get_selected_movie(self.main.ImportMovieWindow.TreeView)
+        selectedMovie = get_selected_movie(self.main.TreeView)
         if selectedMovie is None:
             #todo: errodialog anzeigen
             print('error')
         else:
-            self.main.EditGenreWindow = EditGenreWindow(selectedMovie.get_genre_list(), self.main.ImportMovieWindow, self.main.get_mainPath())
+            self.main.EditGenreWindow = EditGenreWindow(selectedMovie.get_genre_list(), self.main, self.main.parent.get_mainPath())
     
     #Handler, wenn der Editierte Film gespeichert werden soll
     def on_SaveButton_clicked(self, button):    
         #todo savefunktion der Filmliste aufrufen und anschließend den Treeview vom Hauptfenster aktualisierenhier gespeichert werden
-        self.main.ImportMovieWindow.window.destroy()
+        for row in self.main.movieListStore:
+            row[0].persist()
+        self.main.window.destroy()
     
     #Handler zum schließen ohne speichern
     def on_AbortButton_clicked(self, button):
-        self.main.ImportMovieWindow.window.destroy()
+        self.main.window.destroy()
     
     def on_FanartFileChooser_file_set(self, widget):
-        selectedMovie = get_selected_movie(self.main.ImportMovieWindow.TreeView)
+        selectedMovie = get_selected_movie(self.main.TreeView)
         if selectedMovie is None:
             #todo: errodialog anzeigen
             print('error')
         else:
-            selectedMovie.imageFilePath = widget.get_filename()
-            self.main.ImportMovieWindow.image.set_from_pixbuf(update_image(widget.get_filename(), 480, 272))
+            selectedMovie.set_image(widget.get_filename())
+            self.main.image.set_from_pixbuf(update_image(widget.get_filename(), 480, 272))
         
     def on_MovieFileChooser_file_set(self, widget):
-        selectedMovie = get_selected_movie(self.main.ImportMovieWindow.TreeView)
+        selectedMovie = get_selected_movie(self.main.TreeView)
         if selectedMovie is None:
             #todo: errodialog anzeigen
             print('error')
         else:
             selectedMovie.filePath = widget.get_filename()        
-
+   
+    
     def on_treeviewMovieSelection_changed(self, tree_selection) :
         (model, pathlist) = tree_selection.get_selected_rows()
         for path in pathlist :
             tree_iter = model.get_iter(path)
-            self.main.ImportMovieWindow.movie = model.get_value(tree_iter, 0)
-            self.main.ImportMovieWindow.image.set_from_pixbuf(update_image(self.main.ImportMovieWindow.movie.imageFilePath, 480, 272))
-            self.main.ImportMovieWindow.genreText.set_text(get_genre_string(self.main.ImportMovieWindow.movie.get_genre_list()))
-            self.main.ImportMovieWindow.fanartFileChooser.set_filename(self.main.ImportMovieWindow.movie.get_image())
-            self.main.ImportMovieWindow.movieFileChooser.set_filename(self.main.ImportMovieWindow.movie.get_full_path())
-            self.main.ImportMovieWindow.movieName.set_text(self.main.ImportMovieWindow.movie.get_title())
+            self.main.movie = model.get_value(tree_iter, 0)
+            self.main.image.set_from_pixbuf(update_image(self.main.movie.get_image(), 480, 272))
+            self.main.genreText.set_text(get_genre_string(self.main.movie.get_genre_list()))
+            if self.main.movie.get_image() != None:
+                self.main.fanartFileChooser.set_filename(self.main.movie.get_image())
+            else:
+                self.main.fanartFileChooser.set_filename('default movie.jpg')
+            self.main.movieFileChooser.set_filename(self.main.movie.get_full_path())
+            self.main.movieName.set_text(self.main.movie.get_title())
 
 
     def on_MovieText_focus_out_event(self, widget, event):
-        selectedMovie = get_selected_movie(self.main.ImportMovieWindow.TreeView)
+        selectedMovie = get_selected_movie(self.main.TreeView)
         if selectedMovie is not None:
             #keine Fehlermeldung, wenn nur der Text geändert wird
-            self.main.ImportMovieWindow.movie.name = widget.get_text()
+            self.main.movie.name = widget.get_text()
 
     def on_ImportFolderFileChooser_file_set(self, widget):
         # Filme crawlen und anschließend speichern
-        movies = FilmCrawler.crawl_folder('C:/downloads/The.Boss.Baby.German.DL.AC3.1080p.WebHD.h264-PsO - filecrypt.cc/The.Boss.Baby.German.DL.AC3.1080p.WebHD.h264-PsO/', True)
-        if movies:
-            for movie in movies:
-                movie.persist()
+        print('ololol')
 
-        # Sämtliche Filme aus der DB laden
-        movie_list = []
-        if (Persistable.get_db() != None):
-            movie_list = Movie.get_all()
-
-        # Alle Filme der aktuellen Ansicht hinzufügen
-        for movie in movie_list:
-            self.main.ImportMovieWindow.movieListStore.append((movie, ))
-
+     
 
 #Alle Handler für das Film bearbeiten Fenster
 class EditMovieWindowHandler:
-
+    
     def __init__(self, parent):
         self.main = parent
-
-    #Handler wenn der Button zum öffnen des GenreFensters genutzt wird
-    def on_GenreButton_clicked(self, button):
-        self.main.EditGenreWindow = EditGenreWindow(self.main.EditMovieWindow.movie.get_genre_list(), self.main.EditMovieWindow, self.main.get_mainPath())
-
-    #Handler, wenn der Editierte Film gespeichert werden soll
-    def on_SaveButton_clicked(self, button):
-        self.main.EditMovieWindow.movie.name = self.main.EditMovieWindow.movieName.get_text()
-        self.main.selectedMovie.update_from_copy(self.main.EditMovieWindow.movie)
-        self.main.image.set_from_pixbuf(update_image(self.main.selectedMovie.get_image()))
-        genreBuffer = self.main.genreBuffer
-        genreBuffer.set_text(get_genre_string(self.main.selectedMovie.get_genre_list()))
-        #todo: self.main.selectedMovie muss hier gespeichert werden
-        self.main.EditMovieWindow.window.destroy()
-
-    #Handler zum schließen ohne speichern
-    def on_AbortButton_clicked(self, button):
-        self.main.EditMovieWindow.window.destroy()
-        
-    def on_treeviewMovieSelection_changed(self, tree_selection) :
-        (model, pathlist) = tree_selection.get_selected_rows()
-        for path in pathlist :
-            tree_iter = model.get_iter(path)
-            self.main.ImportMovieWindow.movie = model.get_value(tree_iter, 0)
-            self.main.ImportMovieWindow.image.set_from_pixbuf(update_image(self.main.ImportMovieWindow.movie.imageFilePath, 480, 272))
-            self.main.ImportMovieWindow.genreText.set_text(get_genre_string(self.main.ImportMovieWindow.movie.get_genre_list()))
-            self.main.ImportMovieWindow.fanartFileChooser.set_filename(self.main.ImportMovieWindow.movie.get_image())
-            self.main.ImportMovieWindow.movieFileChooser.set_filename(self.main.ImportMovieWindow.movie.get_full_path())
-            self.main.ImportMovieWindow.movieName.set_text(self.main.ImportMovieWindow.movie.get_title())
-
-    
-    def on_MovieText_focus_out_event(self, widget, event):
-        selectedMovie = get_selected_movie(self.main.ImportMovieWindow.TreeView)
-        if selectedMovie is not None:
-            #keine Fehlermeldung, wenn nur der Text geändert wird
-            self.main.ImportMovieWindow.movie.name = widget.get_text()
-    
-    def on_ImportFolderFileChooser_file_set(self, widget):
-        # Filme crawlen und anschließend speichern
-        # ToDo: Chooser für Folder zum Crawlen aufrufen
-        movies = FilmCrawler.crawl_folder('K:/downloads/The.Boss.Baby.German.DL.AC3.1080p.WebHD.h264-PsO - filecrypt.cc/The.Boss.Baby.German.DL.AC3.1080p.WebHD.h264-PsO/', True)
-
-        if movies:
-            for movie in movies:
-                movie.persist()
-
-        # Sämtliche Filme aus der DB laden
-        movie_list = []
-        if (Movie.get_db() != None):
-            movie_list = Movie.get_all()
-
-        # Alle Filme der aktuellen Ansicht hinzufügen
-        for movie in movie_list:
-            self.main.ImportMovieWindow.movieListStore.append((movie, ))
-      
-
-#Alle Handler für das Film bearbeiten Fenster
-class EditMovieWindowHandler:
     #Handler wenn der Button zum öffnen des GenreFensters genutzt wird
     def on_GenreButton_clicked(self, button):               
-        self.main.EditGenreWindow = EditGenreWindow(self.main.EditMovieWindow.movie.get_genre_list(), self.main.EditMovieWindow, self.main.get_mainPath())
+        self.main.parent.EditGenreWindow = EditGenreWindow(self.main.movie.get_genre_list(), self.main, self.main.parent.get_mainPath())
     
     #Handler, wenn der Editierte Film gespeichert werden soll
     def on_SaveButton_clicked(self, button):
         # ToDo: ACHTUNG. Den Pfad des Films zu ändern ist etwas komplizierter
         # ToDo: Es muss auch geprüft werden, ob dieser Film nicht bereits in der Datenbank existiert --> Fehlermeldung!!
-        if(self.main.EditMovieWindow.movie.get_full_path() != self.main.EditMovieWindow.movieFileChooser.get_filename()):
-            if(Movie.get_by_path(self.main.EditMovieWindow.movieFileChooser.get_filename())):
+        if(self.main.movie.get_full_path() != self.main.movieFileChooser.get_filename()):
+            if(Movie.get_by_path(self.main.movieFileChooser.get_filename())):
                 pass
                 # ToDo: Fehlermeldung, dass dieser Film bereits in der Datenbank existiert
             else:
-                new_movie = Movie.read_file_to_movie(self.main.EditMovieWindow.movieFileChooser.get_filename())
-                for genre in self.main.EditMovieWindow.movie.get_full_path():
-                    new_movie.add_genre(genre)
+                self.main.movie =  Movie.read_file_to_movie(self.main.movieFileChooser.get_filename())
+                for genre in self.main.movie.get_genre_list():
+                    self.main.movie.add_genre(genre)
 
-        self.main.EditMovieWindow.movie.set_title(self.main.EditMovieWindow.movieName.get_text())
-        self.main.EditMovieWindow.movie.set_image(self.main.EditMovieWindow.fanartFileChooser.get_filename())
-        self.main.selectedMovie.update_values(self.main.EditMovieWindow.movie)
-        self.main.selectedMovie.persist()
+        self.main.movie.set_title(self.main.movieName.get_text())
+        self.main.movie.set_image(self.main.fanartFileChooser.get_filename())
+        
+        
+        self.main.parent.selectedMovie.update_values(self.main.movie)
+        self.main.parent.selectedMovie.persist()
 
-        self.main.image.set_from_pixbuf(update_image(self.main.selectedMovie.get_image()))
-        genreBuffer = self.main.genreBuffer
-        genreBuffer.set_text(get_genre_string(self.main.selectedMovie.get_genre_list()))
-        self.main.EditMovieWindow.window.destroy()
+        self.main.parent.image.set_from_pixbuf(update_image(self.main.parent.selectedMovie.get_image()))
+        genreBuffer = self.main.parent.genreBuffer
+        genreBuffer.set_text(get_genre_string(self.main.parent.selectedMovie.get_genre_list()))
+        self.main.window.destroy()
     
     #Handler zum schließen ohne speichern
     def on_AbortButton_clicked(self, button):
-        self.main.EditMovieWindow.window.destroy()
+        self.main.window.destroy()
     
     def on_FanartFileChooser_file_set(self, widget):
-        self.main.EditMovieWindow.movie.imageFilePath = widget.get_filename()
-        self.main.EditMovieWindow.image.set_from_pixbuf(update_image(widget.get_filename()))
+        self.main.movie.set_image(widget.get_filename())
+        self.main.image.set_from_pixbuf(update_image(widget.get_filename()))
         
     def on_MovieFileChooser_file_set(self, widget):
-        self.main.EditMovieWindow.movie.filePath = widget.get_filename()
+        self.main.movie.filePath = widget.get_filename()
                        
          
 #Alle Handler für das Genre bearbeiten Fenster      
@@ -303,14 +244,15 @@ class EditGenreWindowHandler:
 
     #Hander zum Speicern der ausgewählten Genres (Kein speichern in der Datenbank, dazu muss noch der Speichern Button beim Film editieren genutzt werden
     def on_SaveButton_clicked(self, widget):
-        self.main.EditGenreWindow.callWindow.movie.clear_genre_list()
-        for genre in self.main.EditGenreWindow.liststore:
+        self.main.callWindow.movie.clear_genre_list()
+        for genre in self.main.liststore:
             if genre[0] == True:
-                self.main.EditGenreWindow.callWindow.movie.add_genre(genre[1])
-        self.main.EditGenreWindow.callWindow.genreText.set_text(get_genre_string(self.main.EditGenreWindow.callWindow.movie.get_genre_list()))
-        self.main.EditGenreWindow.window.destroy()
+                self.main.callWindow.movie.add_genre(genre[1])
+        self.main.callWindow.genreText.set_text(get_genre_string(self.main.callWindow.movie.get_genre_list()))
+        self.main.window.destroy()
         
-
+    def on_AbortButton_clicked(self, button):
+        self.main.window.destroy()
 ##############################################################################################################
 ########################################  Allgemeine Funktionen  #############################################
 ##############################################################################################################  
@@ -495,7 +437,7 @@ class EditGenreWindow:
         
 class EditMovieWindow:        
     #Film bearbeiten Fenster initialisieren
-    def __init__(self, movie, mainPath = None):
+    def __init__(self, parent, movie, mainPath = None):
         #
         self.builder = Gtk.Builder()
         if (mainPath == None):
@@ -512,7 +454,7 @@ class EditMovieWindow:
         self.image = self.builder.get_object("FanArtImage")
         self.movieFileChooser = self.builder.get_object("MovieFileChooser") 
         self.movieFileChooser.set_filename(self.movie.get_full_path())
-        
+        self.parent = parent
         self.fanartFileChooser = self.builder.get_object("FanartFileChooser")
         if(self.movie.get_image()):
             self.fanartFileChooser.set_filename(self.movie.get_image())
@@ -528,7 +470,7 @@ class ImportMovieWindow:
     # ToDo: Bislang in dieser Klasse nichts angepasst (Thomas 22.06.2017)
 
     #Film bearbeiten Fenster initialisieren
-    def __init__(self, mainPath = None):
+    def __init__(self, parent, movieListStore, mainPath = None):
         #
         self.builder = Gtk.Builder()
         if (mainPath == None):
@@ -541,7 +483,7 @@ class ImportMovieWindow:
         self.window = self.builder.get_object("ImportMovieWindow") 
         self.window.set_modal(True)
         self.movie = Movie()
-        
+        self.parent = parent
         #Das Image zuweisen (Noetig, damit man das den Bildbereich bearbeiten kann)
         self.image = self.builder.get_object("FanArtImage")
         self.movieFileChooser = self.builder.get_object("MovieFileChooser") 
@@ -550,7 +492,7 @@ class ImportMovieWindow:
         self.genreText = self.builder.get_object("GenreText")
         
         
-        self.movieListStore = Gtk.ListStore(Movie)
+        self.movieListStore = movieListStore
         self.TreeView = self.builder.get_object("MovieTreeView")  
         #Spalte fuer die Filme erzeugen    
         cellrenderer = Gtk.CellRendererText()
@@ -562,29 +504,11 @@ class ImportMovieWindow:
         treeviewcolumn.pack_start(cellrenderer, True)
         self.TreeView.append_column(treeviewcolumn)
         
-        Film1 = Movie('Logan','K:/downloads/Filme/Logan/Logan.mkv','K:/downloads/Filme/Logan/Logan-fanart.jpg')
-        Film1.genreList.append(Genre('Action'))
-        Film1.genreList.append(Genre('Drama'))
-        Film1.genreList.append(Genre('Sci-Fi'))
 
-        Film2 = Movie('xXx','K:/downloads/Filme/xXx III/xXx III.mkv','K:/downloads/Filme/xXx III/xXx III-fanart.jpg')
-        Film2.genreList.append(Genre('Action'))
-        Film2.genreList.append(Genre('Adventure'))
-        Film2.genreList.append(Genre('Thriller'))
-        
-        Film3 = Movie('','','')
-        Film3.genreList.append(Genre('Action'))
-        Film3.genreList.append(Genre('Adventure'))
-        Film3.genreList.append(Genre('Sci-Fi'))
-        
         #todo frische änderung
         db = DbUtils()
         db.create_database()
 
-        #movieListStore.append((Film1,))
-        #movieListStore.append((Film2,))
-        #movieListStore.append((Film3,))        
-        
         #setzen des Models
         self.TreeView.set_model(self.movieListStore)   
         
