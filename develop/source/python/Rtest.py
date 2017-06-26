@@ -244,9 +244,7 @@ class ImportMovieWindowHandler:
             #keine Fehlermeldung, wenn nur der Text geändert wird
             self.main.movie.name = widget.get_text()
 
-    def on_ImportFolderFileChooser_file_set(self, widget):
-        # Filme crawlen und anschließend speichern
-        print('ololol')
+
 
      
 
