@@ -19,6 +19,7 @@ import vlc
 class PlayerVLC(Gtk.Window):
     def __init__(self, myMedia = None):
         Gtk.Window.__init__(self, title="Vlc Media Player with Python")
+        self.set_position(Gtk.WindowPosition.CENTER)
         self._player_paused = False
         self._is_player_active = False
         self.connect("destroy", self.on_video_close)
