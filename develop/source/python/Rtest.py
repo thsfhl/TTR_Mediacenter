@@ -360,7 +360,9 @@ def update_image(filePath, x=1280, y=720):
             bgImage = GdkPixbuf.Pixbuf().new_from_file(filePath)
     else:
         bgImage = GdkPixbuf.Pixbuf().new_from_file('media/default movie.jpg')
-    bgImage = bgImage.scale_simple(x, y, GdkPixbuf.InterpType.BILINEAR)
+    hpercent = (y / float(bgImage.get_height()))
+    wsize = int((float(bgImage.get_width()*float(hpercent))))
+    bgImage = bgImage.scale_simple(wsize, y, GdkPixbuf.InterpType.BILINEAR)
     return bgImage
 
 #Funktion zum sichtbar machen von Fenstern
