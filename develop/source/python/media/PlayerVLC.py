@@ -27,7 +27,7 @@ class PlayerVLC(Gtk.Window):
 
     def on_video_close(self, widget):
             self.stop_player(widget)
-            widget.destroy()
+            self.destroy()
 
     def show(self):
         self.show_all()
