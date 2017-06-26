@@ -4,9 +4,43 @@ Thomas Brzuska (Matrikelnummer 262479)
 Ruben Stöcker (Matrikelnummer 222396)
 Thies Schillhorn (Matrikelnummer ??????)
 
+Benötigt wird außer den Modulen in der Requirements.txt außerdem
+Python 3.4 und der VLC-Player
+
+Für die GUI haben wir größtenteils Glade verwendet, das taucht in der Requirements.txt auch nicht auf
+Datenbank im Hintergrund ist SQLite. Die Datenbank wird beim ersten Öffnen des Programms erstellt.
+
+
 Das Mediacenter soll folgende Aufgaben übernehmen:
 
 - Ordner nach Filmen durchsuchen und dem Programm hinzufügen
 - Filme in einer Datenbank verwalten
-- Fime bearbeiten (Titel, Vorschaubild, Genre) nud Löschen ermöglichen
+- Fime bearbeiten (Titel, Vorschaubild, Genres) nud Löschen ermöglichen
 - Film über Schnittstelle zum VLC-Player abspielen (nur rudimentär implementiert)
+
+
+Menüpunkt Datei
+
+- Film abspielen
+- Beenden (Proramm beenden)
+
+
+Menüpunkt Bearbeiten
+
+- Filme importieren
+Es öffnet sich ein weiterer Dialog, in dem man eine einzelne Datei oder eine ganzen Ordner auswählen kann.
+Bei einem Ordner werden dort alle Dateien mit festgelegten Dateiendungen gesucht.
+Dateien, die noch nicht in der Datenbank vorhanden sind, erscheinen dann in einem Import-Dialog und können vor
+dem eigentlichen Import noch bearbeitet werden. Falls keine neuen Dateien gefunden wurden, ist die Liste
+der Dateien im Import-Dialog leer.
+Bei Klick auf Speichern werden die neuen Filme dann hinzugefügt
+
+- Filme bearbeiten
+Ähnlich wie im Import-Dialog kann ein Film markiert und dann bearbeitet werden
+
+
+Kontextmenü auf Film:
+
+- Film abspielen (Fenster mit VLC-Anbindung öffnet sich)
+- Film bearbeiten (Bearbeitungsfenster öffnet sich)
+- Film löschen (Bestätigungsfenster, dann wird Film gelöscht)
