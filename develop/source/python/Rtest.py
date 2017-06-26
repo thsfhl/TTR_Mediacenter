@@ -197,9 +197,13 @@ class ImportMovieWindowHandler:
         for row in self.main.movieListStore:
             if not row[0].get_db_id():
                 row[0].persist()
-                self.main.parent.movieListStore.append((row[0],))
+                
         # ToDo: TREEVIEW VOM HAUPTFENSTER AKTUALISIEREN (FILME NEU LADEN UND DORT ANZEIGEN)
-        
+        movies_from_db = Movie.get_all()
+        #main Liststore neuladen
+        self.main.parent.movieListStore.clear()
+        for movie in movies_from_db:
+            self.main.parent.movieListStore.append((movie,))
         self.main.window.destroy()
     
     #Handler zum schließen ohne speichern
