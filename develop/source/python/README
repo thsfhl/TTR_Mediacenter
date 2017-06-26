@@ -1,13 +1,13 @@
-TTR Mediacenter
+TTR Mediacenter - Semesterprojekt Onjektorientierte Scriptsprachen SS 17 -
 
 Thomas Brzuska (Matrikelnummer 262479)
 Ruben Stöcker (Matrikelnummer 222396)
-Thies Schillhorn (Matrikelnummer ??????)
+Thies Schillhorn (Matrikelnummer 220275)
 
 Benötigt wird außer den Modulen in der Requirements.txt außerdem
 Python 3.4 und der VLC-Player
 
-Für die GUI haben wir größtenteils Glade verwendet, das taucht in der Requirements.txt auch nicht auf
+Für die GUI haben wir größtenteils Glade verwendet, das taucht in der Requirements.txt auch nicht auf.
 Datenbank im Hintergrund ist SQLite. Die Datenbank wird beim ersten Öffnen des Programms erstellt.
 
 
@@ -15,10 +15,10 @@ Das Mediacenter soll folgende Aufgaben übernehmen:
 
 - Ordner nach Filmen durchsuchen und dem Programm hinzufügen
 - Filme in einer Datenbank verwalten
-- Fime bearbeiten (Titel, Vorschaubild, Genres) nud Löschen ermöglichen
-- Film über Schnittstelle zum VLC-Player abspielen (nur rudimentär implementiert)
+- Fime bearbeiten (Titel, Vorschaubild, Genres) und Löschen ermöglichen
+- Film über Schnittstelle zum VLC-Player abspielen (nur rudimentär implementiert).
 
-
+Hauptfenster der Anwendung:
 Menüpunkt Datei
 
 - Film abspielen
@@ -44,3 +44,12 @@ Kontextmenü auf Film:
 - Film abspielen (Fenster mit VLC-Anbindung öffnet sich)
 - Film bearbeiten (Bearbeitungsfenster öffnet sich)
 - Film löschen (Bestätigungsfenster, dann wird Film gelöscht)
+
+
+Eingebundener VLC-Player:
+ Der Player wird über die python-vlc-Bibliothek angesprochen und gesteuert.
+ Bzgl. des VLC-Players gibt es jedoch Unterschiede zwischen einem Linux und einem Windows System.
+ Im Playerfenster gibt es die Buttons "Play" und "Cancel". Der Film startet, sobald sich das Fenster öffnet.
+ Über den Play-Button kann der Film an der aktuellen Position angehalten und wieder gestartet werden
+ Über den Cancel-butten kann das Abspielen des Films beendet werden.
+ Anschließen kann über den bisherigen Play-Button der Film von Beginn neu gestartet werden.
