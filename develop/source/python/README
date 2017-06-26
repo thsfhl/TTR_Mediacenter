@@ -1,0 +1,12 @@
+TTR Mediacenter
+
+Thomas Brzuska (Matrikelnummer 262479)
+Ruben Stöcker (Matrikelnummer 222396)
+Thies Schillhorn (Matrikelnummer ??????)
+
+Das Mediacenter soll folgende Aufgaben übernehmen:
+
+- Ordner nach Filmen durchsuchen und dem Programm hinzufügen
+- Filme in einer Datenbank verwalten
+- Fime bearbeiten (Titel, Vorschaubild, Genre) nud Löschen ermöglichen
+- Film über Schnittstelle zum VLC-Player abspielen (nur rudimentär implementiert)
