@@ -79,7 +79,8 @@ class MainWindowHandler:
                 if filme:
                     # persist these movies
                     for film in filme:
-                        movieListStore.append((film, ))
+                        if film.get_db_id() is None:
+                            movieListStore.append((film, ))
 
                 self.main.ImportMovieWindow = ImportMovieWindow(self.main, movieListStore, self.main.get_mainPath())
 
