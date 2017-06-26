@@ -260,6 +260,7 @@ class ImportMovieWindowHandler:
                 self.main.fanartFileChooser.set_filename(self.main.movie.get_image())
             else:
                 self.main.fanartFileChooser.set_filename('default movie.jpg')
+                self.main.fanartFileChooser.set_uri(self.main.movie.get_path())
             self.main.movieFileChooser.set_filename(self.main.movie.get_full_path())
             self.main.movieName.set_text(self.main.movie.get_title())
 
@@ -540,11 +541,13 @@ class EditMovieWindow:
         self.image = self.builder.get_object("FanArtImage")
         self.movieFileChooser = self.builder.get_object("MovieFileChooser") 
         self.movieFileChooser.set_filename(self.movie.get_full_path())
+
         self.parent = parent
         self.fanartFileChooser = self.builder.get_object("FanartFileChooser")
-        if(self.movie.get_image()):
+        if (self.movie.get_image()):
             self.fanartFileChooser.set_filename(self.movie.get_image())
-        
+        else:
+            self.fanartFileChooser.set_uri(self.movie.get_path())
         self.movieName = self.builder.get_object("MovieText")
         self.movieName.set_text(self.movie.get_title())
         self.genreText = self.builder.get_object("GenreText")
