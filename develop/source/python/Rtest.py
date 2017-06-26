@@ -176,9 +176,9 @@ class ImportMovieWindowHandler:
 
         for row in self.main.movieListStore:
             row[0].persist()
-
+            self.main.parent.movieListStore.append((row[0],))
         # ToDo: TREEVIEW VOM HAUPTFENSTER AKTUALISIEREN (FILME NEU LADEN UND DORT ANZEIGEN)
-
+        
         self.main.window.destroy()
     
     #Handler zum schließen ohne speichern
@@ -399,7 +399,7 @@ class MainWindow:
         self.genreBuffer = self.textviewGenre.get_buffer()
 
         #Einen Liststore erstellen. Hier kommt die Filmliste rein. Die Filme werden als Objekte angehaengt.
-        movieListStore = Gtk.ListStore(Movie)
+        self.movieListStore = Gtk.ListStore(Movie)
           
         #Spalte fuer die Filme erzeugen    
         cellrenderer = Gtk.CellRendererText()
@@ -421,10 +421,10 @@ class MainWindow:
         movies_from_db = Movie.get_all()
 
         for movie in movies_from_db:
-            movieListStore.append((movie,))
+            self.movieListStore.append((movie,))
 
         #setzen des Models
-        self.TreeView.set_model(movieListStore)
+        self.TreeView.set_model(self.movieListStore)
 
         #Hauptfenster anzeigen
         show_window(self) # this shows the 'window1' object
