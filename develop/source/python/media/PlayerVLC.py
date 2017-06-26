@@ -58,7 +58,7 @@ class PlayerVLC(Gtk.Window):
         self._stopped = True
         self._is_player_active = False
         self.playback_button.set_label('Replay')
-        self.stop_button.connect("clicked", Gtk.main_quit)
+        self.stop_button.connect("clicked", self.on_video_close)
 
 
     def toggle_player_playback(self, widget, data=None):
