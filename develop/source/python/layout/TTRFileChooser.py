@@ -21,7 +21,7 @@ class TTRFileChooser(Gtk.Window):
         self._box.add(self._button2)
 
         self._button3 = Gtk.Button(label="Cancel")
-        self._button3.connect("clicked", Gtk.main_quit)
+        self._button3.connect("clicked", self.on_cancel_clicked)
         self._box.add(self._button3)
 
         self._folder = None
@@ -49,6 +49,7 @@ class TTRFileChooser(Gtk.Window):
         dialog.destroy()
         if (not self._canceled):
             self._button3.set_label("Fertig")
+            self.destroy()
 
     def add_filters(self, dialog):
         filter = Gtk.FileFilter()
@@ -82,6 +83,10 @@ class TTRFileChooser(Gtk.Window):
         dialog.destroy()
         if (not self._canceled):
             self._button3.set_label("Fertig")
+            self.destroy()
+
+    def on_cancel_clicked(self, widget):
+        self.destroy()
 
     def getFileOrFolder(self):
         if (None != self._folder) and ( '' != self._folder):

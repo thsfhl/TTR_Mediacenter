@@ -60,28 +60,33 @@ class MainWindowHandler:
 
     def on_ImportMenu_activate(self, menuItem):
         #self.main.ImportMovieWindow = ImportMovieWindow(self.main.get_mainPath())
+
+        def on_chooser_closed(widget):
+            fileOrFolder = None
+
+            # check if file/folder selection is canceled
+            if (not widget.isCanceled()):
+                # file or folder which has been selected in filechooser windows
+                fileOrFolder = win.getFileOrFolder()
+
+            if fileOrFolder:
+                movieListStore = Gtk.ListStore(Movie)
+                crawler = FilmCrawler()
+
+                # search in folder for movies etcpp and receive an array of those movies etc
+                filme = crawler.crawl_folder(fileOrFolder, True)
+
+                if filme:
+                    # persist these movies
+                    for film in filme:
+                        movieListStore.append((film, ))
+
+                self.main.ImportMovieWindow = ImportMovieWindow(self.main, movieListStore, self.main.get_mainPath())
+
         win = TTRFileChooser()
-        win.connect("delete-event", Gtk.main_quit)
+        win.connect("destroy", on_chooser_closed)
         win.show_all()
         Gtk.main()
-
-        fileOrFolder = None
-        # check if file/folder selection is canceled
-        if (not win.isCanceled()):
-            # file or folder which has been selected in filechooser windows
-            fileOrFolder = win.getFileOrFolder()
-            
-        movieListStore = Gtk.ListStore(Movie)
-        crawler = FilmCrawler()
-        if (fileOrFolder == None):
-            fileOrFolder = os.path.join(os.getcwd(), "temp")
-        # search in folder for movies etcpp and receive an array of those movies etc
-        filme = crawler.crawl_folder(fileOrFolder, True)
-        if filme:
-            # persist these movies
-            for film in filme:               
-                movieListStore.append((film, ))                
-        self.main.ImportMovieWindow = ImportMovieWindow(self.main, movieListStore, self.main.get_mainPath())
         
     #Wird "Film bearbeiten" gewählt"
     def edit_movie_handler(self, menuItem):
@@ -168,9 +173,12 @@ class ImportMovieWindowHandler:
     
     #Handler, wenn der Editierte Film gespeichert werden soll
     def on_SaveButton_clicked(self, button):    
-        #todo savefunktion der Filmliste aufrufen und anschließend den Treeview vom Hauptfenster aktualisierenhier gespeichert werden
+
         for row in self.main.movieListStore:
             row[0].persist()
+
+        # ToDo: TREEVIEW VOM HAUPTFENSTER AKTUALISIEREN (FILME NEU LADEN UND DORT ANZEIGEN)
+
         self.main.window.destroy()
     
     #Handler zum schließen ohne speichern

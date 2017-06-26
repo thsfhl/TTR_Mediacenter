@@ -10,6 +10,8 @@ from gi.repository import GdkX11
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 
+from gettext import gettext as _
+
 import ctypes
 
 import vlc
@@ -19,9 +21,13 @@ class PlayerVLC(Gtk.Window):
         Gtk.Window.__init__(self, title="Vlc Media Player with Python")
         self._player_paused = False
         self._is_player_active = False
-        self.connect("destroy", Gtk.main_quit)
+        self.connect("destroy", self.on_video_close)
         self._media = myMedia
         self._stopped = False
+
+    def on_video_close(self, widget):
+            self.stop_player(widget)
+            widget.destroy()
 
     def show(self):
         self.show_all()
