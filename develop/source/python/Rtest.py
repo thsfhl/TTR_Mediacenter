@@ -79,8 +79,7 @@ class MainWindowHandler:
                 if filme:
                     # persist these movies
                     for film in filme:
-                        if film.get_db_id() is None:
-                            movieListStore.append((film, ))
+                        movieListStore.append((film, ))
 
                 self.main.ImportMovieWindow = ImportMovieWindow(self.main, movieListStore, self.main.get_mainPath())
 
@@ -196,13 +195,15 @@ class ImportMovieWindowHandler:
     def on_SaveButton_clicked(self, button):    
 
         for row in self.main.movieListStore:
-            if row[0].get_db_id() is None:
+            if not row[0].get_db_id():
                 row[0].persist()
-                self.main.parent.movieListStore.append((row[0],))
-            else:
-                row[0].persist()
+                
         # ToDo: TREEVIEW VOM HAUPTFENSTER AKTUALISIEREN (FILME NEU LADEN UND DORT ANZEIGEN)
-        
+        movies_from_db = Movie.get_all()
+        #main Liststore neuladen
+        self.main.parent.movieListStore.clear()
+        for movie in movies_from_db:
+            self.main.parent.movieListStore.append((movie,))
         self.main.window.destroy()
     
     #Handler zum schließen ohne speichern
