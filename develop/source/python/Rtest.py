@@ -108,9 +108,6 @@ class MainWindowHandler:
             movie = self.main.selectedMovie.get_copy()
             self.main.EditMovieWindow = EditMovieWindow(self.main, movie, self.main.get_mainPath())
             self.main.EditMovieWindow.image.set_from_pixbuf(update_image(self.main.selectedMovie.get_image()))
-        
-    def on_EditFileExtensionsMenu_activate(self, menuItemm):
-        print('open fileext admin')     
 
         
     #Bei Auswahl eines Filmes, werden die Attribute der Filme geladen das passendne Bild geladen

@@ -24,11 +24,6 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-edit</property>
   </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-about</property>
-  </object>
   <object class="GtkWindow" id="MainWindow">
     <property name="can_focus">False</property>
     <child>
@@ -113,40 +108,6 @@
                         <signal name="activate" handler="edit_movie_handler" swapped="no"/>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="EditFileExtensionsMenu">
-                        <property name="label">Dateiendungen administrieren</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="image">image5</property>
-                        <property name="use_stock">False</property>
-                        <property name="always_show_image">True</property>
-                        <signal name="activate" handler="on_EditFileExtensionsMenu_activate" swapped="no"/>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="Help Menu">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Hilfe</property>
-                <property name="use_underline">True</property>
-                <child type="submenu">
-                  <object class="GtkMenu" id="menu3">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem10">
-                        <property name="label">gtk-about</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
-                      </object>
-                    </child>
                   </object>
                 </child>
               </object>
@@ -173,7 +134,7 @@
                 <child>
                   <object class="GtkTreeView" id="MovieTreeView">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="enable_search">False</property>
                     <property name="search_column">8</property>
                     <signal name="button-press-event" handler="on_MovieTreeView_Right_Click" swapped="no"/>
