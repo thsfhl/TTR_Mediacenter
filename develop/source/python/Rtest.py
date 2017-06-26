@@ -79,7 +79,8 @@ class MainWindowHandler:
                 if filme:
                     # persist these movies
                     for film in filme:
-                        movieListStore.append((film, ))
+                        if film.get_db_id() is None:
+                            movieListStore.append((film, ))
 
                 self.main.ImportMovieWindow = ImportMovieWindow(self.main, movieListStore, self.main.get_mainPath())
 
@@ -197,9 +198,13 @@ class ImportMovieWindowHandler:
         for row in self.main.movieListStore:
             if not row[0].get_db_id():
                 row[0].persist()
-                self.main.parent.movieListStore.append((row[0],))
+                
         # ToDo: TREEVIEW VOM HAUPTFENSTER AKTUALISIEREN (FILME NEU LADEN UND DORT ANZEIGEN)
-        
+        movies_from_db = Movie.get_all()
+        #main Liststore neuladen
+        self.main.parent.movieListStore.clear()
+        for movie in movies_from_db:
+            self.main.parent.movieListStore.append((movie,))
         self.main.window.destroy()
     
     #Handler zum schließen ohne speichern
@@ -360,7 +365,9 @@ def update_image(filePath, x=1280, y=720):
             bgImage = GdkPixbuf.Pixbuf().new_from_file(filePath)
     else:
         bgImage = GdkPixbuf.Pixbuf().new_from_file('media/default movie.jpg')
-    bgImage = bgImage.scale_simple(x, y, GdkPixbuf.InterpType.BILINEAR)
+    hpercent = (y / float(bgImage.get_height()))
+    wsize = int((float(bgImage.get_width()*float(hpercent))))
+    bgImage = bgImage.scale_simple(wsize, y, GdkPixbuf.InterpType.BILINEAR)
     return bgImage
 
 #Funktion zum sichtbar machen von Fenstern

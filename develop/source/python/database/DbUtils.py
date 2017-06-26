@@ -79,10 +79,7 @@ class DbUtils:
                      ('Flash Video', '.flv'),
                      ('QuickTime File Format', '.mov'),
                      ('Containerformat / MOTION PICTURE EXPERTS GROUP 4,' , '.mp4'),
-                     ('Xiph.Org Foundation', '.ogg'),
-                     ('Joint Photographic Experts Group', '.jpeg'),
-                     ('Joint Photographic Experts Group', '.jpg'),
-                     ('Portable Network Graphics', '.png')
+                     ('Matroska', '.mkv')
                      ]
         cur.executemany("INSERT INTO FileTypes(name, extension) VALUES(?, ?)", filetypes)
 
