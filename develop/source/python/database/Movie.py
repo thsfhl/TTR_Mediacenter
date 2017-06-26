@@ -26,7 +26,7 @@ class Movie(Persistable, GObject.GObject):
 
     _cache = None
 
-    def __init__(self, db_id=0, title=None, path=None, filename=None, checksum=None, genre_list=None, filetype=None, image=None, status=0):
+    def __init__(self, db_id=None, title=None, path=None, filename=None, checksum=None, genre_list=None, filetype=None, image=None, status=0):
         """ Constructor """
         Persistable.__init__(self)
         GObject.GObject.__init__(self)
@@ -205,9 +205,11 @@ class Movie(Persistable, GObject.GObject):
         """
         Sucht einen Movie anhand des Pfads. Wird keiner gefunden wird None zurückgegeben, sonst der Movie
         """
+        path_folder, filename = os.path.split(path)
+
         con = Movie.get_db().get_connection()
         cur = con.cursor()
-        cur.execute("SELECT db_id, title, path, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE path=?", (path,))
+        cur.execute("SELECT db_id, title, path, filename, checksum, filetype, image FROM " + Movie.get_table_name() + " WHERE path=? and filename=?", (path_folder, filename))
         row = cur.fetchone()
         if row:
             movie = Movie.get_cache().get_by_id(row[0])
@@ -240,16 +242,11 @@ class Movie(Persistable, GObject.GObject):
         movie_from_db = Movie.get_by_path(path)
         if movie_from_db:
             # Ein Movie mit diesem Pfad existiert bereits in der DB
-            if movie_from_db.checksum_changed():
-                # Checksum neu setzen
-                movie_from_db.set_checksum(movie_from_db.md5(path))
-                movie_from_db.set_status(
-                    1)  # Status auf "geänderte Datei" setzen / ggf. später auch Metadaten neu lesen
-                Movie.persist(movie_from_db)
+            movie_from_db.determine_status()
             return movie_from_db
 
         # Falls der Movie noch nicht in der Datenbank war
-        movie_neu = Movie(0, file_root, path_folder, filename, Movie.md5(path), None, filetype)
+        movie_neu = Movie(None, file_root, path_folder, filename, Movie.md5(path), None, filetype)
 
         return movie_neu
 
