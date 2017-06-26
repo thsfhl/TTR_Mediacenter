@@ -122,7 +122,30 @@ class MainWindowHandler:
             
     #handler fuer doppelclick und Enter
     def on_MovieTreeView_row_activated(self, treeview, path, column):
-        print('dblClk')
+        if get_selected_movie(self.main.TreeView) is None:
+            def message_response(widget, response_id):
+                widget.destroy()
+
+            message = Gtk.MessageDialog(
+                parent=self.main.window,
+                flags=Gtk.DialogFlags.MODAL,
+                type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                message_format="Fehler! Es wurde kein Film zum Abspielen ausgewählt!"
+            )
+            message.connect("response", message_response)
+            message.show()
+        else:
+            print('play movie clicked')
+            selectedMovie = get_selected_movie(self.main.TreeView)
+            movie = selectedMovie.get_copy()
+            myMedia = os.path.join(movie.get_path(), movie.get_filename())
+            player = PlayerVLC(myMedia)
+            player.setup_objects_and_events()
+            player.show()
+            Gtk.main()
+            player.player.stop()
+            player.instance.release()
         
     #handler fuer Popupmenue    
     def on_MovieTreeView_Right_Click(self, widget, event):
@@ -172,8 +195,9 @@ class ImportMovieWindowHandler:
     def on_SaveButton_clicked(self, button):    
 
         for row in self.main.movieListStore:
-            row[0].persist()
-            self.main.parent.movieListStore.append((row[0],))
+            if not row[0].get_db_id():
+                row[0].persist()
+                self.main.parent.movieListStore.append((row[0],))
         # ToDo: TREEVIEW VOM HAUPTFENSTER AKTUALISIEREN (FILME NEU LADEN UND DORT ANZEIGEN)
         
         self.main.window.destroy()
@@ -334,9 +358,9 @@ def update_image(filePath, x=1280, y=720):
         myfile = Path(filePath)
         if myfile.is_file():
             bgImage = GdkPixbuf.Pixbuf().new_from_file(filePath)
-        else:
-            bgImage = GdkPixbuf.Pixbuf().new_from_file('default movie.jpg')
-        bgImage = bgImage.scale_simple(x, y, GdkPixbuf.InterpType.BILINEAR)
+    else:
+        bgImage = GdkPixbuf.Pixbuf().new_from_file('media/default movie.jpg')
+    bgImage = bgImage.scale_simple(x, y, GdkPixbuf.InterpType.BILINEAR)
     return bgImage
 
 #Funktion zum sichtbar machen von Fenstern
